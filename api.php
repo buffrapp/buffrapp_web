@@ -109,7 +109,7 @@
             define('ALREADY_REGISTERED', 3);
             define('USERNAME_UNEXPECTED_VALUE', 4);
             define('PASSWORD_UNEXPECTED_VALUE', 5);
-            
+
             // If it's a mail address...
             if (filter_var($email, FILTER_VALIDATE_EMAIL)) { // filter it out...
               $lookup = $server->query('SELECT COUNT(mail) FROM ' . $tables['users'] . ' WHERE E-mail = ' . $email);
@@ -126,7 +126,7 @@
                 }
               } else {
                 print ERROR;
-              } 
+              }
             } elseif (count(explode(".", $email)) > 0) { // else, look for a DNI.
               $lookup = $server->query('SELECT dni FROM ' . $tables['users'] . ' WHERE mail = ' . $email);
               if ($server->query('INSERT INTO usuarios (DNI, Password) VALUES (' . $email . ', ' . $password . ')') > 0) {
@@ -142,18 +142,18 @@
           case 'makeOrder':
             /*
             //Hacer un pedido
-            //$_POST['content'][0] = ID del producto 
+            //$_POST['content'][0] = ID del producto
             //$_POST['content'][1] = DNI del usuario
             */
            //Verifico si este alumno hizo un pedido y no fue ni entregado ni cancelado
-            $lookup = $server->query('SELECT FROM '.$tables['orders'].' WHERE 
-              DNI = '.$server->quote($_POST['content'][1]).' AND 
-              FH_Entregado = NULL AND 
+            $lookup = $server->query('SELECT FROM '.$tables['orders'].' WHERE
+              DNI = '.$server->quote($_POST['content'][1]).' AND
+              FH_Entregado = NULL AND
               Cancelado = \'0\'');
 
             //Verifico si el producto existe y esta disponible
-            $lookup = $server->query('SELECT FROM '.$tables['products'].' WHERE 
-              ID_Producto = '.$server->quote($_POST['content'][0]).' AND 
+            $lookup = $server->query('SELECT FROM '.$tables['products'].' WHERE
+              ID_Producto = '.$server->quote($_POST['content'][0]).' AND
               Estado = \'1\'');
 
             //Si todo es correcto agrego el pedido a la cola
@@ -170,12 +170,12 @@
                 VALUES
                 (
                   '.$_POST['content'][1].', '/* DNI_Usuario*/'
-                  NULL, '/* ID_Pedido*/'   
+                  NULL, '/* ID_Pedido*/'
                   '.$_POST['content'][0].', '/* ID_Producto*/'
                   NULL,   '/* FH_Tomado*/'
                   NULL,   '/* FH_Listo*/'
                   NULL, '/* FH_Entregado*/'
-                  NULL '/* Cancelado*/'              
+                  NULL '/* Cancelado*/'
                 )');
               break;
           case 'takeOrder':
@@ -198,7 +198,7 @@
                 }
               }
 
-             
+
               break;
           case 'readyOrder':
                 /*
@@ -220,16 +220,34 @@
               }
             break;
           case 'viewOrder':
-              $lookup = $server->(query('SELECT * FROM '.$tables['orders'].' WHERE
-                ID_Pedido = '.$server->quote($_POST['content'][0]).''));
+            $lookup   =     $server->(query('SELECT * FROM ' .$tables['orders'] . ' WHERE
+            ID_Pedido = ' . $server->quote($_POST['content'][0]).''));
+
+            if ($lookup) {
+              print json_encode($lookup->fetch());
+            } else {
+              print ERROR;
+            }          
             break;
-            case 'viewUser':
-              $lookup = $server->(query('SELECT * FROM '.$tables['users'].' WHERE
-                DNI = '.$server->quote($_POST['content'][0]).''));
+          case 'viewUser':
+            $lookup =     $server->(query('SELECT COUNT(*) FROM '.$tables['users'].' WHERE
+            DNI     = ' . $server->quote($_POST['content'][0]).''));
+
+            if ($lookup) {
+              print json_encode($lookup->fetch());
+            } else {
+              print ERROR;
+            }
             break;
-            case 'viewReports':
-              $lookup = $server->(query('SELECT * FROM '.$tables['reports'].' WHERE
-                DNI = '.$server->quote($_POST['content'][0]).''));
+          case 'viewReports':
+            $lookup =     $server->(query('SELECT * FROM '.$tables['reports'].' WHERE
+            DNI     = ' . $server->quote($_POST['content'][0]).''));
+
+            if ($lookup) {
+              print json_encode($lookup->fetch());
+            } else {
+              print ERROR;
+            }
             break;
           case 'doAdministratorLogin':
             /*
@@ -249,7 +267,7 @@
             // login script itself, and not here, because it would be a waste of resources for the rest of
             // possible frontends.
             */
-            
+
             /*
             // About this operation:
             //
@@ -258,7 +276,7 @@
             // return a pair of hex values that are easy to work with in the database, this results in a
             // string with a length of RANDOM_LENGTH ^ 2 or RANDOM_LENGTH * 2.
             */
-            
+
             define('BAD_CREDENTIALS', 3);
             define('RANDOM_LENGTH', 64);
 
@@ -286,19 +304,19 @@
               //       the client that a fatal error broke the
               //       login process.
               */
-              print ERROR; 
+              print ERROR;
             } elseif ($updated_count == 1) {
               // Success logging in.
 
               // Reflect the token to the session.
               session_start();
               $_SESSION['token'] = $token;
-              
+
               print PASS;
             } else {
               print BAD_CREDENTIALS;
             }
-            
+
             break;
           case 'addReport':
 
@@ -318,9 +336,9 @@
                 VALUES
                 (
                   "'.$_POST['content'][0].'", '/* Motivo*/'
-                  '.$_POST['content'][1].', '/* DNI_U*/'   
+                  '.$_POST['content'][1].', '/* DNI_U*/'
                   '.$_POST['content'][2].', '/* DNI_A*/'
-                  NULL,   '/* Fecha_Hora*/'             
+                  NULL,   '/* Fecha_Hora*/'
                 )');
             break;
           default:
