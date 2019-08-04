@@ -1,0 +1,38 @@
+@media only screen and (min-width: 768px) {
+  .brand-logo { padding-left: 0.4em !important; }
+  #account_greeter { padding-right: 0.4em !important;cursor: default; }
+}
+
+.form_box {
+  max-width: 25em;
+  margin: auto;
+  padding: 0.8em;
+}
+
+input:not([type]):focus:not([readonly]),input[type=text]:not(.browser-default):focus:not([readonly]),input[type=password]:not(.browser-default):focus:not([readonly]),input[type=email]:not(.browser-default):focus:not([readonly]),input[type=url]:not(.browser-default):focus:not([readonly]),input[type=time]:not(.browser-default):focus:not([readonly]),input[type=date]:not(.browser-default):focus:not([readonly]),input[type=datetime]:not(.browser-default):focus:not([readonly]),input[type=datetime-local]:not(.browser-default):focus:not([readonly]),input[type=tel]:not(.browser-default):focus:not([readonly]),input[type=number]:not(.browser-default):focus:not([readonly]),input[type=search]:not(.browser-default):focus:not([readonly]),textarea.materialize-textarea:focus:not([readonly]) {
+ border-bottom:1px solid #4CAF50;
+ -webkit-box-shadow:0 1px 0 0 #4CAF50;
+ box-shadow:0 1px 0 0 #4CAF50;
+}
+
+/*#area_picker .collection-item .title { border-bottom: 1px solid grey; width: 100%; }*/
+
+/*.secondary-content { position: relative; bottom: 8em; right: -1em; }*/
+
+.padded_checkbox { padding-left: 1em; }
+
+.collection-item { cursor: pointer; transition: transform 0.2s,color 0.2s}
+.collection-item:hover { transform:  scale(1.05,1.05) translateX(5px); color:green; }
+
+.collection-item span h5, .collection-item p { user-select: none; }
+
+html { overflow: hidden; }
+
+.inner {
+  margin-top: 0.5em;
+  border-left: 1px solid #E0E0E0; /* Materialize stock picker border. */
+  height: 92vh;
+  width: 1px !important;
+}
+
+#vcentered_message { position: fixed; top: 40%; width: 100%; }
