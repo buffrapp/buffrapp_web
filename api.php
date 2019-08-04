@@ -274,14 +274,26 @@
             define('YELLOW',1);
             define('GREEN',2);
             define('GREY',3);
+            define('CROSS',4);
             $lookup =     $server->query('SELECT ISNULL(FH_Tomado), ISNULL(FH_Listo), ISNULL(FH_Entregado), ISNULL(DNI_Cancelado) FROM '.$tables['orders'].' WHERE
-            ID_Pedido  = ' . $server->quote($_POST['content'][0]));
+            ID_Pedido  = ' . $server->quote($_POST['content'][0]).'');
             if ($lookup) {
               if ($lookup->rowCount() > 0) {
                 $array = $lookup->fetch();
-                if ($array[0]) {
-
+                if ($array[3]) {
+                    if ($array[0]) {
+                      print RED;
+                    }else if ($array[1]) {
+                      print YELLOW;
+                    }elseif ($array[2]) {
+                      print GREEN;
+                    }else{
+                      print GREY;
+                    }
+                }else{
+                  print CROSS;
                 }
+               
               }else{
                 print ERROR;
               }
