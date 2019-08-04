@@ -31,7 +31,7 @@
     {
       switch ($_POST['request']) {
           case 'addProduct':
-            if (isset($_SESSION['token']))
+            if (isset($_SESSION['username']) && isset($_SESSION['password']))
             {
               if (is_array($_POST['content']))
               {
@@ -221,8 +221,7 @@
               }else{
                 print ERROR;
               }
-
-
+            }
               break;
           case 'readyOrder':
                 /*
@@ -242,31 +241,30 @@
                   print ERROR;
                 }
               }
-            break;
-          case 'viewOrder':
-            $lookup   =     $server->(query('SELECT * FROM ' .$tables['orders'] . ' WHERE
-            ID_Pedido = ' . $server->quote($_POST['content'][0]).''));
+          break;
+        case 'viewOrder':
+          $lookup   =     $server->(query('SELECT * FROM ' .$tables['orders'] . ' WHERE
+          ID_Pedido = ' . $server->quote($_POST['content'][0]).''));
 
-            if ($lookup) {
-              print json_encode($lookup->fetch());
-            } else {
-              print ERROR;
-            }          
-            break;
-          case 'viewUser':
-            $lookup =     $server->(query('SELECT COUNT(*) FROM '.$tables['users'].' WHERE
-            DNI     = ' . $server->quote($_POST['content'][0]).''));
+          if ($lookup) {
+            print json_encode($lookup->fetch());
+          } else {
+            print ERROR;
+          }
+          break;
+        case 'viewUser':
+          $lookup =     $server->(query('SELECT COUNT(*) FROM '.$tables['users'].' WHERE
+          DNI     = ' . $server->quote($_POST['content'][0]).''));
 
-            if ($lookup) {
-              print json_encode($lookup->fetch());
-            } else {
-              print ERROR;
-            }
-            break;
-          case 'viewReports':
-            $lookup =     $server->(query('SELECT * FROM '.$tables['reports'].' WHERE
-            DNI     = ' . $server->quote($_POST['content'][0]).''));
-
+          if ($lookup) {
+            print json_encode($lookup->fetch());
+          } else {
+            print ERROR;
+          }
+          break;
+        case 'viewReports':
+          $lookup =     $server->(query('SELECT * FROM '.$tables['reports'].' WHERE
+          DNI     = ' . $server->quote($_POST['content'][0]).''));
             if ($lookup) {
               print json_encode($lookup->fetch());
             } else {
@@ -325,44 +323,45 @@
             */
 
             define('BAD_CREDENTIALS', 3);
-            define('RANDOM_LENGTH', 64);
-
-            // Generate a token.
-            $token = bin2hex(random_bytes(64));
 
             // Try to update a matching entry.
-            $updated_count = $server->query('UPDATE           ' . $tables['users'] . '
-                                             SET token      = ' . $token . '
-                                             WHERE (
-                                               E-mail         = ' . $email . '
-                                                OR
-                                               username     = ' . $email . '
-                                                OR
-                                               DNI          = ' . $email . '
-                                                   )
-                                             AND   password = ' . $password);
+            $lookup = $server->query('SELECT COUNT(DNI) FROM ' . $tables['users'] . '
+                                       WHERE (
+                                         E-mail       = ' . $email . '
+                                          OR
+                                         username     = ' . $email . '
+                                          OR
+                                         DNI          = ' . $email . '
+                                             )
+                                       AND   password = ' . $password);
 
-            // If any entry is updated...
-            if ($updated_count > 1) {
-              /*
-              // The database was inconsistent.
-              //
-              // TODO: The frontend should print an error telling
-              //       the client that a fatal error broke the
-              //       login process.
-              */
-              print ERROR;
-            } elseif ($updated_count == 1) {
-              // Success logging in.
+            // If the request was possible..
+            if ($lookup) {
+                $matches = $lookup->fetch()[0];
+                if ($matches > 0) {
+                  /*
+                  // The database was inconsistent.
+                  //
+                  // TODO: The frontend should print an error telling
+                  //       the client that a fatal error broke the
+                  //       login process.
+                  */
+                  print ERROR;
+                } elseif ($matches == 1) {
+                  // Success logging in.
 
-              // Reflect the token to the session.
-              session_start();
-              $_SESSION['token'] = $token;
+                  // Reflect the logon to the session.
+                  session_start();
+                  $_SESSION['username'] = $email;
+                  $_SESSION['password'] = $password;
 
-              print PASS;
-            } else {
-              print BAD_CREDENTIALS;
-            }
+                  print PASS;
+                } else {
+                  print BAD_CREDENTIALS;
+                }
+              } else {
+                print ERROR;
+              }
 
             break;
           case 'addReport':
@@ -403,6 +402,7 @@
       }
     }
   } else {
+    $title = 'API';
     require_once('includes/header.php');
     print '
     <div id="vcentered_message" class="row valign-wrapper">

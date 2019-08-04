@@ -1,32 +1,9 @@
-<html>
-  <head>
-    <meta charset="utf-8"/>
-    <title>BuffRApp - Iniciá sesión</title>
-    <!--Import Google Icon Font-->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <!--Import materialize.css-->
-    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"  media="screen,projection"/>
-
-    <!--Import custom styles-->
-    <link type="text/css" rel="stylesheet" href="styles/custom.css">
-
-    <!--Let browser know website is optimized for mobile-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  </head>
-  <body>
-    <header>
-      <nav class="green">
-        <div class="nav-wrapper">
-          <a href="#" class="brand-logo">BuffRApp</a>
-        </div>
-      </nav>
-    </header>
-    <main>
+<?php $title = 'Iniciá sesión';  require_once('includes/header.php'); ?>
       <div class="section"></div>
       <h5 class="green-text center-align">Para continuar, iniciá sesión.</h5>
       <div class="container">
         <div class="z-depth-1 grey lighten-4 form_box">
-          <form class="col" method="get" action="index.html">
+          <div class="col" method="post">
 
             <div class="row">
               <div class="col s12">
@@ -49,11 +26,11 @@
 
             <div class="row">
               <div class="input-feld col s12">
-                <button type="submit" class="waves-effect waves-light btn green right">Iniciar sesión</button>
+                <button id="button" type="submit" class="waves-effect waves-light btn green right">Iniciar sesión</button>
               </div>
             </div>
 
-          </form>
+          </div>
         </div>
       </div>
     </main>
@@ -70,3 +47,4 @@
     <script src="scripts/login.js"></script>
   </body>
 </html>
+<?php require_once('includes/footer.php'); ?>
