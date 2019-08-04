@@ -240,8 +240,15 @@
               }
           break;
         case 'viewOrder':
-          $lookup   =     $server->query('SELECT * FROM ' .$tables['orders'] . ' WHERE
-          ID_Pedido = ' . $server->quote($_POST['content'][0]));
+          $lookup   =     $server->query('SELECT
+            DNI_Usuario, ID_Pedido, 
+            ID_Producto, DNI_Administrador, 
+            FH_Recibido, FH_Tomado,
+            FH_Listo, FH_Entregado, 
+            DNI_Cancelado, Nombre
+            FROM ' .$tables['orders'] . ', ' .$tables['users'] . ' WHERE
+            ID_Pedido = ' . $server->quote($_POST['content'][0]).' AND
+            DNI = DNI_Usuario');
 
           if ($lookup) {
             print json_encode($lookup->fetch());
@@ -249,8 +256,19 @@
             print ERROR;
           }
           break;
+          case 'history':
+            $lookup   =     $server->query('SELECT 
+              o.ID_Pedido,o.ID_Producto,
+              o.DNI_Usuario,u.Nombre,p.Nombre 
+              FROM ' .$tables['orders'] . ' o,' .$tables['users'] . ' u,' .$tables['products'] . ' p');
+            if ($lookup) {
+              print json_encode($lookup->fetch());
+            } else {
+              print ERROR;
+            }
+            break;
         case 'viewUser':
-          $lookup =     $server->query('SELECT COUNT(*) FROM '.$tables['users'].' WHERE
+          $lookup =     $server->query('SELECT * FROM '.$tables['users'].' WHERE
           DNI     = ' . $server->quote($_POST['content'][0]).'');
 
           if ($lookup) {
@@ -274,14 +292,26 @@
             define('YELLOW',1);
             define('GREEN',2);
             define('GREY',3);
+            define('CROSS',4);
             $lookup =     $server->query('SELECT ISNULL(FH_Tomado), ISNULL(FH_Listo), ISNULL(FH_Entregado), ISNULL(DNI_Cancelado) FROM '.$tables['orders'].' WHERE
-            ID_Pedido  = ' . $server->quote($_POST['content'][0]));
+            ID_Pedido  = ' . $server->quote($_POST['content'][0]).'');
             if ($lookup) {
               if ($lookup->rowCount() > 0) {
                 $array = $lookup->fetch();
-                if ($array[0]) {
-
+                if ($array[3]) {
+                    if ($array[0]) {
+                      print RED;
+                    }else if ($array[1]) {
+                      print YELLOW;
+                    }elseif ($array[2]) {
+                      print GREEN;
+                    }else{
+                      print GREY;
+                    }
+                }else{
+                  print CROSS;
                 }
+               
               }else{
                 print ERROR;
               }
