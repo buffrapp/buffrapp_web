@@ -142,13 +142,13 @@
          case 'makeOrder':
             /*
             //Hacer un pedido
-            //$_POST['content'][0] = ID del producto 
+            //$_POST['content'][0] = ID del producto
             //$_POST['content'][1] = DNI del usuario
             */
            //Verifico si este alumno hizo un pedido y no fue ni entregado ni cancelado
-            $lookup = $server->query('SELECT COUNT(DNI_Usuario) FROM '.$tables['orders'].' WHERE 
-              DNI_Usuario = '.$server->quote($_POST['content'][1]).' AND 
-              FH_Entregado = NULL AND 
+            $lookup = $server->query('SELECT COUNT(DNI_Usuario) FROM '.$tables['orders'].' WHERE
+              DNI_Usuario = '.$server->quote($_POST['content'][1]).' AND
+              FH_Entregado = NULL AND
               DNI_Cancelado = NULL');
             if ($lookup) {
                 if ($lookup->fetch()[0] > 1) {
@@ -158,8 +158,8 @@
                 } else {
 
                   //Verifico si el producto existe y esta disponible
-                  $lookup = $server->query('SELECT FROM '.$tables['products'].' WHERE 
-                  ID_Producto = '.$server->quote($_POST['content'][0]).' AND 
+                  $lookup = $server->query('SELECT FROM '.$tables['products'].' WHERE
+                  ID_Producto = '.$server->quote($_POST['content'][0]).' AND
                   Estado = \'1\'');
                   if($lookup){
 
@@ -172,9 +172,9 @@
                               )
                               VALUES
                               (
-                                '.$_POST['content'][1].', '/* DNI_Usuario*/'
-                                NULL, '/* ID_Pedido*/'   
-                                '.$_POST['content'][0].', '/* ID_Producto*/'            
+                                '.$_POST['content'][1].', ' /* DNI_Usuario*/ . '
+                                NULL, ' /* ID_Pedido*/ .'
+                                '.$_POST['content'][0].', ' /* ID_Producto*/ . '
                               )');
                       if ($lookup) {
                         print PASS;
@@ -187,17 +187,15 @@
 
                   } else {
                     print ERROR;
-                  } 
-                } else {
-                  print ERROR;
-                } 
+                  }
+                }
             } else {
               print ERROR;
-            } 
-            
+            }
+
 
             //Si todo es correcto agrego el pedido a la cola
-            
+
               break;
           case 'takeOrder':
             /*
@@ -206,14 +204,14 @@
               //$_POST['content'][1] = DNI del administrador
             */
            //VERIFICO SI EXISTE Y SI NO FUE TOMADO
-              $lookup = $server->(query('SELECT count(DNI_Usuario) FROM '.$tables['orders'].' WHERE
+              $lookup = $server->query('SELECT count(DNI_Usuario) FROM '.$tables['orders'].' WHERE
                 ID_Pedido = '.$server->quote($_POST['content'][0]).' AND
-                FH_Tomado != NULL'));
+                FH_Tomado != NULL');
               if($lookup){
                 if ($lookup->fetch()[0]==0) {
                    //Pongo el momento en el que fue tomado y por quien
-                   $server->(query('UPDATE '.$tables['orders'].' SET
-                   FH_Tomado = SYSDATE(), DNI_Administrador = '.$_POST['content'][1]));
+                   $server->query('UPDATE '.$tables['orders'].' SET
+                   FH_Tomado = SYSDATE(), DNI_Administrador = '.$_POST['content'][1]);
                    print PASS;
                 }else{
                   print ERROR;
@@ -221,30 +219,29 @@
               }else{
                 print ERROR;
               }
-            }
               break;
           case 'readyOrder':
                 /*
                   El pedido ya esta listo
                  */
               //VERIFICO SI EXISTE Y SI NO FUE TOMADO
-              $lookup = $server->(query('SELECT COUNT(ID_Pedido) FROM '.$tables['orders'].' WHERE
+              $lookup = $server->query('SELECT COUNT(ID_Pedido) FROM '.$tables['orders'].' WHERE
                 ID_Pedido = '.$server->quote($_POST['content'][0]).' AND
-                FH_Tomado != NULL'));
+                FH_Tomado != NULL');
 
               if($lookup){
                 if ($lookup->fetch()[0]==0) {
                    //Pongo el momento en el que fue tomado y por quien
-                   $server->(query('UPDATE '.$tables['orders'].' SET
-                   FH_Listo = SYSDATE()'));
+                   $server->query('UPDATE '.$tables['orders'].' SET
+                   FH_Listo = SYSDATE()');
                 }else{
                   print ERROR;
                 }
               }
           break;
         case 'viewOrder':
-          $lookup   =     $server->(query('SELECT * FROM ' .$tables['orders'] . ' WHERE
-          ID_Pedido = ' . $server->quote($_POST['content'][0]).''));
+          $lookup   =     $server->query('SELECT * FROM ' .$tables['orders'] . ' WHERE
+          ID_Pedido = ' . $server->quote($_POST['content'][0]));
 
           if ($lookup) {
             print json_encode($lookup->fetch());
@@ -253,8 +250,8 @@
           }
           break;
         case 'viewUser':
-          $lookup =     $server->(query('SELECT COUNT(*) FROM '.$tables['users'].' WHERE
-          DNI     = ' . $server->quote($_POST['content'][0]).''));
+          $lookup =     $server->query('SELECT COUNT(*) FROM '.$tables['users'].' WHERE
+          DNI     = ' . $server->quote($_POST['content'][0]).'');
 
           if ($lookup) {
             print json_encode($lookup->fetch());
@@ -263,8 +260,8 @@
           }
           break;
         case 'viewReports':
-          $lookup =     $server->(query('SELECT * FROM '.$tables['reports'].' WHERE
-          DNI     = ' . $server->quote($_POST['content'][0]).''));
+          $lookup =     $server->query('SELECT * FROM '.$tables['reports'].' WHERE
+          DNI     = ' . $server->quote($_POST['content'][0]));
             if ($lookup) {
               print json_encode($lookup->fetch());
             } else {
@@ -277,18 +274,18 @@
             define('YELLOW',1);
             define('GREEN',2);
             define('GREY',3);
-            $lookup =     $server->(query('SELECT ISNULL(FH_Tomado), ISNULL(FH_Listo), ISNULL(FH_Entregado), ISNULL(DNI_Cancelado) FROM '.$tables['orders'].' WHERE
-            ID_Pedido  = ' . $server->quote($_POST['content'][0]).''));
+            $lookup =     $server->query('SELECT ISNULL(FH_Tomado), ISNULL(FH_Listo), ISNULL(FH_Entregado), ISNULL(DNI_Cancelado) FROM '.$tables['orders'].' WHERE
+            ID_Pedido  = ' . $server->quote($_POST['content'][0]));
             if ($lookup) {
               if ($lookup->rowCount() > 0) {
                 $array = $lookup->fetch();
                 if ($array[0]) {
-                
+
                 }
               }else{
                 print ERROR;
               }
-              
+
             } else {
               print ERROR;
             }
@@ -381,10 +378,10 @@
                 )
                 VALUES
                 (
-                  "'.$_POST['content'][0].'", '/* Motivo*/'
-                  '.$_POST['content'][1].', '/* DNI_U*/'
-                  '.$_POST['content'][2].', '/* DNI_A*/'
-                  NULL,   '/* Fecha_Hora*/'
+                  "'.$_POST['content'][0].'", ' /* Motivo*/ . '
+                  '.$_POST['content'][1].', ' /* DNI_U*/ . '
+                  '.$_POST['content'][2].', ' /* DNI_A*/ . '
+                  NULL,   '/* Fecha_Hora*/ . '
                 )');
             break;
           default:
