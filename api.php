@@ -139,44 +139,65 @@
             }
 
             break;
-          case 'makeOrder':
+         case 'makeOrder':
             /*
             //Hacer un pedido
-            //$_POST['content'][0] = ID del producto
+            //$_POST['content'][0] = ID del producto 
             //$_POST['content'][1] = DNI del usuario
             */
            //Verifico si este alumno hizo un pedido y no fue ni entregado ni cancelado
-            $lookup = $server->query('SELECT FROM '.$tables['orders'].' WHERE
-              DNI = '.$server->quote($_POST['content'][1]).' AND
-              FH_Entregado = NULL AND
-              Cancelado = \'0\'');
+            $lookup = $server->query('SELECT COUNT(DNI_Usuario) FROM '.$tables['orders'].' WHERE 
+              DNI_Usuario = '.$server->quote($_POST['content'][1]).' AND 
+              FH_Entregado = NULL AND 
+              DNI_Cancelado = NULL');
+            if ($lookup) {
+                if ($lookup->fetch()[0] > 1) {
 
-            //Verifico si el producto existe y esta disponible
-            $lookup = $server->query('SELECT FROM '.$tables['products'].' WHERE
-              ID_Producto = '.$server->quote($_POST['content'][0]).' AND
-              Estado = \'1\'');
+                  print ALREADY_REGISTERED;
+
+                } else {
+
+                  //Verifico si el producto existe y esta disponible
+                  $lookup = $server->query('SELECT FROM '.$tables['products'].' WHERE 
+                  ID_Producto = '.$server->quote($_POST['content'][0]).' AND 
+                  Estado = \'1\'');
+                  if($lookup){
+
+                    if ($lookup->fetch()[0] > 1) {
+                      $lookup = $server->query('INSERT INTO '.$tables['orders'].'
+                              (
+                                `DNI_Usuario`,
+                                `ID_Pedido`,
+                                `ID_Producto`,
+                              )
+                              VALUES
+                              (
+                                '.$_POST['content'][1].', '/* DNI_Usuario*/'
+                                NULL, '/* ID_Pedido*/'   
+                                '.$_POST['content'][0].', '/* ID_Producto*/'            
+                              )');
+                      if ($lookup) {
+                        print PASS;
+                      } else {
+                        print ERROR;
+                      }
+                    } else {
+                      print ERROR;
+                    }
+
+                  } else {
+                    print ERROR;
+                  } 
+                } else {
+                  print ERROR;
+                } 
+            } else {
+              print ERROR;
+            } 
+            
 
             //Si todo es correcto agrego el pedido a la cola
-            $server->query('INSERT INTO '.$tables['orders'].'
-                (
-                  `DNI_Usuario`,
-                  `ID_Pedido`,
-                  `ID_Producto`,
-                  `FH_Tomado`,
-                  `FH_Listo`,
-                  `FH_Entregado`,
-                  `Cancelado`
-                )
-                VALUES
-                (
-                  '.$_POST['content'][1].', '/* DNI_Usuario*/'
-                  NULL, '/* ID_Pedido*/'
-                  '.$_POST['content'][0].', '/* ID_Producto*/'
-                  NULL,   '/* FH_Tomado*/'
-                  NULL,   '/* FH_Listo*/'
-                  NULL, '/* FH_Entregado*/'
-                  NULL '/* Cancelado*/'
-                )');
+            
               break;
           case 'takeOrder':
             /*
@@ -193,9 +214,12 @@
                    //Pongo el momento en el que fue tomado y por quien
                    $server->(query('UPDATE '.$tables['orders'].' SET
                    FH_Tomado = SYSDATE(), DNI_Administrador = '.$_POST['content'][1]));
+                   print PASS;
                 }else{
                   print ERROR;
                 }
+              }else{
+                print ERROR;
               }
 
 
@@ -205,7 +229,7 @@
                   El pedido ya esta listo
                  */
               //VERIFICO SI EXISTE Y SI NO FUE TOMADO
-              $lookup = $server->(query('SELECT * FROM '.$tables['orders'].' WHERE
+              $lookup = $server->(query('SELECT COUNT(ID_Pedido) FROM '.$tables['orders'].' WHERE
                 ID_Pedido = '.$server->quote($_POST['content'][0]).' AND
                 FH_Tomado != NULL'));
 
@@ -248,6 +272,29 @@
             } else {
               print ERROR;
             }
+            break;
+          case 'statusOrder':
+          //$_POST['content'][0]) id del producto
+            define('RED',0);
+            define('YELLOW',1);
+            define('GREEN',2);
+            define('GREY',3);
+            $lookup =     $server->(query('SELECT ISNULL(FH_Tomado), ISNULL(FH_Listo), ISNULL(FH_Entregado), ISNULL(DNI_Cancelado) FROM '.$tables['orders'].' WHERE
+            ID_Pedido  = ' . $server->quote($_POST['content'][0]).''));
+            if ($lookup) {
+              if ($lookup->rowCount() > 0) {
+                $array = $lookup->fetch();
+                if ($array[0]) {
+                
+                }
+              }else{
+                print ERROR;
+              }
+              
+            } else {
+              print ERROR;
+            }
+
             break;
           case 'doAdministratorLogin':
             /*
