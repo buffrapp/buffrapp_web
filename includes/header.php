@@ -1,3 +1,11 @@
+<?php
+ session_start();
+ if (isset($secure) && ( !isset($_SESSION['username']) || !isset($_SESSION['password']) )) {
+   header('location: login.php');
+   exit();
+ }
+?>
+
 <html>
   <head>
     <meta charset="utf-8"/>

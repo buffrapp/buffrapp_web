@@ -13,11 +13,15 @@ $('document').ready(function() {
 				console.log(data);
 				data = parseInt(data);
 				switch (data) {
+					case 0:
+						M.toast({ 'html': 'Cargando...' });
+					  window.location = 'index.php';
+						break;
 					case 1:
-						M.toast({html: 'Hubo un problema al iniciar sesión.'});
+						M.toast({ 'html': 'Hubo un problema al iniciar sesión.' });
 						break;
 					case 3:
-						M.toast({html: 'Esa combinación de usuario y contraseña no existe.'});
+						M.toast({ 'html': 'Esa combinación de usuario y contraseña no existe.' });
 						break;
 				}
 			})

@@ -31,6 +31,7 @@
     {
       switch ($_POST['request']) {
           case 'addProduct':
+            session_start();
             if (isset($_SESSION['username']) && isset($_SESSION['password']))
             {
               if (is_array($_POST['content']))
@@ -45,7 +46,7 @@
                 (
                   ' . $server->quote($_POST['content'][0]) . ',
                   ' . $server->quote($_POST['content'][1]) . ',
-                  ' . $server->quote($_POST['content'][2]) . '
+                  ' . str_replace('\'', '', $server->quote($_POST['content'][2])) . '
                 )
                 ');
                 print PASS;
@@ -241,10 +242,10 @@
           break;
         case 'viewOrder':
           $lookup   =     $server->query('SELECT
-            DNI_Usuario, ID_Pedido, 
-            ID_Producto, DNI_Administrador, 
+            DNI_Usuario, ID_Pedido,
+            ID_Producto, DNI_Administrador,
             FH_Recibido, FH_Tomado,
-            FH_Listo, FH_Entregado, 
+            FH_Listo, FH_Entregado,
             DNI_Cancelado, Nombre
             FROM ' .$tables['orders'] . ', ' .$tables['users'] . ' WHERE
             ID_Pedido = ' . $server->quote($_POST['content'][0]).' AND
@@ -257,9 +258,9 @@
           }
           break;
           case 'history':
-            $lookup   =     $server->query('SELECT 
+            $lookup   =     $server->query('SELECT
               o.ID_Pedido,o.ID_Producto,
-              o.DNI_Usuario,u.Nombre,p.Nombre 
+              o.DNI_Usuario,u.Nombre,p.Nombre
               FROM ' .$tables['orders'] . ' o,' .$tables['users'] . ' u,' .$tables['products'] . ' p');
             if ($lookup) {
               print json_encode($lookup->fetch());
@@ -311,7 +312,7 @@
                 }else{
                   print CROSS;
                 }
-               
+
               }else{
                 print ERROR;
               }
