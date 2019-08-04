@@ -324,18 +324,16 @@
             // Try to update a matching entry.
             $lookup = $server->query('SELECT COUNT(DNI) FROM ' . $tables['users'] . '
                                        WHERE (
-                                         E-mail       = ' . $email . '
-                                          OR
-                                         username     = ' . $email . '
-                                          OR
-                                         DNI          = ' . $email . '
+                                           `E-mail`       = ' . $email . '
+                                            OR
+                                            DNI           = ' . $email . '
                                              )
-                                       AND   password = ' . $password);
+                                       AND  password      = ' . $password);
 
             // If the request was possible..
             if ($lookup) {
                 $matches = $lookup->fetch()[0];
-                if ($matches > 0) {
+                if ($matches > 1) {
                   /*
                   // The database was inconsistent.
                   //
