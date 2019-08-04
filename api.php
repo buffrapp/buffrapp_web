@@ -423,6 +423,9 @@
           print json_encode($info['home']);
 
           break;
+        case 'getProducts':
+          print json_encode($server->query('SELECT * FROM ' . $tables['products'])->fetchAll());
+          break;
         default:
           print ERROR;
       }
