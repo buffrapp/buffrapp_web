@@ -38,7 +38,7 @@
       <input type="hidden" name="product_id" value="">
     </div>
     <div class="modal-footer">
-      <a href="#!" class="modal-close waves-effect waves-green btn-flat" onclick="product_delete(0, true)">Sí</a>
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat" onclick="product_delete(true)">Sí</a>
       <a href="#!" class="modal-close waves-effect waves-green btn-flat">No</a>
     </div>
   </div>

@@ -413,6 +413,15 @@
                   NULL,   '/* Fecha_Hora*/ . '
                 )');
             break;
+          case 'deleteProduct':
+            if ($server->query('DELETE         FROM ' . $tables['products'] . '
+                                WHERE ID_Producto = ' . $server->quote($_POST['content'][0])) > 0)
+            {
+              print PASS;
+            } else {
+              print ERROR;
+            }
+            break;
           default:
             print ERROR;
         }

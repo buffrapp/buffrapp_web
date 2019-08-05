@@ -1,5 +1,7 @@
 let atime = 400;
 
+const NO_PRODUCTS = 'No hay productos.';
+
 $('document').ready(function () {
   $('.modal').modal();
 
@@ -14,14 +16,14 @@ $('document').ready(function () {
     console.log(data);
     data = JSON.parse(data);
 
-   var html = '';
+   let html = '';
 
    if (data.length > 0) {
-     for (var i = 0; i < data.length; i++) {
+     for (let i = 0; i < data.length; i++) {
         console.log(data[i]);
 
         html += `
-        <div id="producto` + data[i][0] + `" class="col">
+        <div id="producto` + data[i][0] + `" class="producto col">
             <div class="card">
                 <div class="card-content">
                   <span class="card-title">` + data[i][1] + `</span>
@@ -36,7 +38,7 @@ $('document').ready(function () {
                 </div>
                 <div class="card-action">
                     <a id="product_edit" class="green-text" href="#" onclick="product_edit(` + data[i][0] + `)">Editar</a>
-                    <a id="product_delete" class="green-text" href="#" onclick="product_delete(` + data[i][0] + `, false)">Eliminar</a>
+                    <a id="product_delete" class="green-text" href="#" onclick="product_delete_request(` + data[i][0] + `)">Eliminar</a>
                 </div>
             </div>
         </div>
@@ -48,14 +50,13 @@ $('document').ready(function () {
              $('#products_empty').fadeOut();
          }, atime);
          setTimeout(function() {
-             $('#products_empty').remove();
              $('#products_cards_container').append(html);
          }, atime * 2);
      } else {
        $('#products_cards_container').append(html);
      }
    } else {
-    $('#products_empty').html('No hay productos.');
+    $('#products_empty').html(NO_PRODUCTS);
    }
  });
 });
@@ -63,7 +64,7 @@ $('document').ready(function () {
 function product_add() {
   rnd = 0;
   html = `
-  <div id="producto` + rnd + `" class="col">
+  <div id="producto` + rnd + `" class="producto col">
       <div class="card">
           <div class="card-content">
             <span class="card-title">` + $('#product_name').val() + `</span>
@@ -78,7 +79,7 @@ function product_add() {
           </div>
           <div class="card-action">
               <a id="product_edit" class="green-text" href="#" onclick="product_edit(` + rnd + `)">Editar</a>
-              <a id="product_delete" class="green-text" href="#" onclick="product_delete(` + rnd + `, false)">Eliminar</a>
+              <a id="product_delete" class="green-text" href="#" onclick="product_delete_request(` + rnd + `)">Eliminar</a>
           </div>
       </div>
   </div>
@@ -114,7 +115,6 @@ function product_add() {
           $('#products_empty').fadeOut();
       }, atime);
       setTimeout(function() {
-          $('#products_empty').remove();
           $('#products_cards_container').append(html);
       }, atime * 2);
   } else {
@@ -123,3 +123,48 @@ function product_add() {
   $('#product_name').val('');
   $('#product_price').val('');
 }
+
+ function product_delete_request(product_id) {
+    $('#product_id').val(product_id);
+    console.log($('#product_id').val());
+    $('#products_remove').modal('open');
+ }
+
+ function product_delete() {
+   M.toast({ 'html': 'Cargando...' });
+   $.ajax({
+     url: 'api.php',
+     type: 'POST',
+     data: {
+       request: 'deleteProduct',
+       content: [ $('#product_id').val() ]
+     }
+   })
+   .done(function (data) {
+     console.log(data);
+     data = parseInt(data);
+
+     switch (data) {
+       case 0:
+         M.toast({ 'html': 'El producto se eliminó con éxito.' });
+
+         setTimeout(function () {
+           $('#producto' + $('#product_id').val()).fadeOut();
+         }, atime);
+         setTimeout(function () {
+           $('#producto' + $('#product_id').val()).remove();
+
+           if ($('.producto').length < 1) {
+               setTimeout(function() {
+                   $('#products_empty').fadeIn();
+                   $('#products_empty').html(NO_PRODUCTS)
+               }, atime);
+           }
+         }, atime * 2);
+         break;
+       case 1:
+         M.toast({ 'html': 'Hubo un error al eliminar el producto.' })
+         break;
+     }
+   });
+ }
