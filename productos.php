@@ -21,7 +21,7 @@
     </div>
     <div class="col s9"> <!-- Right side -->
       <div id="products_cards_container" class="row"> <!-- Card container -->
-        <h5 id="products_empty" class="center-align grey-text">No hay productos.</h5>
+        <h5 id="products_empty" class="center-align grey-text">Cargando...</h5>
       </div>
     </div>
   </div>
@@ -72,8 +72,8 @@
     </div>
     <!-- BOTONES PARA AGREGAR O CANCELAR UN PEDIDO-->
     <div class="modal-footer">
-      <input name="btn" value="Aceptar" class="modal-close waves-effect waves-green btn-flat" onclick="product_add()">
-      <input name="btn" value="Cancelar" class="modal-close waves-effect waves-green btn-flat">
+      <button class="modal-close waves-effect waves-green btn-flat" onclick="product_add()">Aceptar</button>
+      <button class="modal-close waves-effect waves-green btn-flat">Cancelar</button>
     </div>
   </form>
   </div>
