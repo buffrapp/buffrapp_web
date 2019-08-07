@@ -45,8 +45,6 @@
 <!-- AGREGAR UN PRODUCTO  -->
 
   <div id="products_add" class="modal modal-fixed-footer">
-  <form action="#" method="get" accept-charset="utf-8">
-
     <div class="modal-content">
       <h4>Agregá un producto</h4>
         <div class="row">
@@ -72,9 +70,8 @@
     </div>
     <!-- BOTONES PARA AGREGAR O CANCELAR UN PEDIDO-->
     <div class="modal-footer">
-      <button class="modal-close waves-effect waves-green btn-flat" onclick="product_add()">Aceptar</button>
+      <button class="waves-effect waves-green btn-flat" onclick="product_add()">Aceptar</button>
       <button class="modal-close waves-effect waves-green btn-flat">Cancelar</button>
     </div>
-  </form>
   </div>
 <?php require_once('includes/footer.php'); ?>
