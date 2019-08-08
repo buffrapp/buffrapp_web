@@ -353,7 +353,7 @@
             define('BAD_CREDENTIALS', 3);
 
             // Try to update a matching entry.
-            $lookup = $server->query('SELECT COUNT(DNI) FROM ' . $tables['users'] . '
+            $lookup = $server->query('SELECT COUNT(DNI) FROM ' . $tables['admin'] . '
                                        WHERE (
                                            `E-mail`       = ' . $email . '
                                             OR

@@ -25,7 +25,8 @@
     <header>
       <nav class="green">
         <div class="nav-wrapper">
-          <a href="#" class="brand-logo">BuffRApp</a><span class="right" id="account_greeter">¡Hola administrador!</span>
+          <a href="#" class="brand-logo">BuffRApp</a>
+          <?php echo ($secure ? '<a href="logout.php" class="right" id="account_greeter">Cerrar sesión</a>':""); ?>
         </div>
       </nav>
     </header>

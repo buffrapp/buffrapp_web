@@ -56,7 +56,7 @@
 
         <div class="row">
           <div class="input-feld col s12">
-            <input class="validate" type="text" name="product_price" id="product_price" />
+            <input minlength="0.00" class="validate" type="number" step="0.50" pattern="[0-9]" name="product_price" id="product_price" />
             <label for="product_price">Ingresá el precio</label>
           </div>
         </div>

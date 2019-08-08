@@ -35,4 +35,7 @@ html { overflow: hidden; }
   width: 1px !important;
 }
 
+.card-content *{
+	cursor: default !important;
+}
 #vcentered_message { position: fixed; top: 40%; width: 100%; }
