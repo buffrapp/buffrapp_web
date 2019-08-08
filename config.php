@@ -21,24 +21,51 @@
         'orders'      => 'pedidos',
         'reports'      => 'reportes',
     );
-    
+
 
     // Open a connection to the database.
     try {
         $server = new PDO('mysql:host=' . $server['hostname'] . ':' . $server['port'] . ';dbname=' . $server['database'] .';charset=utf8', $server['username'], $server['password']);
     } catch (PDOException $e) {
-        $secure = false; $title = 'Fatal exception';
-        require_once('includes/header.php');
+        $secure = false; $title = 'Error fatal';
         echo '
-        <div id="vcentered_message" class="col s12">
-            <h5 class="grey-text center-align">
-                <i class="large material-icons">link_off</i> <br>
-                No fue posible conectarse con la base de datos. ¿Querés <a href="">probar otra vez</a>?
-            </h5>
-        </div>';
+        <html>
+          <head>
+            <meta charset="utf-8"/>
+            <title>BuffRApp - ' . $title . '</title>
+            <!--Import Google Icon Font-->
+            <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+            <!--Import materialize.css-->
+            <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"  media="screen,projection"/>
+
+            <!--Import custom styles-->
+            <link type="text/css" rel="stylesheet" href="styles/custom.css">
+
+            <!--Let browser know website is optimized for mobile-->
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+          </head>
+          <body>
+            <header>
+              <nav class="green">
+                <div class="nav-wrapper">
+                  <a href="#" class="brand-logo">BuffRApp</a>
+                </div>
+              </nav>
+            </header>
+            <main>
+              <div id="vcentered_message" class="col s12">
+                  <h5 class="grey-text center-align">
+                      <i class="large material-icons">link_off</i> <br>
+                      No fue posible conectarse con la base de datos. ¿Querés <a href="">probar otra vez</a>?
+                  </h5>
+              </div>';
         require_once('includes/footer.php');
         $server = null;
         error_log($e->getMessage());
         exit();
     }
+
+    // Define and initialize common variables.
+    $secure = true;
+    $showmenu = true;
 ?>

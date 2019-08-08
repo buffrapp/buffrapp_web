@@ -1,3 +1,5 @@
+        </div>
+      </div>
     </main>
     <footer></footer>
     <!-- Compiled and minified Javascript for jQuery -->

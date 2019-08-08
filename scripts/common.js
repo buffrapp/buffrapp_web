@@ -1,6 +1,6 @@
 $('document').ready(function() {
   $('#area_picker_estadisticas').on('click', function() {
-      window.location = 'index.php';
+      window.location = 'estadisticas.php';
   });
   $('#area_picker_productos').on('click', function() {
       window.location = 'productos.php';
