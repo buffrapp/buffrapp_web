@@ -20,6 +20,7 @@
         'products'      => 'productos',
         'orders'      => 'pedidos',
         'reports'      => 'reportes',
+        'reasons'      => 'motivos'
     );
 
 
