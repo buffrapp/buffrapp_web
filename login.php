@@ -1,5 +1,5 @@
 <?php
- $title   = 'Iniciá sesión'; $showmenu = false; require_once('includes/header.php');
+ $title   = 'Iniciá sesión'; $secure = false; $showmenu = false; require_once('includes/header.php');
  $scripts = [ 'login' ];
 
  if (isset($_SESSION['username']) || isset($_SESSION['password'])) {

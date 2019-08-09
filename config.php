@@ -65,8 +65,4 @@
         error_log($e->getMessage());
         exit();
     }
-
-    // Define and initialize common variables.
-    $secure = true;
-    $showmenu = true;
 ?>
