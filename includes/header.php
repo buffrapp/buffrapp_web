@@ -55,9 +55,20 @@
               <p>Administrá los productos, controlá la disponibilidad y más.</p>
             </li>
 
+            <li id="area_picker_historial" class="collection-item">
+              <span class="title"><h5>Historial</h5></span>
+              <p>Consultá el historial de ventas.</p>
+            </li>
+
+
             <li id="area_picker_estadisticas" class="collection-item">
               <span class="title"><h5>Estadísticas</h5></span>
               <p>Echále un vistazo al estado del sistema, la cantidad de ventas y otros datos.</p>
+            </li>
+
+            <li id="area_picker_configuraciones" class="collection-item">
+              <span class="title"><h5>Configuraciones</h5></span>
+              <p>Editá la configuración del sistema.</p>
             </li>
           </ul>
         </div>
