@@ -113,7 +113,7 @@
 
             // If it's a mail address...
             if (filter_var($email, FILTER_VALIDATE_EMAIL)) { // filter it out...
-              $lookup = $server->query('SELECT COUNT(mail) FROM ' . $tables['users'] . ' WHERE E-mail = ' . $email);
+              $lookup = $server->query('SELECT COUNT(E-mail) FROM ' . $tables['users'] . ' WHERE E-mail = ' . $email);
 
               if ($lookup) {
                 if ($lookup->fetch()[0] > 1) {
@@ -129,7 +129,7 @@
                 print ERROR;
               }
             } elseif (count(explode(".", $email)) > 0) { // else, look for a DNI.
-              $lookup = $server->query('SELECT dni FROM ' . $tables['users'] . ' WHERE mail = ' . $email);
+              $lookup = $server->query('SELECT DNI FROM ' . $tables['users'] . ' WHERE E-mail = ' . $email);
               if ($server->query('INSERT INTO usuarios (DNI, Password) VALUES (' . $email . ', ' . $password . ')') > 0) {
                 print PASS;
               } else {
@@ -241,15 +241,24 @@
               }
           break;
         case 'viewOrder':
-          $lookup   =     $server->query('SELECT
-            DNI_Usuario, ID_Pedido,
-            ID_Producto, DNI_Administrador,
-            FH_Recibido, FH_Tomado,
-            FH_Listo, FH_Entregado,
-            DNI_Cancelado, Nombre
-            FROM ' .$tables['orders'] . ', ' .$tables['users'] . ' WHERE
-            ID_Pedido = ' . $server->quote($_POST['content'][0]).' AND
-            DNI = DNI_Usuario');
+            $lookup   =     $server->query('SELECT
+            o.DNI_Usuario, o.ID_Pedido,
+            o.ID_Producto, o.DNI_Administrador,
+            o.FH_Recibido, o.FH_Tomado,
+            o.FH_Listo, o.FH_Entregado, 
+            o.DNI_Cancelado,
+            u.Nombre, a.Nombre,
+            u.Division, u.Curso,
+            p.Nombre, p.Precio
+            FROM ' .$tables['orders'] . ' o
+            INNER JOIN ' .$tables['users'] . ' u
+            ON u.DNI = DNI_Usuario
+            INNER JOIN ' .$tables['admin'] . ' a
+            ON a.DNI = DNI_Administrador
+            INNER JOIN ' .$tables['products']. ' p
+            ON p.ID_Producto = o.ID_Producto
+            WHERE
+            ID_Pedido = ' . $server->quote($_POST['content'][0]));
 
           if ($lookup) {
             print json_encode($lookup->fetch());
@@ -257,11 +266,81 @@
             print ERROR;
           }
           break;
+        break;
+        case 'viewOrderQueve':
+        //DEVUELVE:
+        //DNI_Usuario
+        //ID_Pedido
+        //ID_Producto
+        //DNI_Administrador = DNI DEL ADMINISTRADOR QUE TOMÓ EL PEDIDO
+        //FH_Recibido
+        //FH_Tomado
+        //u.Nombre = NOMBRE DEL USUARIO QUE HIZO EL PEDIDO
+        //a.Nombre = NOMBRE DEL ADMINISTRADOR QUE TOMÓ EL PEDIDO
+        //p.Nombre = NOMBRE DEL PRODUCTO QUE SE PIDE
+        //p.Precio = PRECIO DEL PRODUCTO QUE SE PIDE
+          $lookup   =     $server->query('SELECT
+            o.DNI_Usuario, o.ID_Pedido,
+            o.ID_Producto, o.DNI_Administrador,
+            o.FH_Recibido, o.FH_Tomado,
+            u.Nombre, a.Nombre,
+            p.Nombre, p.Precio
+            FROM ' .$tables['orders'] . ' o
+            INNER JOIN ' .$tables['users'] . ' u
+            ON u.DNI = DNI_Usuario 
+            INNER JOIN ' .$tables['admin'] . ' a
+            ON a.DNI = DNI_Administrador 
+            INNER JOIN' .$tables['products']. ' p
+            ON p.ID_Producto = o.ID_Producto');
+
+          if ($lookup) {
+            print json_encode($lookup->fetch());
+          } else {
+            print ERROR;
+          }
+          break;
+          case 'viewOrderRequest':
+          //DEVUELVE:
+        //DNI_Usuario
+        //ID_Pedido
+        //ID_Producto
+        //FH_Recibido
+        //u.Nombre = NOMBRE DEL USUARIO QUE HIZO EL PEDIDO
+        //p.Nombre = NOMBRE DEL PRODUCTO QUE SE PIDE
+        //p.Precio = PRECIO DEL PRODUCTO QUE SE PIDE
+          $lookup   =     $server->query('SELECT
+            o.DNI_Usuario, o.ID_Pedido,
+            o.FH_Recibido,
+            u.Nombre,
+            p.Nombre, p.Precio
+            FROM ' .$tables['orders'] . ' o
+            INNERJOIN ' .$tables['users'] . ' u
+            ON DNI = DNI_Usuario 
+            INNERJOIN' .$tables['products']. ' p 
+            ON p.ID_Producto =  o.ID_Producto');
+
+          if ($lookup) {
+            print json_encode($lookup->fetch());
+          } else {
+            print ERROR;
+          }
+          break;
+
           case 'history':
+          //MOSTRAR EN PANTALLA:
+          //o.ID_PEDIDO
+          //u.NOMBRE = NOMBRE DEL USUARIO
+          //a.Administrador = NOMBRE DEL ADMINISTRADOR
+          //o.DNI_Cancelado = DNI DE QUIEN LO CANCELÓ
             $lookup   =     $server->query('SELECT
-              o.ID_Pedido,o.ID_Producto,
-              o.DNI_Usuario,u.Nombre,p.Nombre
-              FROM ' .$tables['orders'] . ' o,' .$tables['users'] . ' u,' .$tables['products'] . ' p');
+              o.ID_Pedido, o.DNI_Cancelado
+              o.FH_Recibido,
+              u.Nombre, a.Nombre        
+            FROM ' .$tables['orders'] . ' o  
+            INNER JOIN ' .$tables['users'] . ' u
+            ON u.DNI = DNI_Usuario 
+            INNER JOIN ' .$tables['admin'] . ' a
+            ON a.DNI = DNI_Administrador a');
             if ($lookup) {
               print json_encode($lookup->fetch());
             } else {
@@ -278,9 +357,19 @@
             print ERROR;
           }
           break;
-        case 'viewReports':
-          $lookup =     $server->query('SELECT * FROM '.$tables['reports'].' WHERE
-          DNI     = ' . $server->quote($_POST['content'][0]));
+        case 'viewOneReport':
+          $lookup =     $server->query('SELECT * 
+            FROM '.$tables['reports'].' 
+            WHERE DNI     = ' . $server->quote($_POST['content'][0]));
+            if ($lookup) {
+              print json_encode($lookup->fetch());
+            } else {
+              print ERROR;
+            }
+            break;
+            case 'viewReports':
+          $lookup =     $server->query('SELECT * 
+            FROM '.$tables['reports'].'');
             if ($lookup) {
               print json_encode($lookup->fetch());
             } else {
@@ -294,20 +383,23 @@
             define('GREEN',2);
             define('GREY',3);
             define('CROSS',4);
-            $lookup =     $server->query('SELECT ISNULL(FH_Tomado), ISNULL(FH_Listo), ISNULL(FH_Entregado), ISNULL(DNI_Cancelado) FROM '.$tables['orders'].' WHERE
+            $lookup =     $server->query('SELECT 
+              INULL(FH_Tomado), ISNULL(FH_Listo), 
+              ISNULL(FH_Entregado), ISNULL(DNI_Cancelado) 
+              FROM '.$tables['orders'].' WHERE
             ID_Pedido  = ' . $server->quote($_POST['content'][0]).'');
             if ($lookup) {
               if ($lookup->rowCount() > 0) {
                 $array = $lookup->fetch();
-                if ($array[3]) {
-                    if ($array[0]) {
+                if ($array[3]) { //SI CANCELADO ESTA NULO (NADIE CANCELÓ EL PEDIDO)
+                    if ($array[0]) { //SI FH_Tomado ESTA NULO (NADIE TOMÓ EL PEDIDO)
                       print RED;
-                    }else if ($array[1]) {
+                    }else if ($array[1]) {//SI FH_Listo ESTA NULO (EL PRODUCTO FUE TOMADO EL PEDIDO)
                       print YELLOW;
-                    }elseif ($array[2]) {
+                    }elseif ($array[2]) {//SI FH_Entregado ESTA NULO (TODAVIA NO LO RETIRARON EL PEDIDO)
                       print GREEN;
                     }else{
-                      print GREY;
+                      print GREY; //RETIRARON EL PEDIDO
                     }
                 }else{
                   print CROSS;
@@ -322,6 +414,15 @@
             }
 
             break;
+          case 'getReasons':
+                $lookup =     $server->query('SELECT * 
+                  FROM '.$tables['reasons'].'');
+                if ($lookup) {
+                  print json_encode($lookup->fetch());
+                } else {
+                  print ERROR;
+                }
+          break;
           case 'doAdministratorLogin':
             /*
             // Inputs:
