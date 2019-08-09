@@ -113,7 +113,7 @@
 
             // If it's a mail address...
             if (filter_var($email, FILTER_VALIDATE_EMAIL)) { // filter it out...
-              $lookup = $server->query('SELECT COUNT(mail) FROM ' . $tables['users'] . ' WHERE E-mail = ' . $email);
+              $lookup = $server->query('SELECT COUNT(E-mail) FROM ' . $tables['users'] . ' WHERE E-mail = ' . $email);
 
               if ($lookup) {
                 if ($lookup->fetch()[0] > 1) {
@@ -129,7 +129,7 @@
                 print ERROR;
               }
             } elseif (count(explode(".", $email)) > 0) { // else, look for a DNI.
-              $lookup = $server->query('SELECT dni FROM ' . $tables['users'] . ' WHERE mail = ' . $email);
+              $lookup = $server->query('SELECT DNI FROM ' . $tables['users'] . ' WHERE E-mail = ' . $email);
               if ($server->query('INSERT INTO usuarios (DNI, Password) VALUES (' . $email . ', ' . $password . ')') > 0) {
                 print PASS;
               } else {
@@ -283,7 +283,7 @@
         //p.Precio = PRECIO DEL PRODUCTO QUE SE PIDE
           $lookup   =     $server->query('SELECT
             DNI_Usuario, ID_Pedido,
-            ID_Producto, FH_Recibido,
+            FH_Recibido,
             u.Nombre,
             p.Nombre, p.Precio
             FROM ' .$tables['orders'] . ' 
