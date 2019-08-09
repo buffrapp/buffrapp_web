@@ -1,7 +1,16 @@
 <?php
- require_once('config.php');
  session_start();
- if ($secure && ( !isset($_SESSION['username']) || !isset($_SESSION['password']) )) {
+ require_once('config.php');
+
+ if (!isset($secure)) {
+  $secure = true;
+ }
+
+ if (!isset($showmenu)) {
+  $showmenu = true;
+ }
+
+ if ($secure && !(isset($_SESSION['username']) && isset($_SESSION['password'])) ) {
    header('location: login.php');
    exit();
  }
