@@ -29,6 +29,7 @@
   {
     if (isset($_POST['content']) && is_array($_POST['content']))
     {
+      print $_POST['request'];
       switch ($_POST['request']) {
           case 'addProduct':
             session_start();
@@ -299,32 +300,6 @@
             print ERROR;
           }
           break;
-          case 'viewOrderRequest':
-          //DEVUELVE:
-        //DNI_Usuario
-        //ID_Pedido
-        //ID_Producto
-        //FH_Recibido
-        //u.Nombre = NOMBRE DEL USUARIO QUE HIZO EL PEDIDO
-        //p.Nombre = NOMBRE DEL PRODUCTO QUE SE PIDE
-        //p.Precio = PRECIO DEL PRODUCTO QUE SE PIDE
-          $lookup   =     $server->query('SELECT
-            o.DNI_Usuario, o.ID_Pedido,
-            o.FH_Recibido,
-            u.Nombre,
-            p.Nombre, p.Precio
-            FROM ' .$tables['orders'] . ' o
-            INNERJOIN ' .$tables['users'] . ' u
-            ON DNI = DNI_Usuario 
-            INNERJOIN' .$tables['products']. ' p 
-            ON p.ID_Producto =  o.ID_Producto');
-
-          if ($lookup) {
-            print json_encode($lookup->fetch());
-          } else {
-            print ERROR;
-          }
-          break;
 
           case 'history':
           //MOSTRAR EN PANTALLA:
@@ -532,6 +507,53 @@
         case 'getHome':
           print json_encode($info['home']);
 
+          break;
+          case 'viewOrderRequest':
+          define('EMPETY', 3);
+          //DEVUELVE:
+        //DNI_Usuario
+        //ID_Pedido
+        //ID_Producto
+        //FH_Recibido
+        //u.Nombre = NOMBRE DEL USUARIO QUE HIZO EL PEDIDO
+        //p.Nombre = NOMBRE DEL PRODUCTO QUE SE PIDE
+        //p.Precio = PRECIO DEL PRODUCTO QUE SE PIDE
+          $lookup   =     $server->query('SELECT
+            o.DNI_Usuario, o.ID_Pedido,
+            o.FH_Recibido,
+            u.Nombre,
+            p.Nombre, p.Precio
+            FROM ' .$tables['orders'] . ' o
+            INNER JOIN ' .$tables['users'] . ' u
+            ON DNI = DNI_Usuario 
+            INNER JOIN ' .$tables['products']. ' p 
+            ON p.ID_Producto =  o.ID_Producto
+            WHERE o.DNI_Cancelado = "NULL" AND 
+                  o.DNI_Administrador = "NULL"');
+            print 'SELECT
+            o.DNI_Usuario, o.ID_Pedido,
+            o.FH_Recibido,
+            u.Nombre,
+            p.Nombre, p.Precio
+            FROM ' .$tables['orders'] . ' o
+            INNER JOIN ' .$tables['users'] . ' u
+            ON DNI = DNI_Usuario 
+            INNER JOIN ' .$tables['products']. ' p 
+            ON p.ID_Producto =  o.ID_Producto
+            WHERE o.DNI_Cancelado = "NULL" AND
+                  o.DNI_Administrador = "NULL"';
+
+            if($lookup){
+              if($lookup->fetch()[0] > 0){
+                print json_encode($lookup->fetchall());
+              }else{
+                print EMPETY;
+              }
+              
+            }else{
+              print ERROR;
+            }
+            
           break;
         case 'getProducts':
           print json_encode($server->query('SELECT * FROM ' . $tables['products'])->fetchAll());

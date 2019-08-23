@@ -1,4 +1,5 @@
-<?php $title = 'Pedidos'; $secure = true; require_once('includes/header.php'); ?>
+<?php $title = 'Pedidos'; $secure = true; require_once('includes/header.php'); 
+$scripts = [ 'pedidos' ];?>
   <div class="col s6"> <!-- Inner left -->
     <div class="row">
       <h5 class="col s12 grey-text center-align">Solicitudes</h5>
