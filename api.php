@@ -24,6 +24,7 @@
   define('PASS', 0);
   define('ERROR', 1);
   define('NOT_ALLOWED', 2);
+  define('EMPETY', 3);
 
   if (isset($_POST['request']))
   {
@@ -207,14 +208,31 @@
             */
            //VERIFICO SI EXISTE Y SI NO FUE TOMADO
               $lookup = $server->query('SELECT count(DNI_Usuario) FROM '.$tables['orders'].' WHERE
-                ID_Pedido = '.$server->quote($_POST['content'][0]).' AND
-                FH_Tomado != NULL');
+                				ID_Pedido = '.$server->quote($_POST['content'][0]).' AND
+                				FH_Tomado != NULL');
               if($lookup){
                 if ($lookup->fetch()[0]==0) {
                    //Pongo el momento en el que fue tomado y por quien
                    $server->query('UPDATE '.$tables['orders'].' SET
-                   FH_Tomado = SYSDATE(), DNI_Administrador = '.$_POST['content'][1]);
-                   print PASS;
+                  				 FH_Tomado = SYSDATE(),
+                  				 DNI_Administrador = '.$_POST['content'][1]);
+
+                   $lookup   =     $server->query('SELECT
+						            o.DNI_Usuario, o.ID_Pedido,
+						            o.ID_Producto, o.DNI_Administrador,
+						            o.FH_Recibido, o.FH_Tomado,
+						            u.Nombre, a.Nombre,
+						            p.Nombre, p.Precio
+						            FROM ' .$tables['orders'] . ' o
+						            INNER JOIN ' .$tables['users'] . ' u
+						            ON u.DNI = DNI_Usuario 
+						            INNER JOIN ' .$tables['admin'] . ' a
+						            ON a.DNI = DNI_Administrador 
+						            INNER JOIN' .$tables['products']. ' p
+						            ON p.ID_Producto = o.ID_Producto
+						            WHERE 
+						            o.ID_Pedido = '.$server->quote($_POST['content'][0]).''););
+                    print json_encode($lookup->fetch()[0]);
                 }else{
                   print ERROR;
                 }
@@ -268,60 +286,7 @@
           }
           break;
         break;
-        case 'viewOrderQueve':
-        //DEVUELVE:
-        //DNI_Usuario
-        //ID_Pedido
-        //ID_Producto
-        //DNI_Administrador = DNI DEL ADMINISTRADOR QUE TOMÓ EL PEDIDO
-        //FH_Recibido
-        //FH_Tomado
-        //u.Nombre = NOMBRE DEL USUARIO QUE HIZO EL PEDIDO
-        //a.Nombre = NOMBRE DEL ADMINISTRADOR QUE TOMÓ EL PEDIDO
-        //p.Nombre = NOMBRE DEL PRODUCTO QUE SE PIDE
-        //p.Precio = PRECIO DEL PRODUCTO QUE SE PIDE
-          $lookup   =     $server->query('SELECT
-            o.DNI_Usuario, o.ID_Pedido,
-            o.ID_Producto, o.DNI_Administrador,
-            o.FH_Recibido, o.FH_Tomado,
-            u.Nombre, a.Nombre,
-            p.Nombre, p.Precio
-            FROM ' .$tables['orders'] . ' o
-            INNER JOIN ' .$tables['users'] . ' u
-            ON u.DNI = DNI_Usuario 
-            INNER JOIN ' .$tables['admin'] . ' a
-            ON a.DNI = DNI_Administrador 
-            INNER JOIN' .$tables['products']. ' p
-            ON p.ID_Producto = o.ID_Producto');
 
-          if ($lookup) {
-            print json_encode($lookup->fetch());
-          } else {
-            print ERROR;
-          }
-          break;
-
-          case 'history':
-          //MOSTRAR EN PANTALLA:
-          //o.ID_PEDIDO
-          //u.NOMBRE = NOMBRE DEL USUARIO
-          //a.Administrador = NOMBRE DEL ADMINISTRADOR
-          //o.DNI_Cancelado = DNI DE QUIEN LO CANCELÓ
-            $lookup   =     $server->query('SELECT
-              o.ID_Pedido, o.DNI_Cancelado
-              o.FH_Recibido,
-              u.Nombre, a.Nombre        
-            FROM ' .$tables['orders'] . ' o  
-            INNER JOIN ' .$tables['users'] . ' u
-            ON u.DNI = DNI_Usuario 
-            INNER JOIN ' .$tables['admin'] . ' a
-            ON a.DNI = DNI_Administrador a');
-            if ($lookup) {
-              print json_encode($lookup->fetch());
-            } else {
-              print ERROR;
-            }
-            break;
         case 'viewUser':
           $lookup =     $server->query('SELECT * FROM '.$tables['users'].' WHERE
           DNI     = ' . $server->quote($_POST['content'][0]).'');
@@ -429,7 +394,7 @@
             define('BAD_CREDENTIALS', 3);
 
             // Try to update a matching entry.
-            $lookup = $server->query('SELECT COUNT(DNI) FROM ' . $tables['admin'] . '
+            $lookup = $server->query('SELECT DNI FROM ' . $tables['admin'] . '
                                        WHERE (
                                            `E-mail`       = ' . $email . '
                                             OR
@@ -456,6 +421,7 @@
                   session_start();
                   $_SESSION['username'] = $email;
                   $_SESSION['password'] = $password;
+                  $_SESSION['dni'] = $lookup->fetch()[0]['DNI'];
 
                   print PASS;
                 } else {
@@ -493,6 +459,7 @@
             if ($server->query('DELETE         FROM ' . $tables['products'] . '
                                 WHERE ID_Producto = ' . $server->quote($_POST['content'][0])) > 0)
             {
+
               print PASS;
             } else {
               print ERROR;
@@ -508,8 +475,73 @@
           print json_encode($info['home']);
 
           break;
+         case 'viewOrderQueve':
+        //DEVUELVE:
+        //DNI_Usuario
+        //ID_Pedido
+        //ID_Producto
+        //DNI_Administrador = DNI DEL ADMINISTRADOR QUE TOMÓ EL PEDIDO
+        //FH_Recibido
+        //FH_Tomado
+        //u.Nombre = NOMBRE DEL USUARIO QUE HIZO EL PEDIDO
+        //a.Nombre = NOMBRE DEL ADMINISTRADOR QUE TOMÓ EL PEDIDO
+        //p.Nombre = NOMBRE DEL PRODUCTO QUE SE PIDE
+        //p.Precio = PRECIO DEL PRODUCTO QUE SE PIDE
+          $lookup   =     $server->query('SELECT
+            o.DNI_Usuario, o.ID_Pedido,
+            o.ID_Producto, o.DNI_Administrador,
+            o.FH_Recibido, o.FH_Tomado,
+            u.Nombre, a.Nombre,
+            p.Nombre, p.Precio
+            FROM ' .$tables['orders'] . ' o
+            INNER JOIN ' .$tables['users'] . ' u
+            ON u.DNI = DNI_Usuario 
+            INNER JOIN ' .$tables['admin'] . ' a
+            ON a.DNI = DNI_Administrador 
+            INNER JOIN' .$tables['products']. ' p
+            ON p.ID_Producto = o.ID_Producto
+            WHERE o.DNI_Administrador != "NULL" AND 
+            		o.DNI_Cancelado = "NULL"');
+
+          if($lookup){
+              if($lookup->fetch()[0] > 0){
+                print json_encode($lookup->fetchall());
+              }else{
+                print EMPETY;
+              }
+            }else{
+              print ERROR;
+            }
+          break;
+
+          case 'history':
+          //MOSTRAR EN PANTALLA:
+          //o.ID_PEDIDO
+          //u.NOMBRE = NOMBRE DEL USUARIO
+          //a.Administrador = NOMBRE DEL ADMINISTRADOR
+          //o.DNI_Cancelado = DNI DE QUIEN LO CANCELÓ
+            $lookup   =     $server->query('SELECT
+              o.ID_Pedido, o.DNI_Cancelado
+              o.FH_Recibido,
+              u.Nombre, a.Nombre        
+            FROM ' .$tables['orders'] . ' o  
+            INNER JOIN ' .$tables['users'] . ' u
+            ON u.DNI = DNI_Usuario 
+            INNER JOIN ' .$tables['admin'] . ' a
+            ON a.DNI = DNI_Administrador a');
+            if($lookup){
+              if($lookup->fetch()[0] > 0){
+                print json_encode($lookup->fetchall());
+              }else{
+                print EMPETY;
+              }
+              
+            }else{
+              print ERROR;
+            }
+            break;
           case 'viewOrderRequest':
-          define('EMPETY', 3);
+          
           //DEVUELVE:
         //DNI_Usuario
         //ID_Pedido
@@ -520,7 +552,7 @@
         //p.Precio = PRECIO DEL PRODUCTO QUE SE PIDE
           $lookup   =     $server->query('SELECT
             o.DNI_Usuario, o.ID_Pedido,
-            o.FH_Recibido,
+            CONCAT(HOUR(o.FH_Recibido),":",MINUTE(o.FH_Recibido)),
             u.Nombre,
             p.Nombre, p.Precio
             FROM ' .$tables['orders'] . ' o
@@ -528,7 +560,7 @@
             ON DNI = DNI_Usuario 
             INNER JOIN ' .$tables['products']. ' p 
             ON p.ID_Producto =  o.ID_Producto
-            WHERE o.DNI_Cancelado = "NULL" AND 
+            WHERE o.DNI_Cancelado = "NULL" and 
                   o.DNI_Administrador = "NULL"');
             print 'SELECT
             o.DNI_Usuario, o.ID_Pedido,
@@ -540,7 +572,7 @@
             ON DNI = DNI_Usuario 
             INNER JOIN ' .$tables['products']. ' p 
             ON p.ID_Producto =  o.ID_Producto
-            WHERE o.DNI_Cancelado = "NULL" AND
+            WHERE o.DNI_Cancelado = "NULL" OR
                   o.DNI_Administrador = "NULL"';
 
             if($lookup){
