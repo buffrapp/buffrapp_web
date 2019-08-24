@@ -7,8 +7,8 @@
     // Database
     $server = array(
         'hostname'   => 'localhost',
-        'username'   => 'pmauser',
-        'password'   => 'pmauser',
+        'username'   => 'root',
+        'password'   => 'usbw',
         'port'       => 3306,
         'database'   => 'buffrapp'
     );

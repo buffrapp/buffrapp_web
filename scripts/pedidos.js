@@ -19,7 +19,6 @@ $('document').ready(function () {
    if (data.length > 0) {
      for (let i = 0; i < data.length; i++) {
         console.log(data[i]);
-
         html += `
             <div id="del` + data[i][1] + `" class="col">
 
@@ -51,9 +50,9 @@ $('document').ready(function () {
      }
      $('#del' + data[i][1]).hide().fadeIn();
    } else {
-    $('#del_empty').html(NO_ORDERS_QUEVE);
+    $('#del_empty').html(NO_ORDERS);
    }
- }
+ });
 
   //--------COLA
     $.ajax({
