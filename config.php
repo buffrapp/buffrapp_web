@@ -1,7 +1,8 @@
 <?php
     // Internal information
     $info = array(
-        'home'       => 'index.html'
+        'home'       => 'index.html',
+        'secret'     => 'BuFfRaPp2019@WebOnline24/7FullBuildSecret'
     );
 
     // Database

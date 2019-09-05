@@ -2,6 +2,20 @@
  session_start();
  require_once('config.php');
 
+ if (file_exists('vendor')) {
+  require_once('vendor/autoload.php');
+ } else {
+  die('Falta el directorio de instalación de composer y sus dependencias, ¿te aseguraste de ejecutar <span style="font-family: monospace">composer install</span> antes de ingresar?');
+ }
+
+ use \Firebase\JWT\JWT;
+
+ function doQuickLoginRedir() {
+  unset($_SESSION['token']);
+  header('location: login.php');
+  exit();
+ }
+
  if (!isset($secure)) {
   $secure = true;
  }
@@ -10,9 +24,34 @@
   $showmenu = true;
  }
 
- if ($secure && !(isset($_SESSION['username']) && isset($_SESSION['password'])) ) {
-   header('location: login.php');
-   exit();
+ if ($secure) {
+  if (!isset($_SESSION['token'])) {
+    doQuickLoginRedir();
+  } else {
+    // Try to decode the token.
+    try {
+      $decoded = JWT::decode($_SESSION['token'], $info['secret'], array('HS256'));
+
+      $query = 'SELECT COUNT(DNI) FROM ' . $tables['admin'] . ' WHERE (DNI = ' . $server->quote($decoded->data->username) . ' OR `E-mail` = ' . $server->quote($decoded->data->username) . ') AND Password = ' . $server->quote($decoded->data->password);
+      $matches = $server->query($query)->fetch()[0];
+
+      if ($matches > 0) {
+        if ($matches > 2) {
+          doQuickLoginRedir();
+        }
+      } else {
+        doQuickLoginRedir();
+      }
+    } catch (SignatureInvalidException $e) {
+      // Invalid signature, probably something went wrong with the client
+      // but we're gonna request a recent login just to ensure the safety
+      // of the process.
+
+      doQuickLoginRedir();
+    } catch (UnexpectedValueException $e) {
+      doQuickLoginRedir();
+    }
+  }
  }
 ?>
 

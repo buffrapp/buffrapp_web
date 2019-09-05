@@ -21,6 +21,14 @@
   */
   require_once('config.php');
 
+  if (file_exists('vendor')) {
+    require_once('vendor/autoload.php');
+  } else {
+    die('Falta el directorio de instalación de composer y sus dependencias, ¿te aseguraste de ejecutar <span style="font-family: monospace">composer install</span> antes de ingresar?');
+  }
+
+  use \Firebase\JWT\JWT;
+
   define('PASS', 0);
   define('ERROR', 1);
   define('NOT_ALLOWED', 2);
@@ -29,7 +37,7 @@
   {
     if (isset($_POST['content']) && is_array($_POST['content']))
     {
-      print $_POST['request'];
+      // print $_POST['request'];
       switch ($_POST['request']) {
           case 'addProduct':
             session_start();
@@ -454,8 +462,17 @@
 
                   // Reflect the logon to the session.
                   session_start();
-                  $_SESSION['username'] = $email;
-                  $_SESSION['password'] = $password;
+
+                  $token = array(
+                      "iat"        => $_SERVER['REQUEST_TIME'],
+                      "data"       => [
+                        "username" => $_POST['content'][0],
+                        "password" => $_POST['content'][1]
+                      ]
+                  );
+
+                  // Define encryption parameters and encode the data.
+                  $_SESSION['token'] = JWT::encode($token, $info['secret']);
 
                   print PASS;
                 } else {
