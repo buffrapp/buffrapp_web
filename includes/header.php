@@ -81,7 +81,7 @@
     </header>
     <main><?php echo ($showmenu ? '
       <div class="row">
-        <div class="col s3"> <!-- Left side-->
+        <div class="col s2  "> <!-- Left side-->
           <ul id="area_picker" class="collection">
 
             <li id="area_picker_pedidos" class="collection-item">
@@ -112,4 +112,6 @@
           </ul>
         </div>
         <div class="col s9"> <!-- Right side -->
-        ' : ''); ?>
+        ' : ''); 
+
+?>
