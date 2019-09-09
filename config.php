@@ -9,7 +9,7 @@
     $server = array(
         'hostname'   => 'localhost',
         'username'   => 'root',
-        'password'   => 'usbw',
+        'password'   => '',
         'port'       => 3306,
         'database'   => 'buffrapp'
     );

@@ -2,8 +2,10 @@ let atime = 100;
 
 const NO_ORDERS = 'No hay solicitudes.';
 const NO_ORDERS_QUEVE = 'No hay pedidos en cola.';
+const NO_ORDERS_DONE = 'No hay pedidos finalizados.';
 $('document').ready(function () {
   $('.modal').modal();
+    
   //------PEDIDOS
   $.ajax({
     url: 'api.php',
@@ -20,19 +22,19 @@ $('document').ready(function () {
      for (let i = 0; i < data.length; i++) {
         //console.log(data[i]);
         html += `
-            <div id="del` + data[i][1] + `" class="col">
+            <div id="del` + data[i]["ID_Pedido"] + `" class="col">
 
                 <div class="card">
                     <div class="card-content">
-                        <span class="card-title" >Pedido #` + data[i][1] + `</span>
+                        <span class="card-title" >Pedido #` + data[i]["ID_Pedido"] + `</span>
                         <span class="card-title">` + data[i][2] + `</span>
-                        <p><a id="" href="#" onclick="ver_alumno(`+data[i][0]+`)">` + data[i][3]+ `</a> te pidió ` + data[i][4]+ `.</p>
+                        <p><a href="#" class="tooltipped" data-position="bottom" data-tooltip="I am a tooltip">` + data[i][3]+ `</a> te pidió ` + data[i][4]+ `.</p>
                         <p>$ ` + data[i][5] + `</p>
                     </div>
 
                   <div class="card-action">
-                    <a id="del_aceptar" class="green-text" href="#" onclick="aceptar_pedido(` + data[i][1] + `)">Aceptar</a>
-                    <a id="del_rechazar" class="green-text" href="#" onclick="rechazar_pedido(` + data[i][1] + `)">Rechazar</a>
+                    <a id="del_aceptar" class="green-text" href="#" onclick="aceptar_pedido(` + data[i]["ID_Pedido"] + `)">Aceptar</a>
+                    <a id="del_rechazar" class="green-text" href="#" onclick="rechazar_pedido(` + data[i]["ID_Pedido"] + `)">Rechazar</a>
                   </div>
               </div>
             </div>
@@ -69,20 +71,20 @@ $('document').ready(function () {
     for (let i = 0; i < data.length; i++) {
         //console.log(data[i]);
         html += `
-                    <div id="del` + data[i][1] + `" class="col">
+                    <div id="del` + data[i]["ID_Pedido"] + `" class="col">
 
                         <div class="card">
                             <div class="card-content">
-                                <span class="card-title">Pedido #` + data[i][1] + `</span>
-                                <span class="card-title">Recibido a las : ` + data[i][4] + `hs</span>
-                                <span class="card-title">Tomado a las : ` + data[i][5] + `hs</span>
+                                <span class="card-title">Pedido #` + data[i]["ID_Pedido"] + `</span>
+                                <span class="card-title">Recibido ` + data[i][4] + `hs</span>
+                                <span class="card-title">Tomado: ` + data[i][5] + `hs</span>
                                 <p><a id="" href="#" onclick="ver_alumno(`+data[i][0]+`)">` + data[i][6]+ `</a> te pidió ` + data[i][8]+ `.</p>
                               <p>$ ` + data[i][9] + `</p>
                             </div>
 
                           <div class="card-action">
-                            <a id="del_aceptar" class="green-text" href="#" onclick="listo_pedido(` + data[i][1] + `)">Listo</a>
-                            <a id="del_rechazar" class="green-text" href="#" onclick="rechazar_pedido(` + data[i][1] + `)">Rechazar</a>
+                            <a id="del_aceptar" class="green-text" href="#" onclick="listo_pedido(` + data[i]["ID_Pedido"] + `)">Listo</a>
+                            <a id="del_rechazar" class="green-text" href="#" onclick="rechazar_pedido(` + data[i]["ID_Pedido"] + `)">Rechazar</a>
                           </div>
                       </div>
                     </div>
@@ -120,21 +122,21 @@ $('document').ready(function () {
     for (let i = 0; i < data.length; i++) {
         //console.log(data[i]);
         html += `
-                    <div id="del` + data[i][1] + `" class="col">
+                    <div id="del` + data[i]["ID_Pedido"] + `" class="col">
 
                         <div class="card">
                             <div class="card-content">
-                                <span class="card-title">Pedido #` + data[i][1] + `</span>
-                                <span class="card-title">Recibido a las : ` + data[i][4] + `hs</span>
-                                <span class="card-title">Tomado a las : ` + data[i][5] + `hs</span>
-                                <span class="card-title">Listo a las : ` + data[i][6] + `hs</span>
-                                <p><a id="" href="#" onclick="ver_alumno(`+data[i][0]+`)">` + data[i][7]+ `</a> te pidió ` + data[i][9]+ `.</p>
-                              <p>$ ` + data[i][10] + `</p>
+                                <span class="card-title">Pedido #` + data[i]["ID_Pedido"] + `</span>
+                                <span class="card-title">Recibido: ` + data[i]["Recibido"] + `</span>
+                                <span class="card-title">Tomado: ` + data[i]["Tomado"] + `</span>
+                                <span class="card-title">Listo: ` + data[i]["Listo"] + `</span>
+                                <p><a id="" href="#" onclick="ver_alumno(`+data[i][0]+`)">` + data[i]["Usuario"]+ `</a> te pidió ` + data[i]["Producto"]+ `.</p>
+                              <p>$ ` + data[i]["Precio"] + `</p>
                             </div>
 
                           <div class="card-action">
-                            <a id="del_aceptar" class="green-text" href="#" onclick="completar_pedido(` + data[i][1] + `)">Entregado</a>
-                            <a id="del_rechazar" class="green-text" href="#" onclick="no_entregado_pedido(` + data[i][1] + `)">No vino</a>
+                            <a id="del_aceptar" class="green-text" href="#" onclick="completar_pedido(` + data[i]["ID_Pedido"] + `)">Entregado</a>
+                            <a id="del_rechazar" class="green-text" href="#" onclick="rechazar_pedido(` + data[i]["ID_Pedido"] + `)">No vino</a>
                           </div>
                       </div>
                     </div>
@@ -152,7 +154,7 @@ $('document').ready(function () {
              $('#done_requests_cards_container').append(html);
            }
          } else {
-          $('#done_empty').html(NO_ORDERS_QUEVE);
+          $('#done_empty').html(NO_ORDERS_DONE);
          }
   });
 });
@@ -187,20 +189,20 @@ function aceptar_pedido(id_pedido) {
 			   let html = '';
 			   if (data.length > 0) {
 					 html += `
-				            <div id="del` + data[1] + `" class="col">
+				            <div id="del` + data[0]["ID_Pedido"] + `" class="col">
 
 				                <div class="card">
 				                    <div class="card-content">
-				                        <span class="card-title">Pedido #` + data[1] + `</span>
-				                        <span class="card-title">Recibido: ` + data[4] + `</span>
-				                        <span class="card-title">Tomado: ` + data[5] + `</span>
-				                        <p><a id="" href="#" onclick="ver_alumno(`+data[0]+`)">` + data[6]+ `</a> te pidió ` + data[8]+ `.</p>
-				                   		<p>$ ` + data[9] + `</p>
+				                        <span class="card-title">Pedido #` + data[0]["ID_Pedido"] + `</span>
+				                        <span class="card-title">Recibido: ` + data[0]["Recibido"] + `</span>
+				                        <span class="card-title">Tomado: ` + data[0]["Tomado"] + `</span>
+				                        <p><a id="" href="#" onclick="ver_alumno(`+data[0][0]+`)">` + data[0][6]+ `</a> te pidió ` + data[0][8]+ `.</p>
+				                   		<p>$ ` + data[0][9] + `</p>
 				                    </div>
 
 				                  <div class="card-action">
-				                    <a id="del_aceptar" class="green-text" href="#" onclick="listo_pedido(` + data[1] + `)">Listo</a>
-				                    <a id="del_rechazar" class="green-text" href="#" onclick="rechazar_pedido(` + data[1] + `)">Rechazar</a>
+				                    <a id="del_aceptar" class="green-text" href="#" onclick="listo_pedido(` + data[0]["ID_Pedido"] + `)">Listo</a>
+				                    <a id="del_rechazar" class="green-text" href="#" onclick="rechazar_pedido(` + data[0]["ID_Pedido"] + `)">Rechazar</a>
 				                  </div>
 				              </div>
 				            </div>
@@ -215,7 +217,7 @@ function aceptar_pedido(id_pedido) {
 			     } else {
 			       $('#queued_requests_cards_container').append(html);
 			     }
-			     $('#del' + data[1]).hide().fadeIn();
+			     $('#del' + data["ID_Pedido"]).hide().fadeIn();
 			   } else {
 			    $('#queue_empty').html(NO_ORDERS);
 			   }
@@ -225,13 +227,29 @@ function aceptar_pedido(id_pedido) {
             }, atime);
         }, timeout * 2);
     }, atime);
+
 }
 
 function rechazar_pedido(id_pedido) {
-    completar_pedido(id_pedido);
-    M.toast({ html: 'El pedido '+id_pedido+' fue rechazado.' });
+  $('#del' + id_pedido).fadeOut();
+    setTimeout(function () {
+        $('#del' + id_pedido).remove();
+        //$('#area_picker_pedidos').effect('shake');
+        verificar_existencia();
+        $.ajax({
+          url: 'api.php',
+          type: 'POST',
+          data: {
+            request: 'cancelarOrden',
+            content: [id_pedido]
+          }
+        })
+        .done(function (data) {
+         console.log(data);
+         M.toast({ html: 'El pedido '+id_pedido+' fue rechazado.' });
+        });
     
-    verificar_existencia();
+    }, atime);
 }
 
 function cancelar_pedido(id_pedido) {
@@ -294,26 +312,25 @@ function listo_pedido(id_pedido){
          let html = '';
          if (data.length > 0) {
            html += `
-                    <div id="del` + data[1] + `" class="col">
+                    <div id="del` + data[0]["ID_Pedido"] + `" class="col">
 
                         <div class="card">
                             <div class="card-content">
-                                <span class="card-title">Pedido #` + data[1] + `</span>
-                                <span class="card-title">Recibido: ` + data[4] + `</span>
-                                <span class="card-title">Tomado: ` + data[5] + `</span>
-                                <p><a id="" href="#" onclick="ver_alumno(`+data[0]+`)">` + data[6]+ `</a> te pidió ` + data[8]+ `.</p>
-                              <p>$ ` + data[9] + `</p>
+                                <span class="card-title">Pedido #` + data[0]["ID_Pedido"] + `</span>
+                                <span class="card-title">Recibido: ` + data[0]["Recibido"] + `</span>
+                                <span class="card-title">Tomado: ` + data[0]["Tomado"] + `</span>
+                                <span class="card-title">Listo: ` + data[0]["Listo"] + `</span>
+                                <p><a id="" href="#" onclick="ver_alumno(`+data[0][0]+`)">` + data[0]["Usuario"]+ `</a> te pidió ` + data[0]["Producto"]+ `.</p>
+                              <p>$ ` + data[0]["Precio"] + `</p>
                             </div>
 
                           <div class="card-action">
-                            <a id="del_aceptar" class="green-text" href="#" onclick="listo_pedido(` + data[1] + `)">Listo</a>
-                            <a id="del_rechazar" class="green-text" href="#" onclick="rechazar_pedido(` + data[1] + `)">Rechazar</a>
+                            <a id="del_aceptar" class="green-text" href="#" onclick="completar_pedido(` + data[0]["ID_Pedido"] + `)">Listo</a>
+                            <a id="del_rechazar" class="green-text" href="#" onclick="rechazar_pedido(` + data[0]["ID_Pedido"] + `)">Rechazar</a>
                           </div>
                       </div>
                     </div>
                 `
-                
-        console.log(html);
            if ($('#done_empty').length > 0) {
                setTimeout(function() {
                    $('#done_empty').fadeOut();
@@ -324,7 +341,7 @@ function listo_pedido(id_pedido){
            } else {
              $('#done_requests_cards_container').append(html);
            }
-           $('#del' + data[1]).hide().fadeIn();
+           $('#del' + data["ID_Pedido"]).hide().fadeIn();
          } else {
           $('#done_empty').html(NO_ORDERS);
          }
@@ -368,4 +385,3 @@ function ver_alumno(dni){
      }
   });
 }
-

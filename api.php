@@ -229,7 +229,8 @@
                    $sql = 'SELECT
                         o.DNI_Usuario, o.ID_Pedido,
                         o.ID_Producto, o.DNI_Administrador,
-                        o.FH_Recibido, o.FH_Tomado,
+                        CONCAT(HOUR(o.FH_Recibido),":",MINUTE(o.FH_Recibido)) AS "Recibido",
+                      CONCAT(HOUR(o.FH_Tomado),":",MINUTE(o.FH_Tomado)) AS "Tomado",
                         u.Nombre, a.Nombre,
                         p.Nombre, p.Precio
                         FROM ' .$tables['orders'] . ' o
@@ -270,11 +271,11 @@
                    $sql = 'SELECT
                       o.DNI_Usuario, o.ID_Pedido,
                       o.ID_Producto, o.DNI_Administrador,
-                      CONCAT(HOUR(o.FH_Recibido),":",MINUTE(o.FH_Recibido)),
-                      CONCAT(HOUR(o.FH_Tomado),":",MINUTE(o.FH_Tomado)),
-                      CONCAT(HOUR(o.FH_Listo),":",MINUTE(o.FH_Listo)),
-                      u.Nombre, a.Nombre,
-                      p.Nombre, p.Precio
+                      CONCAT(HOUR(o.FH_Recibido),":",MINUTE(o.FH_Recibido)) AS "Recibido",
+                      CONCAT(HOUR(o.FH_Tomado),":",MINUTE(o.FH_Tomado)) AS "Tomado",
+                      CONCAT(HOUR(o.FH_Listo),":",MINUTE(o.FH_Listo)) AS "Listo",
+                      u.Nombre AS "Usuario", a.Nombre AS "Admin",
+                      p.Nombre AS "Producto", p.Precio
                       FROM ' .$tables['orders'] . ' o
                       INNER JOIN ' .$tables['users'] . ' u
                       ON u.DNI = DNI_Usuario 
@@ -297,12 +298,15 @@
          $sql = 'SELECT
             o.DNI_Usuario, o.ID_Pedido,
             o.ID_Producto, o.DNI_Administrador,
-            o.FH_Recibido, o.FH_Tomado,
-            o.FH_Listo, o.FH_Entregado, 
+              CONCAT(DATE_FORMAT(o.FH_Recibido,"%d-%m-%Y")," (",DAYNAME(o.FH_Recibido),")") AS "DIA",
+              CONCAT(HOUR(o.FH_Recibido),":",MINUTE(o.FH_Recibido)) AS "Recibido",
+              CONCAT(HOUR(o.FH_Tomado),":",MINUTE(o.FH_Tomado)) AS "Tomado",
+              CONCAT(HOUR(o.FH_Listo),":",MINUTE(o.FH_Listo)) AS "Listo",
+              CONCAT(HOUR(o.FH_Entregado),":",MINUTE(o.FH_Entregado)) AS "Entregado",
             o.DNI_Cancelado,
-            u.Nombre, a.Nombre,
-            u.Division, u.Curso,
-            p.Nombre, p.Precio
+            u.Nombre AS "Usuario", a.Nombre AS "Admin",
+            CONCAT(u.Curso," ",u.Division) AS "curso",
+            p.Nombre AS "Producto", p.Precio
             FROM ' .$tables['orders'] . ' o
             INNER JOIN ' .$tables['users'] . ' u
             ON u.DNI = DNI_Usuario
@@ -313,7 +317,7 @@
             WHERE
             ID_Pedido = ' . $server->quote($_POST['content'][0]);
             $lookup   =     $server->query($sql);
-
+            //print $sql;
           if ($lookup) {
             print json_encode($lookup->fetchall());
           } else {
@@ -492,7 +496,7 @@
                         "password" => $_POST['content'][1]
                       ]
                   );
-                  $_SESSION["dni"] = $datos["DNI"];
+                  $_SESSION['dni'] = $datos["DNI"];
                   // Define encryption parameters and encode the data.
                   $_SESSION['token'] = JWT::encode($token, $info['secret']);
 
@@ -551,9 +555,60 @@
               print ERROR;
             }
             break;
+            case 'history':
+          //MOSTRAR EN PANTALLA:
+          //o.ID_PEDIDO
+          //u.NOMBRE = NOMBRE DEL USUARIO
+          //a.Administrador = NOMBRE DEL ADMINISTRADOR
+          //o.DNI_Cancelado = DNI DE QUIEN LO CANCELÓ
+          if (isset($_POST['content'][1])) {
+            $aux = $_POST['content'][1];
+            $donde="o.ID_Pedido = '".$aux."'";
+            $donde.=" OR u.Nombre LIKE '%$aux%'";
+            $donde.=" OR a.Nombre LIKE '%$aux%'";
+            $donde.=" OR u.DNI LIKE '$aux%'";
+            $donde.=" OR p.Nombre LIKE '%$aux%'";
+          }else{
+            $donde = $server->quote($_POST['content'][0]);
+          }
+            $sql = 'SELECT
+              o.ID_Pedido, o.DNI_Cancelado,
+              u.Nombre AS "Usuario", a.Nombre AS "Admin"     
+            FROM ' .$tables['orders'] . ' o  
+            INNER JOIN ' .$tables['users'] . ' u
+            ON u.DNI = DNI_Usuario 
+            INNER JOIN ' .$tables['products'] . ' p
+            ON p.ID_Producto = o.ID_Producto 
+            INNER JOIN ' .$tables['admin'] . ' a
+            ON a.DNI = DNI_Administrador OR a.DNI=DNI_Cancelado
+            WHERE o.FH_Entregado IS NOT NULL AND
+            ('.$donde.')
+            ORDER BY o.ID_Pedido DESC';
+            //print $sql;
+            $lookup   =     $server->query($sql);
+            if($lookup){
+                print json_encode($lookup->fetchall());
+              
+            }else{
+              print ERROR;
+            }
+            break;
+            case 'cancelarOrden':
+            $dni = isset($_POST['content'][1]) ? $_POST['content'][1] : $_SESSION['dni'];
+              $sql = "UPDATE ".$tables['orders']." SET
+              DNI_Cancelado = ".$dni." WHERE ID_Pedido = ".$_POST['content'][0];  
+              $lookup = $server->query($sql);
+              print $sql;
+              if ($lookup) {
+                print PASS;
+              }else{
+                print ERROR;
+              }
+            break;
           default:
             print ERROR;
         }
+        
     } elseif (isset($_POST['request'])) {
       switch ($_POST['request']) {
         // TODO: Check this case, it doesn't seem to be necessary.
@@ -576,8 +631,8 @@
         $sql = 'SELECT
             o.DNI_Usuario, o.ID_Pedido,
             o.ID_Producto, o.DNI_Administrador,
-            CONCAT(HOUR(o.FH_Recibido),":",MINUTE(o.FH_Recibido)),
-            CONCAT(HOUR(o.FH_Tomado),":",MINUTE(o.FH_Tomado)),
+              CONCAT(HOUR(o.FH_Recibido),":",MINUTE(o.FH_Recibido)) AS "Recibido",
+              CONCAT(HOUR(o.FH_Tomado),":",MINUTE(o.FH_Tomado)) AS "Tomado",
             u.Nombre, a.Nombre,
             p.Nombre, p.Precio
             FROM ' .$tables['orders'] . ' o
@@ -602,9 +657,9 @@
             $sql = 'SELECT
             o.DNI_Usuario, o.ID_Pedido,
             o.ID_Producto, o.DNI_Administrador,
-            CONCAT(HOUR(o.FH_Recibido),":",MINUTE(o.FH_Recibido)),
-            CONCAT(HOUR(o.FH_Tomado),":",MINUTE(o.FH_Tomado)),
-            CONCAT(HOUR(o.FH_Listo),":",MINUTE(o.FH_Listo)),
+              CONCAT(HOUR(o.FH_Recibido),":",MINUTE(o.FH_Recibido)) AS "Recibido",
+              CONCAT(HOUR(o.FH_Tomado),":",MINUTE(o.FH_Tomado)) AS "Tomado",
+              CONCAT(HOUR(o.FH_Listo),":",MINUTE(o.FH_Listo)) AS "Listo",
             u.Nombre, a.Nombre,
             p.Nombre, p.Precio
             FROM ' .$tables['orders'] . ' o
@@ -625,32 +680,7 @@
               print ERROR;
             }
             break;
-          case 'history':
-          //MOSTRAR EN PANTALLA:
-          //o.ID_PEDIDO
-          //u.NOMBRE = NOMBRE DEL USUARIO
-          //a.Administrador = NOMBRE DEL ADMINISTRADOR
-          //o.DNI_Cancelado = DNI DE QUIEN LO CANCELÓ
-            $sql = 'SELECT
-              o.ID_Pedido, o.DNI_Cancelado,
-              o.FH_Recibido,
-              u.Nombre AS "Usuario", a.Nombre AS "Admin",
-              u.DNI AS "DNIUsuario",a.DNI AS "DNIAdmin"       
-            FROM ' .$tables['orders'] . ' o  
-            INNER JOIN ' .$tables['users'] . ' u
-            ON u.DNI = DNI_Usuario 
-            INNER JOIN ' .$tables['admin'] . ' a
-            ON a.DNI = DNI_Administrador
-            ORDER BY o.ID_Pedido DESC';
-            //print $sql;
-            $lookup   =     $server->query($sql);
-            if($lookup){
-                print json_encode($lookup->fetchall());
-              
-            }else{
-              print ERROR;
-            }
-            break;
+          
           case 'viewOrderRequest':
           
           //DEVUELVE:
@@ -663,7 +693,7 @@
         //p.Precio = PRECIO DEL PRODUCTO QUE SE PIDE
         $sql ='SELECT
             o.DNI_Usuario, o.ID_Pedido,
-            CONCAT(HOUR(o.FH_Recibido),":",MINUTE(o.FH_Recibido)),
+              CONCAT(HOUR(o.FH_Recibido),":",MINUTE(o.FH_Recibido)) AS "Recibido",
             u.Nombre,
             p.Nombre, p.Precio
             FROM ' .$tables['orders'] . ' o
