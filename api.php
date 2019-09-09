@@ -460,21 +460,21 @@
             define('BAD_CREDENTIALS', 3);
 
             // Try to update a matching entry.
-             $sql = 'SELECT COUNT(DNI) AS "verificar",DNI FROM ' . $tables['admin'] . '
-                                       WHERE (
-                                           `E-mail`       = ' . $email . '
-                                            OR
-                                            DNI           = ' . $email . '
-                                             )
-                                       AND  password      = ' . $password. '';
+            $sql = 'SELECT DNI FROM ' . $tables['admin'] . '
+                               WHERE (
+                                  `E-mail`       = ' . $email . '
+                                  OR
+                                  DNI           = ' . $email . '
+                                     )
+                               AND  Password      = ' . $password. '';
+
             $lookup = $server->query($sql);
-            //PRINT $sql;
 
             // If the request was possible..
 
             if ($lookup) {
               $datos = $lookup->fetch();
-                $matches = $datos['verificar'];
+                $matches = $lookup->rowCount();
 
                 if ($matches > 1) {
                   /*
