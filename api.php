@@ -448,19 +448,81 @@
             // possible frontends.
             */
 
+            define('BAD_CREDENTIALS', 3);
+
+            // Try to update a matching entry.
+            $sql = 'SELECT DNI FROM ' . $tables['admin'] . '
+                               WHERE (
+                                  `E-mail`       = ' . $email . '
+                                  OR
+                                  DNI           = ' . $email . '
+                                     )
+                               AND  Password      = ' . $password. '';
+
+            $lookup = $server->query($sql);
+
+            // If the request was possible..
+
+            if ($lookup) {
+              $datos = $lookup->fetch();
+                $matches = $lookup->rowCount();
+
+                if ($matches > 1) {
+                  /*
+                  // The database was inconsistent.
+                  //
+                  // TODO: The frontend should print an error telling
+                  //       the client that a fatal error broke the
+                  //       login process.
+                  */
+                  print ERROR;
+                } elseif ($matches == 1) {
+                  // Success logging in.
+
+                  // Reflect the logon to the session
+                  $token = array(
+                      "iat"        => $_SERVER['REQUEST_TIME'],
+                      "data"       => [
+                        "username" => $_POST['content'][0],
+                        "password" => $_POST['content'][1]
+                      ]
+                  );
+                  $_SESSION['dni'] = $datos["DNI"];
+                  // Define encryption parameters and encode the data.
+                  $_SESSION['token'] = JWT::encode($token, $info['secret']);
+
+                  print PASS;
+                } else {
+                  print BAD_CREDENTIALS;
+                }
+              } else {
+                print ERROR;
+              }
+
+            break;
+          case 'doUserLogin':
             /*
-            // About this operation:
+            // Inputs:
             //
-            // A random_bytes call is done, looking for a return value of 64 bytes (default), taken from the
-            // RANDOM_LENGTH constant. Then, this value is passed to a subsequent bin2hex call which will
-            // return a pair of hex values that are easy to work with in the database, this results in a
-            // string with a length of RANDOM_LENGTH ^ 2 or RANDOM_LENGTH * 2.
+            // 0 -> DNI/Mail address.
+            // 1 -> Password.
+            */
+
+            $email = $server->quote($_POST['content'][0]);
+            $password = $server->quote($_POST['content'][1]);
+
+            /*
+            // Security:
+            //
+            // There isn't much to worry about this topic, the security mechanisms will be backed by the
+            // login script itself, and not here, because it would be a waste of resources for the rest of
+            // possible frontends.
             */
 
             define('BAD_CREDENTIALS', 3);
 
             // Try to update a matching entry.
-            $sql = 'SELECT DNI FROM ' . $tables['admin'] . '
+            $sql = 'SELECT DNI FROM ' . $tables['users'] . '
                                WHERE (
                                   `E-mail`       = ' . $email . '
                                   OR
@@ -584,7 +646,7 @@
             WHERE o.FH_Entregado IS NOT NULL AND
             ('.$donde.')
             ORDER BY o.ID_Pedido DESC';
-            //print $sql;
+            // print $sql;
             $lookup   =     $server->query($sql);
             if($lookup){
                 print json_encode($lookup->fetchall());
@@ -594,6 +656,18 @@
             }
             break;
             case 'cancelarOrden':
+            $dni = isset($_POST['content'][1]) ? $_POST['content'][1] : $_SESSION['dni'];
+              $sql = "UPDATE ".$tables['orders']." SET
+              DNI_Cancelado = ".$dni." WHERE ID_Pedido = ".$_POST['content'][0];  
+              $lookup = $server->query($sql);
+              print $sql;
+              if ($lookup) {
+                print PASS;
+              }else{
+                print ERROR;
+              }
+            break;
+          case 'cancelarOrden':
             $dni = isset($_POST['content'][1]) ? $_POST['content'][1] : $_SESSION['dni'];
               $sql = "UPDATE ".$tables['orders']." SET
               DNI_Cancelado = ".$dni." WHERE ID_Pedido = ".$_POST['content'][0];  
@@ -714,6 +788,30 @@
           break;
         case 'getProducts':
           print json_encode($server->query('SELECT * FROM ' . $tables['products'])->fetchAll());
+          break;
+        case 'getUserHistory':
+          if (isset($_SESSION['dni'])) { // a DNI is set
+            
+            $sql = 'SELECT productos.Nombre AS Nombre_Producto, administrador.Nombre AS Nombre_Administrador, FH_Recibido, FH_Tomado, FH_Listo, FH_Entregado
+                    FROM   pedidos
+                    JOIN   administrador
+                           ON administrador.DNI = pedidos.DNI_Administrador
+                    JOIN   productos
+                           ON productos.ID_Producto = pedidos.ID_Producto
+                    WHERE  pedidos.DNI_Usuario = ' . $_SESSION['dni'];
+            // print $sql;
+            $lookup = $server->query($sql);
+            if ($lookup) { // is ok, then..
+              $rowCount = $lookup->rowCount();
+              if ($rowCount > 0) { // and there is any data
+                print json_encode($lookup->fetchall());
+              } else { // just print the obvious count (zero).
+                print $rowCount;
+              }
+            } else {
+              print ERROR;
+            }
+          }
           break;
         default:
           print ERROR;
