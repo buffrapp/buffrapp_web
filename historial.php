@@ -7,9 +7,31 @@
       <div class="nav-wrapper">
       <form>
         <div class="input-field">
-          <input id="search" type="search" onkeyup="buscar()" required>
+          <input id="search" type="search" onkeyup="Buscar()" required>
           <label class="label-icon" for="search"><i class="material-icons">search</i></label>
-          <i class="material-icons">close</i>
+          <div class="row center-align">
+                <label>
+                  <input type="checkbox" id="ID_Pedido" onclick="Buscar()" />
+                  <span>ID Pedido</span>
+                </label>
+                <label>
+                  <input type="checkbox" id="Nombre_Producto" onclick="Buscar()"/>
+                  <span>Nombre del producto</span>
+                </label>
+                <label>
+                  <input type="checkbox" id="Nombre_Encargado" onclick="Buscar()"/>
+                  <span>Nombre del encargado</span>
+                </label>
+                <label>
+                  <input type="checkbox" id="Nombre_Alumno" onclick="Buscar()"/>
+                  <span>Nombre/apellido de alumno</span>
+                </label>
+                <label>
+                  <input type="checkbox" id="DNI_Alumno" onclick="Buscar()"/>
+                  <span>DNI de alumno</span>
+                </label>
+                
+          </div>
         </div>
       </form>
     </div>
@@ -18,11 +40,6 @@
     <div class="row">
       <h5 class="col s12 grey-text center-align"></h5>
     </div>
-      <div class="fixed-action-btn">
-    <a class="btn-floating btn-large waves-effect waves-light modal-trigger green" href="#products_add">
-      <i class="waves-effect waves-light large material-icons">add</i>
-    </a>
-  </div>
     <span id="total"> Total de ventas: </span>
     <div id="pedidos">
       

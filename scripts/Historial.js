@@ -1,7 +1,9 @@
 let atime = 400;
 let NO_HAY = "NO HAY PEDIDOS";
+
 $('document').ready(function () {
   $('.modal').modal();
+  
   todo();
 
 });
@@ -100,17 +102,34 @@ function verOrden(id_pedido){
           }); 
 }
 
-function buscar(){
+function Buscar(){
   $('#total').html("Total de ventas: ");
   let valor = $('#search').val();
   if (valor.length>0) {
+    let uni='';
+    if ($('#ID_Pedido').prop('checked')) {
+      uni = unir(uni,'ID_Pedido = '+valor);
+    };
+    if ($('#Nombre_Alumno').prop('checked')) {
+      uni = unir(uni,'u.Nombre LIKE "%'+valor+'%"');
+    };
+    if ($('#Nombre_Encargado').prop('checked')) {
+      uni = unir(uni,'a.Nombre LIKE "%'+valor+'%"');
+    };
+    if ($('#Nombre_Producto').prop('checked')) {
+      uni = unir(uni,'p.Nombre LIKE "%'+valor+'%"');
+    };
+    if ($('#DNI_Alumno').prop('checked')) {
+      uni = unir(uni,'DNI_Usuario = '+valor);
+    };
+    //console.log(uni);
       $('.modal').modal();
   $.ajax({
     url: 'api.php',
     type: 'POST',
     data: {
       request: 'history',
-      content: ['1',valor]
+      content: ['1',uni]
     }
   })
   .done(function (data) {
@@ -199,4 +218,11 @@ function todo(){
    $('#total').append(total);
  });
 }
-
+function unir(html,sql){
+  if (html=='') {
+    html=sql;
+  }else{
+    html+=' OR '+sql;
+  }
+  return html;
+}
