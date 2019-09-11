@@ -30,4 +30,16 @@ $scripts = [ 'pedidos' ];?>
       <h6 id="done_empty" class="center-align grey-text">No hay pedidos finalizados.</h6>
     </div>
   </div>
+
+  <div id="order_remove" class="modal modal-fixed-footer">
+    <div class="modal-content">
+      <h4>¿Querés cancelar este pedido?</h4>
+      <p>Se le enviará una notificación al usuario de dicha acción.</p>
+      <input type="hidden" name="order_id" value="">
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat" onclick="order_delete(true)">Sí</a>
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat">No</a>
+    </div>
+  </div>
 <?php require_once('includes/footer.php'); ?>

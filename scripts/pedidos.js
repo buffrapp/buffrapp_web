@@ -252,6 +252,12 @@ function rechazar_pedido(id_pedido) {
     }, atime);
 }
 
+function rechazar_pedido_request(id_pedido) {
+    $('#product_id').val(id_pedido);
+    console.log($('#product_id').val());
+    $('#products_remove').modal('open');
+ }
+
 function cancelar_pedido(id_pedido) {
     completar_pedido(id_pedido);
     M.toast({ html: 'El pedido '+id_pedido+' fue cancelado por x razon.' });
