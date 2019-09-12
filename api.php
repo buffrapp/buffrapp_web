@@ -791,8 +791,7 @@
           break;
         case 'getUserHistory':
           if (isset($_SESSION['dni'])) { // a DNI is set
-            
-            $sql = 'SELECT productos.Nombre AS Nombre_Producto, administrador.Nombre AS Nombre_Administrador, FH_Recibido, FH_Tomado, FH_Listo, FH_Entregado
+            $sql = 'SELECT pedidos.ID_Producto AS ID_Producto, productos.Nombre AS Producto_Nombre, productos.Precio AS Producto_Precio, administrador.Nombre AS Nombre_Administrador, FH_Recibido, FH_Tomado, FH_Listo, FH_Entregado, DNI_Cancelado
                     FROM   pedidos
                     JOIN   administrador
                            ON administrador.DNI = pedidos.DNI_Administrador
@@ -811,6 +810,8 @@
             } else {
               print ERROR;
             }
+          } else {
+            print NOT_ALLOWED;
           }
           break;
         default:
