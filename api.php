@@ -158,10 +158,11 @@
             //$_POST['content'][1] = DNI del usuario
             */
            //Verifico si este alumno hizo un pedido y no fue ni entregado ni cancelado
-            $lookup = $server->query('SELECT COUNT(DNI_Usuario) FROM '.$tables['orders'].' WHERE
-              DNI_Usuario = '.$server->quote($_POST['content'][1]).' AND
-              FH_Entregado IS NULL AND
-              DNI_Cancelado IS NULL');
+            $query = 'SELECT COUNT(DNI_Usuario) FROM '.$tables['orders'].'
+                      WHERE DNI_Usuario = '. $_SESSION['dni'] . ' AND
+                            FH_Entregado IS NULL AND
+                            DNI_Cancelado IS NULL';
+            $lookup = $server->query($query);
             if ($lookup) {
                 if ($lookup->fetch()[0] > 1) {
 
@@ -184,12 +185,12 @@
                               )
                               VALUES
                               (
-                                '.$_POST['content'][1].', ' /* DNI_Usuario*/ . '
+                                '.$_SESSION['dni']     . ', ' /* DNI_Usuario*/ . '
                                 NULL, ' /* ID_Pedido*/ .'
-                                '.$_POST['content'][0].', ' /* ID_Producto*/ . '
+                                '.$_POST['content'][0] . ', ' /* ID_Producto*/ . '
                               )';
-                      $lookup = $server->query($sql);
-                      if ($lookup) {
+                      $update = $server->query($sql);
+                      if ($update) {
                         print PASS;
                       } else {
                         print ERROR;
