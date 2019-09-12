@@ -175,22 +175,20 @@
                             WHERE  ID_Producto        = ' . $server->quote($_POST['content'][0]) . '
                             AND    Estado             = 1';
                   $lookup =  $server->query($query);
-                  if($lookup){
+                  if ($lookup) {
 
-                    if ($lookup->fetch()[0] > 1) {
-                       $sql = 'INSERT INTO '.$tables['orders'].'
-                              (
-                                `DNI_Usuario`,
-                                `ID_Pedido`,
-                                `ID_Producto`,
-                              )
-                              VALUES
-                              (
-                                '.$_SESSION['dni']     . ', ' /* DNI_Usuario*/ . '
-                                NULL, ' /* ID_Pedido*/ .'
-                                '.$_POST['content'][0] . ', ' /* ID_Producto*/ . '
-                              )';
-                      $update = $server->query($sql);
+                    if ($lookup->fetch()[0] > 0) {
+                      $query = 'INSERT INTO '.$tables['orders'].'
+                                (
+                                  `DNI_Usuario`,
+                                  `ID_Producto`
+                                )
+                                VALUES
+                                (
+                                  '.$_SESSION['dni']     . ', ' /* DNI_Usuario*/ . '
+                                  '.$_POST['content'][0]        /* ID_Producto*/ . '
+                                )';
+                      $update = $server->query($query);
                       if ($update) {
                         print PASS;
                       } else {
