@@ -43,7 +43,7 @@
       switch ($_POST['request']) {
           case 'addProduct':
             
-            if (isset($_SESSION['username']) && isset($_SESSION['password']))
+            if (isset($_SESSION['dni']))
             {
               if (is_array($_POST['content']))
               {
@@ -324,7 +324,6 @@
             print ERROR;
           }
           break;
-        break;
 
         case 'viewUser':
          $sql = 'SELECT * FROM '.$tables['users'].' WHERE
@@ -522,6 +521,7 @@
             define('BAD_CREDENTIALS', 3);
 
             // Try to update a matching entry.
+
             $sql = 'SELECT DNI FROM ' . $tables['users'] . '
                                WHERE (
                                   `E-mail`       = ' . $email . '
@@ -531,12 +531,13 @@
                                AND  Password      = ' . $password. '';
 
             $lookup = $server->query($sql);
+            //PRINT $sql;
 
             // If the request was possible..
 
             if ($lookup) {
               $datos = $lookup->fetch();
-                $matches = $lookup->rowCount();
+                $matches = $datos['verificar'];
 
                 if ($matches > 1) {
                   /*
@@ -623,13 +624,8 @@
           //u.NOMBRE = NOMBRE DEL USUARIO
           //a.Administrador = NOMBRE DEL ADMINISTRADOR
           //o.DNI_Cancelado = DNI DE QUIEN LO CANCELÓ
-          if (isset($_POST['content'][1])) {
-            $aux = $_POST['content'][1];
-            $donde="o.ID_Pedido = '".$aux."'";
-            $donde.=" OR u.Nombre LIKE '%$aux%'";
-            $donde.=" OR a.Nombre LIKE '%$aux%'";
-            $donde.=" OR u.DNI LIKE '$aux%'";
-            $donde.=" OR p.Nombre LIKE '%$aux%'";
+          if (isset($_POST['content'][1]) && !($_POST['content'][1]=='')) {
+            $donde = $_POST['content'][1];
           }else{
             $donde = $server->quote($_POST['content'][0]);
           }
