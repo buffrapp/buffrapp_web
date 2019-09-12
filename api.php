@@ -537,7 +537,7 @@
 
             if ($lookup) {
               $datos = $lookup->fetch();
-                $matches = $datos['verificar'];
+                $matches = $lookup->rowCount();
 
                 if ($matches > 1) {
                   /*
