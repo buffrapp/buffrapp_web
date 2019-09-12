@@ -171,9 +171,10 @@
                 } else {
 
                   //Verifico si el producto existe y esta disponible
-                  $lookup = $server->query('SELECT FROM '.$tables['products'].' WHERE
-                  ID_Producto = '.$server->quote($_POST['content'][0]).' AND
-                  Estado = \'1\'');
+                  $query = 'SELECT COUNT(ID_Producto) FROM ' . $tables['products'] . '
+                            WHERE  ID_Producto        = ' . $server->quote($_POST['content'][0]) . '
+                            AND    Estado             = 1';
+                  $lookup =  $server->query($query);
                   if($lookup){
 
                     if ($lookup->fetch()[0] > 1) {
