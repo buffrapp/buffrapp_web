@@ -157,6 +157,9 @@
             //$_POST['content'][0] = ID del producto
             //$_POST['content'][1] = DNI del usuario
             */
+           
+           define('ALREADY_ORDERED', 3);
+
            //Verifico si este alumno hizo un pedido y no fue ni entregado ni cancelado
             $query = 'SELECT COUNT(DNI_Usuario) FROM '.$tables['orders'].'
                       WHERE DNI_Usuario = '. $_SESSION['dni'] . ' AND
@@ -166,7 +169,7 @@
             if ($lookup) {
                 if ($lookup->fetch()[0] > 1) {
 
-                  print ALREADY_REGISTERED;
+                  print ALREADY_ORDERED;
 
                 } else {
 
