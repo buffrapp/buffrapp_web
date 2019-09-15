@@ -796,7 +796,8 @@
                            ON administrador.DNI = pedidos.DNI_Administrador
                     JOIN   productos
                            ON productos.ID_Producto = pedidos.ID_Producto
-                    WHERE  pedidos.DNI_Usuario = ' . $_SESSION['dni'];
+                    WHERE  pedidos.DNI_Usuario = ' . $_SESSION['dni'] .'
+                    ORDER  BY ID_Pedido DESC';
             // print $sql;
             $lookup = $server->query($sql);
             if ($lookup) { // is ok, then..
