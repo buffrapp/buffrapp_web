@@ -812,6 +812,44 @@
           } else {
             print NOT_ALLOWED;
           }
+          break;  
+        case 'getUserOrders':
+          // Returns the last order available from the user who issued the request.
+
+          // TODO: Get this case to support multiple orders.
+
+          define('NO_ORDERS', 3);
+          if (isset($_SESSION['dni'])) {
+            $sql = 'SELECT
+                      DNI_Usuario, 
+                      ID_Pedido, 
+                      productos.Nombre As Nombre_Producto, 
+                      DNI_Administrador, 
+                      FH_Recibido, 
+                      FH_Tomado, 
+                      FH_Listo, 
+                      FH_Entregado, 
+                      DNI_Cancelado
+                    FROM pedidos
+                    JOIN productos
+                      ON productos.ID_Producto = pedidos.ID_Producto
+                    WHERE         DNI_Usuario = ' . $_SESSION['dni'] . '
+                    ORDER BY      FH_Recibido DESC
+                    LIMIT 1';
+            $lookup = $server->query($sql);
+            if ($lookup) { // is ok, then..
+              $rowCount = $lookup->rowCount();
+              if ($rowCount > 0) { // and there is any data
+                print json_encode($lookup->fetchAll());
+              } else {
+                print NO_ORDERS;
+              }
+            } else {
+              print ERROR;
+            }
+          } else {
+            print NOT_ALLOWED;
+          }
           break;
         default:
           print ERROR;
