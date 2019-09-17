@@ -612,15 +612,33 @@
               $server->query($sql);
             break;
           case 'deleteProduct':
-            if ($server->query('DELETE         FROM ' . $tables['products'] . '
-                                WHERE ID_Producto = ' . $server->quote($_POST['content'][0])) > 0)
-            {
+              $lookup = $server->query('SELECT COUNT(ID_Producto) FROM ' . $tables['orders'] . '
+                                        WHERE  ID_Producto        =    ' . $server->quote($_POST['content'][0]));
+              if ($lookup) {
+                $matches = $lookup->fetch()[0];
 
-              print PASS;
-            } else {
-              print ERROR;
-            }
-            break;
+                if ($matches > 0) {
+                  if ($server->query('UPDATE                ' . $tables['products'] . '
+                                      SET     Estado      = -1
+                                      WHERE   ID_Producto = ' . $server->quote($_POST['content'][0]))->rowCount() > 0)
+                  {
+                    print PASS;
+                  } else {
+                    print ERROR;
+                  }
+                } else {
+                  if ($server->query('DELETE  FROM          ' . $tables['products'] . '
+                                      WHERE   ID_Producto = ' . $server->quote($_POST['content'][0]))->rowCount() > 0)
+                  {
+                    print PASS;
+                  } else {
+                    print ERROR;
+                  }
+                }
+              } else {
+                print ERROR;
+              }
+              break;
             case 'history':
           //MOSTRAR EN PANTALLA:
           //o.ID_PEDIDO
@@ -786,7 +804,8 @@
             
           break;
         case 'getProducts':
-          print json_encode($server->query('SELECT * FROM ' . $tables['products'])->fetchAll());
+          print json_encode($server->query('SELECT *      FROM ' . $tables['products'] . '
+                                            WHERE  estado >    -1')->fetchAll());
           break;
         case 'getUserHistory':
           if (isset($_SESSION['dni'])) { // a DNI is set
