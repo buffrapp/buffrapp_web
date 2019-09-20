@@ -159,56 +159,58 @@
            
            define('ALREADY_ORDERED', 3);
 
-           //Verifico si este alumno hizo un pedido y no fue ni entregado ni cancelado
-            $query = 'SELECT COUNT(DNI_Usuario) FROM '.$tables['orders'].'
-                      WHERE DNI_Usuario = '. $_SESSION['dni'] . ' AND
-                            FH_Entregado IS NULL AND
-                            DNI_Cancelado IS NULL';
-            $lookup = $server->query($query);
-            if ($lookup) {
-                if ($lookup->fetch()[0] > 1) {
+           if (isset($_SESSION['dni'])) {
+            //Verifico si este alumno hizo un pedido y no fue ni entregado ni cancelado
+              $query = 'SELECT COUNT(DNI_Usuario) FROM '.$tables['orders'].'
+                        WHERE DNI_Usuario = '. $_SESSION['dni'] . ' AND
+                              FH_Entregado IS NULL AND
+                              DNI_Cancelado IS NULL';
+              $lookup = $server->query($query);
+              if ($lookup) {
+                  if ($lookup->fetch()[0] > 1) {
 
-                  print ALREADY_ORDERED;
+                    print ALREADY_ORDERED;
 
-                } else {
+                  } else {
 
-                  //Verifico si el producto existe y esta disponible
-                  $query = 'SELECT COUNT(ID_Producto) FROM ' . $tables['products'] . '
-                            WHERE  ID_Producto        = ' . $server->quote($_POST['content'][0]) . '
-                            AND    Estado             = 1';
-                  $lookup =  $server->query($query);
-                  if ($lookup) {
+                    //Verifico si el producto existe y esta disponible
+                    $query = 'SELECT COUNT(ID_Producto) FROM ' . $tables['products'] . '
+                              WHERE  ID_Producto        = ' . $server->quote($_POST['content'][0]) . '
+                              AND    Estado             = 1';
+                    $lookup =  $server->query($query);
+                    if ($lookup) {
 
-                    if ($lookup->fetch()[0] > 0) {
-                      $query = 'INSERT INTO '.$tables['orders'].'
-                                (
-                                  `DNI_Usuario`,
-                                  `ID_Producto`
-                                )
-                                VALUES
-                                (
-                                  '.$_SESSION['dni']     . ', ' /* DNI_Usuario*/ . '
-                                  '.$_POST['content'][0]        /* ID_Producto*/ . '
-                                )';
-                      $update = $server->query($query);
-                      if ($update) {
-                        print PASS;
+                      if ($lookup->fetch()[0] > 0) {
+                        $query = 'INSERT INTO '.$tables['orders'].'
+                                  (
+                                    `DNI_Usuario`,
+                                    `ID_Producto`
+                                  )
+                                  VALUES
+                                  (
+                                    '.$_SESSION['dni']     . ', ' /* DNI_Usuario*/ . '
+                                    '.$_POST['content'][0]        /* ID_Producto*/ . '
+                                  )';
+                        $update = $server->query($query);
+                        if ($update) {
+                          print PASS;
+                        } else {
+                          print ERROR;
+                        }
                       } else {
                         print ERROR;
                       }
+
                     } else {
                       print ERROR;
                     }
-
-                  } else {
-                    print ERROR;
                   }
-                }
+              } else {
+                print ERROR;
+              }
             } else {
-              print ERROR;
+              print NOT_ALLOWED;
             }
-
-
             //Si todo es correcto agrego el pedido a la cola
 
               break;
