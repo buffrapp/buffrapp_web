@@ -3,9 +3,8 @@ let NO_HAY = "NO HAY PEDIDOS";
 
 $('document').ready(function () {
   $('.modal').modal();
-  
+  $('.collapsible').collapsible();  
   todo();
-
 });
 function verOrden(id_pedido){
           $.ajax({
@@ -19,27 +18,52 @@ function verOrden(id_pedido){
           .done(function (data) {
             console.log(data);
             data = JSON.parse(data);
-           let html = `<ul class='collapsible collapsible-accordion'>
-                        <li>
-                          <div class="collapsible-header"><i class="material-icons">access_time</i>Horarios</div>
-                          <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
-                        </li>
-
-                        <li>
-                          <div class="collapsible-header"><i class="material-icons">access_time</i>Alumno</div>
-                          <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
-                        </li>
-
-                        <li>
-                          <div class="collapsible-header"><i class="material-icons">access_time</i>Administrador</div>
-                          <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
-                        </li>
-
-                        <li>
-                          <div class="collapsible-header"><i class="material-icons">access_time</i>Pedido</div>
-                          <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
-                        </li>
-                      </ul>
+            let horarios = `<div class='row'>
+                          <div class='col s3'>
+                              Recibido: `+data[0]['Recibido']+`
+                          </div>
+                          <div class='col s3'>
+                              Tomado: `+data[0]['Tomado']+`
+                          </div>
+                          <div class='col s3'>
+                              Listo: `+data[0]['Listo']+`
+                          </div>
+                          <div class='col s3'>
+                              Entregado: `+data[0]['Entregado']+`
+                          </div>
+                          </div>`;
+                        $('#horarios').html(horarios);
+            let alumno = `<div class='row'>
+                          <div class='col s3'>
+                            Alumno: `+data[0]['Usuario']+`
+                          </div>
+                          <div class='col s3'>
+                            Año: `+data[0]['curso']+`
+                          </div>
+                          <div class='col s3'>
+                            DNI: `+data[0]['DNI_Usuario']+`
+                          </div>
+                          </div>`;
+                          $('#alumno').html(alumno);
+            let administrador = `<div class='row'>
+                                <div class='col s3'>
+                                  Administrador: `+data[0]['Admin']+`
+                                </div>
+                                <div class='col s3'>
+                                  DNI: `+data[0]['DNI_Administrador']+`
+                                </div>
+                                </div>`;
+                        $('#administrador').html(administrador);
+            let pedido = `<div class='row'>
+                          <div class='col s3'>
+                            Producto: `+data[0]['Producto']+`
+                          </div>
+                          <div class='col s3'>
+                            Precio: $`+data[0]['Precio']+`
+                          </div>
+                          </div>`;
+                          $('#pedido').html(pedido);
+            let html = `
                       <div class='col s12'>
                       
                         <div class='row'>
@@ -52,58 +76,16 @@ function verOrden(id_pedido){
                             </div>
                         </h5>
                         </div>
-
-                        <div class='row'>
-                          <div class='col s3'>
-                          Recibido: `+data[0]['Recibido']+`
-                          </div>
-                          <div class='col s3'>
-                          Tomado: `+data[0]['Tomado']+`
-                          </div>
-                          <div class='col s3'>
-                          Listo: `+data[0]['Listo']+`
-                          </div>
-                          <div class='col s3'>
-                          Entregado: `+data[0]['Entregado']+`
-                          </div>
-                        </div>
-
-                      <div class='row'>
-                          <div class='col s3'>
-                          Alumno: `+data[0]['Usuario']+`
-                          </div>
-                          <div class='col s3'>
-                          Año: `+data[0]['curso']+`
-                          </div>
-                          <div class='col s3'>
-                          DNI: `+data[0]['DNI_Usuario']+`
-                          </div>
-                        </div>
-                      <div class='row'>
-                          <div class='col s3'>
-                            Administrador: `+data[0]['Admin']+`
-                          </div>
-                          <div class='col s3'>
-                            DNI: `+data[0]['DNI_Administrador']+`
-                          </div>
-                        </div>
-                      <div class='row'>
-                          <div class='col s3'>
-                            Producto: `+data[0]['Producto']+`
-                          </div>
-                          <div class='col s3'>
-                            Precio: $`+data[0]['Precio']+`
-                          </div>
-                        </div>
                       </div>`;
+                      $('.collapsible').collapsible();
            if (data.length>0) {
             $('#descripcion').html(html);
            };
           }); 
+          $('#prueba').html('<span>Lorem ipsum dolor sit amet.</span>');
 }
 
 function Buscar(){
-  $('#total').html("Total de ventas: ");
   let valor = $('#search').val();
   if (valor.length>0) {
     let uni='';
@@ -165,7 +147,7 @@ function Buscar(){
      html +=`</table>`;
    }
    $('#pedidos').html(html);
-   $('#total').append(total);
+   $('#total').html(total);
  });
   }else{
     todo();
@@ -173,7 +155,6 @@ function Buscar(){
 }
 
 function todo(){
-  $('#total').html("Total de ventas: ");
    $.ajax({
     url: 'api.php',
     type: 'POST',
@@ -215,7 +196,7 @@ function todo(){
      html +=`</table>`;
        $('#pedidos').html(html);
    }
-   $('#total').append(total);
+   $('#total').html(total);
  });
 }
 function unir(html,sql){

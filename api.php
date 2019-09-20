@@ -678,7 +678,7 @@
               $sql = "UPDATE ".$tables['orders']." SET
               DNI_Cancelado = ".$dni." WHERE ID_Pedido = ".$_POST['content'][0];  
               $lookup = $server->query($sql);
-              print $sql;
+              //print $sql;
               if ($lookup) {
                 print PASS;
               }else{
@@ -690,7 +690,7 @@
               $sql = "UPDATE ".$tables['orders']." SET
               DNI_Cancelado = ".$dni." WHERE ID_Pedido = ".$_POST['content'][0];  
               $lookup = $server->query($sql);
-              print $sql;
+              //print $sql;
               if ($lookup) {
                 print PASS;
               }else{

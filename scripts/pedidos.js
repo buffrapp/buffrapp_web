@@ -5,6 +5,7 @@ const NO_ORDERS_QUEVE = 'No hay pedidos en cola.';
 const NO_ORDERS_DONE = 'No hay pedidos finalizados.';
 $('document').ready(function () {
   $('.modal').modal();
+  $('.tooltipped').tooltip();
 todo();
 });
 

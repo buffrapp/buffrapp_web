@@ -66,6 +66,7 @@ function product_add() {
     M.toast({ 'html': 'No podés dejar ningún campo vacío.' });
   } else {  
     rnd = 0;
+    let checked = $('#product_available').prop('checked') ? "checked='true'":"";
     html = `
     <div id="producto` + rnd + `" class="producto col">
         <div class="card">
@@ -75,7 +76,7 @@ function product_add() {
               <input type="hidden" name="product_id" id="product_id" value="">
               <p>
                 <label>
-                  <input type="checkbox" checked="` + $('#product_available').prop('checked') + `" disabled="disabled" />
+                  <input type="checkbox" `+checked+` disabled="disabled" />
                   <span>Disponible</span>
                 </label>
               </p>
