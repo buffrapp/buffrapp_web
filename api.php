@@ -32,7 +32,6 @@
   define('PASS', 0);
   define('ERROR', 1);
   define('NOT_ALLOWED', 2);
-  define('EMPTY', 3);
 
   if (isset($_POST['request']))
   {
@@ -808,6 +807,8 @@
                                             WHERE  estado >    -1')->fetchAll());
           break;
         case 'getUserHistory':
+          define('EMPTY_RESULT', 3);
+
           if (isset($_SESSION['dni'])) { // a DNI is set
             $sql = 'SELECT pedidos.ID_Producto AS ID_Producto, productos.Nombre AS Producto_Nombre, productos.Precio AS Producto_Precio, administrador.Nombre AS Nombre_Administrador, FH_Recibido, FH_Tomado, FH_Listo, FH_Entregado, DNI_Cancelado
                     FROM   pedidos
@@ -824,7 +825,7 @@
               if ($rowCount > 0) { // and there is any data
                 print json_encode($lookup->fetchall());
               } else { // just print the obvious count (zero).
-                print $rowCount;
+                print EMPTY_RESULT;
               }
             } else {
               print ERROR;
