@@ -35,7 +35,9 @@
 
   if (isset($_POST['request']))
   {
+    session_cache_expire($info['session_lifetime'] * 60 * 24 * 30);
     session_start();
+    
     if (isset($_POST['content']) && is_array($_POST['content']))
     {
       // print $_POST['request'];
