@@ -2,7 +2,6 @@
     // Internal information
     $info = array(
         'home'              => 'index.html',
-        'secret'            => 'BuFfRaPp2019@WebOnline24/7FullBuildSecret',
         'session_lifetime'  => 3 // months
     );
 
@@ -23,6 +22,11 @@
         'orders'      => 'pedidos',
         'reports'      => 'reportes',
         'reasons'      => 'motivos'
+    );
+
+    // Security
+    $security = array(
+      'secret'       => 'BuFfRaPp2019@WebOnline24/7FullBuildSecret',
     );
 
 
