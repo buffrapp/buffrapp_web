@@ -145,7 +145,7 @@ function todo(){
           <div id="producto` + data[i][0] + `" class="producto col s3">
               <div class="card">
                   <div class="card-content">
-                    <span class="card-title target">` + data[i][1] + `</span>
+                    <span class="card-title truncate">` + data[i][1] + `</span>
                     <p>$ ` + data[i][2] + `</p>
                     <input type="hidden" name="product_id" id="product_id" value="">
                     <p>
