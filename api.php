@@ -648,7 +648,7 @@
                   // Define encryption parameters and encode the data.
                   $_SESSION['token'] = JWT::encode($token, $security['secret']);
 
-                  print json_encode($datos['Nombre']);
+                  print json_encode(array( $datos['Nombre'] ));
                 } else {
                   print BAD_CREDENTIALS;
                 }
