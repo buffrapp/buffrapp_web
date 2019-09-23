@@ -43,7 +43,7 @@ function product_add() {
           <div id="producto` + data[0][0] + `" class="producto col">
               <div class="card">
                   <div class="card-content">
-                    <span class="card-title">` + $('#product_name').val() + `</span>
+                    <span class="card-title tooltipped truncate" data-html="true" data-position="top" data-tooltip="` + $('#product_name').val() + `">` + $('#product_name').val() + `</span>
                     <p>$ ` + $('#product_price').val() + `</p>
                     <input type="hidden" name="product_id" id="product_id" value="` + data[0][0] + `">
                     <p>
@@ -62,13 +62,17 @@ function product_add() {
           `;
           if ($('#products_empty').length > 0) {
             setTimeout(function() {
-                $('#products_empty').fadeOut();
+               $('#products_empty').fadeOut();
             }, atime);
             setTimeout(function() {
-                $('#products_cards_container').append(html);
+               $('#products_cards_container').append(html).ready(function () {
+                  $('.tooltipped').tooltip();
+               });
             }, atime * 2);
           } else {
-            $('#products_cards_container').append(html);
+             $('#products_cards_container').append(html).ready(function () {
+                $('.tooltipped').tooltip();
+             });
           }
           $('#product_name').val('');
           $('#product_price').val('');
@@ -145,7 +149,7 @@ function todo(){
           <div id="producto` + data[i][0] + `" class="producto col s3">
               <div class="card">
                   <div class="card-content">
-                    <span class="card-title truncate">` + data[i][1] + `</span>
+                    <span class="card-title tooltipped truncate" data-html="true" data-position="top" data-tooltip="` + data[i][1] + `">` + data[i][1] + `</span>
                     <p>$ ` + data[i][2] + `</p>
                     <input type="hidden" name="product_id" id="product_id" value="">
                     <p>
@@ -169,10 +173,14 @@ function todo(){
                $('#products_empty').fadeOut();
            }, atime);
            setTimeout(function() {
-               $('#products_cards_container').append(html);
+               $('#products_cards_container').append(html).ready(function () {
+                  $('.tooltipped').tooltip();
+               });
            }, atime * 2);
        } else {
-         $('#products_cards_container').append(html);
+         $('#products_cards_container').append(html).ready(function () {
+            $('.tooltipped').tooltip();
+         });
        }
      } else {
       $('#products_empty').html(NO_PRODUCTS);
