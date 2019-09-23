@@ -36,7 +36,7 @@ function product_add() {
         default:
           M.toast({ 'html': '¡El producto se agregó con éxito!' });
           $('#products_add').modal('close');
-          let checked = $('#product_available').prop('checked') ? "checked='true'":"checked='false'";
+          let checked = $('#product_available').prop('checked') ? "checked='true'":"";
           let status = checked=="checked='true'"?"Disponible":"No disponible";
           data = JSON.parse(dataO);
           html = `
