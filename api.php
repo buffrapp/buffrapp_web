@@ -691,30 +691,6 @@
               print ERROR;
             }
             break;
-            case 'cancelarOrden':
-            $dni = isset($_POST['content'][1]) ? $_POST['content'][1] : $_SESSION['dni'];
-              $sql = "UPDATE ".$tables['orders']." SET
-              DNI_Cancelado = ".$dni." WHERE ID_Pedido = ".$_POST['content'][0];  
-              $lookup = $server->query($sql);
-              //print $sql;
-              if ($lookup) {
-                print PASS;
-              }else{
-                print ERROR;
-              }
-            break;
-          case 'cancelarOrden':
-            $dni = isset($_POST['content'][1]) ? $_POST['content'][1] : $_SESSION['dni'];
-              $sql = "UPDATE ".$tables['orders']." SET
-              DNI_Cancelado = ".$dni." WHERE ID_Pedido = ".$_POST['content'][0];  
-              $lookup = $server->query($sql);
-              //print $sql;
-              if ($lookup) {
-                print PASS;
-              }else{
-                print ERROR;
-              }
-            break;
           default:
             print ERROR;
         }
@@ -885,6 +861,39 @@
               } else {
                 print NO_ORDERS;
               }
+            } else {
+              print ERROR;
+            }
+          } else {
+            print NOT_ALLOWED;
+          }
+          break;
+        case 'cancelOrder':
+          if (isset($_SESSION['dni'])) {
+            $sql = 'UPDATE pedidos
+                    SET    DNI_Cancelado = ' . $_SESSION['dni'] . '
+                    WHERE  DNI_Usuario   = ' . $_SESSION['dni'] . '
+                    AND    FH_Tomado     IS NULL 
+                    AND    FH_Listo      IS NULL
+                    AND    FH_Entregado  IS NULL
+                    AND    DNI_Cancelado IS NULL
+                    AND    ID_Pedido = (
+                            SELECT ID_Pedido FROM (
+                              SELECT
+                                  ID_Pedido
+                              FROM
+                                  pedidos
+                              ORDER BY
+                                  FH_Recibido
+                              DESC
+                              LIMIT 1
+                            ) AS ultimo_pedido
+                    )';
+
+            $cancelled = $server->query($sql);
+            //print $sql;
+            if ($cancelled && $cancelled->rowCount() == 1) {
+              print PASS;
             } else {
               print ERROR;
             }
