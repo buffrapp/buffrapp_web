@@ -307,8 +307,8 @@
                         o.ID_Producto, o.DNI_Administrador,
                         CONCAT(HOUR(o.FH_Recibido),":",MINUTE(o.FH_Recibido)) AS "Recibido",
                       CONCAT(HOUR(o.FH_Tomado),":",MINUTE(o.FH_Tomado)) AS "Tomado",
-                        u.Nombre, a.Nombre,
-                        p.Nombre, p.Precio,
+                        u.Nombre AS "Usuario", a.Nombre AS "Admin",
+                        p.Nombre AS "Producto", p.Precio,
                         CONCAT(" ",u.Curso," ",u.Division) AS "Curso"
                         FROM ' .$tables['orders'] . ' o
                         INNER JOIN ' .$tables['users'] . ' u
@@ -887,6 +887,10 @@
           print json_encode($server->query('SELECT * FROM ' . $tables['products'] . '
                                             WHERE  estado >    -1')->fetchAll());
           break;
+        case 'getUserProducts':
+          print json_encode($server->query('SELECT * FROM ' . $tables['products'] . '
+                                              WHERE  estado >    0')->fetchAll());
+          break
         case 'getUserHistory':
           define('EMPTY_RESULT', 3);
 
