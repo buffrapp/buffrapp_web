@@ -167,9 +167,9 @@ function Buscar(){
     }
   }else{
     if ($('#Cancelado').prop('checked')) {
-      uni = 'AND o.DNI_Cancelado IS NOT NULL';
+      uni += 'AND o.DNI_Cancelado IS NOT NULL';
     }else if ($('#NoCancelado').prop('checked')) {
-      uni = 'AND o.DNI_Cancelado IS NULL';
+      uni += 'AND o.DNI_Cancelado IS NULL';
     }
   }
   if ($('#Cancelado').prop('checked')) {
