@@ -890,7 +890,7 @@
         case 'getUserProducts':
           print json_encode($server->query('SELECT * FROM ' . $tables['products'] . '
                                               WHERE  estado >    0')->fetchAll());
-          break
+          break;
         case 'getUserHistory':
           define('EMPTY_RESULT', 3);
 
