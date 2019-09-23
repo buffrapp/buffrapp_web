@@ -691,6 +691,20 @@
               print ERROR;
             }
             break;
+            case 'cancelarOrden':
+              $dni = isset($_POST['content'][1]) ? $_POST['content'][1] : $_SESSION['dni'];
+              $sql = "UPDATE " . $tables['orders'] . "
+                      SET    DNI_Cancelado = " . $dni . "
+                      WHERE  ID_Pedido     = " . $_POST['content'][0];
+
+              $lookup = $server->query($sql);
+              if ($lookup) {
+                print PASS;
+              } else {
+                print ERROR;
+              }
+              break;
+            
           default:
             print ERROR;
         }
