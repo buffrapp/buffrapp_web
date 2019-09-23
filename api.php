@@ -857,7 +857,13 @@
             if ($lookup) { // is ok, then..
               $rowCount = $lookup->rowCount();
               if ($rowCount > 0) { // and there is any data
-                print json_encode($lookup->fetchAll());
+                $order = $lookup->fetchAll();
+
+                if ($order[0]['DNI_Cancelado'] == $order[0]['DNI_Usuario']) {
+                  print NO_ORDERS;
+                } else {
+                  print json_encode($order);
+                }
               } else {
                 print NO_ORDERS;
               }
