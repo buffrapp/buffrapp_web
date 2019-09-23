@@ -46,7 +46,7 @@ function aceptar_pedido(id_pedido) {
 				                        <span class="card-title">Pedido #` + data[0]["ID_Pedido"] + `</span>
 				                        <span class="card-title">Recibido: ` + data[0]["Recibido"] + `hs</span>
 				                        <span class="card-title">Tomado: ` + data[0]["Tomado"] + `hs</span>
-				                        <p><a id="" href="#" onclick="ver_alumno(`+data[0][0]+`)">` + data[0]["Usuario"]+ `</a> te pidió ` + data[0]["Producto"]+ `.</p>
+				                        <p><a id="" href="#" onclick="ver_alumno(`+data[0][0]+`)">` + data[0]["Usuario"]+data[i]["Curso"]+  `</a> te pidió ` + data[0]["Producto"]+ `.</p>
 				                   		<p>$ ` + data[0]["Precio"] + `</p>
 				                    </div>
 
@@ -178,7 +178,7 @@ function listo_pedido(id_pedido){
                                 <span class="card-title">Recibido: ` + data[0]["Recibido"] + `hs</span>
                                 <span class="card-title">Tomado: ` + data[0]["Tomado"] + `hs</span>
                                 <span class="card-title">Listo: ` + data[0]["Listo"] + `hs</span>
-                                <p><a id="" href="#" onclick="ver_alumno(`+data[0][0]+`)">` + data[0]["Usuario"]+ `</a> te pidió ` + data[0]["Producto"]+ `.</p>
+                                <p><a id="" href="#" onclick="ver_alumno(`+data[0][0]+`)">` + data[0]["Usuario"]+data[i]["Curso"]+  `</a> te pidió ` + data[0]["Producto"]+ `.</p>
                               <p>$ ` + data[0]["Precio"] + `</p>
                             </div>
 
