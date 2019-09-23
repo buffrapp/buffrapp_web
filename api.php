@@ -895,7 +895,17 @@
           define('EMPTY_RESULT', 3);
 
           if (isset($_SESSION['dni'])) { // a DNI is set
-            $sql = 'SELECT pedidos.ID_Producto AS ID_Producto, productos.Nombre AS Producto_Nombre, productos.Precio AS Producto_Precio, administrador.Nombre AS Nombre_Administrador, FH_Recibido, FH_Tomado, FH_Listo, FH_Entregado, DNI_Cancelado
+            $sql = 'SELECT
+                              DNI_Usuario, 
+                              pedidos.ID_Producto AS ID_Producto, 
+                              productos.Nombre AS Producto_Nombre, 
+                              productos.Precio AS Producto_Precio, 
+                              administrador.Nombre AS Nombre_Administrador, 
+                              FH_Recibido, 
+                              FH_Tomado, 
+                              FH_Listo, 
+                              FH_Entregado, 
+                              DNI_Cancelado
                     FROM      pedidos
                     LEFT JOIN administrador
                                 ON administrador.DNI = pedidos.DNI_Administrador
