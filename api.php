@@ -606,7 +606,8 @@
 
             // Try to update a matching entry.
 
-            $sql = 'SELECT DNI, 
+            $sql = 'SELECT DNI,
+                           Nombre,
                            Password
                     FROM ' . $tables['users'] . '
                     WHERE
@@ -647,7 +648,7 @@
                   // Define encryption parameters and encode the data.
                   $_SESSION['token'] = JWT::encode($token, $security['secret']);
 
-                  print PASS;
+                  print json_encode($datos['Nombre']);
                 } else {
                   print BAD_CREDENTIALS;
                 }
