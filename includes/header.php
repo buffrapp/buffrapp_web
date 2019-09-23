@@ -30,7 +30,7 @@
   } else {
     // Try to decode the token.
     try {
-      $decoded = JWT::decode($_SESSION['token'], $info['secret'], array('HS256'));
+      $decoded = JWT::decode($_SESSION['token'], $security['secret'], array('HS256'));
 
       $query = 'SELECT COUNT(DNI) FROM ' . $tables['admin'] . ' WHERE (DNI = ' . $server->quote($decoded->data->username) . ' OR `E-mail` = ' . $server->quote($decoded->data->username) . ') AND Password = ' . $server->quote($decoded->data->password);
       $matches = $server->query($query)->fetch()[0];

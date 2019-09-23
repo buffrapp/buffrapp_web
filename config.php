@@ -1,8 +1,8 @@
 <?php
     // Internal information
     $info = array(
-        'home'       => 'index.html',
-        'secret'     => 'BuFfRaPp2019@WebOnline24/7FullBuildSecret'
+        'home'              => 'index.html',
+        'session_lifetime'  => 3 // months
     );
 
     // Database
@@ -22,6 +22,11 @@
         'orders'      => 'pedidos',
         'reports'      => 'reportes',
         'reasons'      => 'motivos'
+    );
+
+    // Security
+    $security = array(
+      'secret'       => 'BuFfRaPp2019@WebOnline24/7FullBuildSecret',
     );
 
 

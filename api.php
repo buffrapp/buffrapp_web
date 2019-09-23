@@ -36,7 +36,9 @@
 
   if (isset($_POST['request']))
   {
+    session_cache_expire($info['session_lifetime'] * 60 * 24 * 30);
     session_start();
+
     if (isset($_POST['content']) && is_array($_POST['content']))
     {
       // print $_POST['request'];
@@ -148,12 +150,20 @@
             /*
             // Inputs:
             //
-            // 0 -> DNI/Mail address.
-            // 1 -> Password.
+            // 0 -> DNI
+            // 1 -> Mail address.
+            // 2 -> Password.
+            // 3 -> Name.
+            // 4 -> Course.
+            // 5 -> Division.
             */
 
-            $email = $server->quote($_POST['content'][0]);
-            $password = $server->quote($_POST['content'][1]);
+            $dni      = $_POST['content'][0];
+            $email    = $_POST['content'][1];
+            $password = $_POST['content'][2];
+            $name     = $_POST['content'][3];
+            $course   = $_POST['content'][4];
+            $division = $_POST['content'][5];
 
             /*
             // TODO: Some custom return values shall
@@ -164,35 +174,51 @@
             */
 
             define('ALREADY_REGISTERED', 3);
-            define('USERNAME_UNEXPECTED_VALUE', 4);
-            define('PASSWORD_UNEXPECTED_VALUE', 5);
+            define('UNEXPECTED_VALUE', 4);
 
-            // If it's a mail address...
-            if (filter_var($email, FILTER_VALIDATE_EMAIL)) { // filter it out...
-              $lookup = $server->query('SELECT COUNT(E-mail) FROM ' . $tables['users'] . ' WHERE E-mail = ' . $email);
+            // If there's both a valid mail address and a DNI...
+            if (filter_var($email, FILTER_VALIDATE_EMAIL) && count(explode(".", $dni)) > 0) { // filter the data...
+                $lookup = $server->query('SELECT COUNT(DNI)
+                                          FROM ' . $tables['users'] . '
+                                          WHERE DNI      = ' . $server->quote($dni) . '
+                                          OR    `E-Mail` = ' . $server->quote($email));
 
-              if ($lookup) {
-                if ($lookup->fetch()[0] > 1) {
-                  print ALREADY_REGISTERED;
-                } else {
-                  if ($server->query('INSERT INTO usuarios (E-mail, Password) VALUES (' . $email . ', ' . $password . ')') > 0) {
-                    print PASS;
+                if ($lookup) {
+                  if ($lookup->fetch()[0] > 0) {
+                    print ALREADY_REGISTERED;
                   } else {
-                    print ERROR;
+                    $query = 'INSERT INTO usuarios (
+                                DNI, 
+                                `E-mail`, 
+                                Password, 
+                                Nombre, 
+                                Curso, 
+                                Division
+                              ) VALUES (
+                              ' . $server->quote($dni) . ', 
+                              ' . $server->quote($email) . ', 
+                              ' . $server->quote(password_hash($password, PASSWORD_DEFAULT)) . ', 
+                              ' . $server->quote($name) . ', 
+                              ' . $server->quote($course) . ', 
+                              ' . $server->quote($division) . '
+                              )';
+
+                    $insert = $server->query($query);
+                    if ($insert) {
+                      if ($insert->rowCount() > 0) {
+                        print PASS;
+                      } else {
+                        print ERROR;
+                      }
+                    } else {
+                      print ERROR;
+                    }
                   }
+                } else {
+                  print ERROR;
                 }
-              } else {
-                print ERROR;
-              }
-            } elseif (count(explode(".", $email)) > 0) { // else, look for a DNI.
-              $lookup = $server->query('SELECT DNI FROM ' . $tables['users'] . ' WHERE E-mail = ' . $email);
-              if ($server->query('INSERT INTO usuarios (DNI, Password) VALUES (' . $email . ', ' . $password . ')') > 0) {
-                print PASS;
-              } else {
-                print ERROR;
-              }
             } else { // If it's none of them, crash.
-              print USERNAME_UNEXPECTED_VALUE;
+              print UNEXPECTED_VALUE;
             }
 
             break;
@@ -554,7 +580,7 @@
                   );
                   $_SESSION['dni'] = $datos["DNI"];
                   // Define encryption parameters and encode the data.
-                  $_SESSION['token'] = JWT::encode($token, $info['secret']);
+                  $_SESSION['token'] = JWT::encode($token, $security['secret']);
 
                   print PASS;
                 } else {
@@ -573,28 +599,20 @@
             // 1 -> Password.
             */
 
-            $email = $server->quote($_POST['content'][0]);
-            $password = $server->quote($_POST['content'][1]);
-
-            /*
-            // Security:
-            //
-            // There isn't much to worry about this topic, the security mechanisms will be backed by the
-            // login script itself, and not here, because it would be a waste of resources for the rest of
-            // possible frontends.
-            */
+            $email = $_POST['content'][0];
+            $password = $_POST['content'][1];
 
             define('BAD_CREDENTIALS', 3);
 
             // Try to update a matching entry.
 
-            $sql = 'SELECT DNI FROM ' . $tables['users'] . '
-                               WHERE (
-                                  `E-mail`       = ' . $email . '
-                                  OR
-                                  DNI           = ' . $email . '
-                                     )
-                               AND  Password      = ' . $password. '';
+            $sql = 'SELECT DNI, 
+                           Password
+                    FROM ' . $tables['users'] . '
+                    WHERE
+                      `E-mail`       = ' . $server->quote($email) . '
+                      OR
+                      DNI           = ' . $server->quote($email);
 
             $lookup = $server->query($sql);
             //PRINT $sql;
@@ -602,7 +620,7 @@
             // If the request was possible..
 
             if ($lookup) {
-              $datos = $lookup->fetch();
+                $datos = $lookup->fetch();
                 $matches = $lookup->rowCount();
 
                 if ($matches > 1) {
@@ -614,7 +632,7 @@
                   //       login process.
                   */
                   print ERROR;
-                } elseif ($matches == 1) {
+                } elseif ($matches == 1 && password_verify($password, $datos['Password'])) {
                   // Success logging in.
 
                   // Reflect the logon to the session
@@ -627,7 +645,7 @@
                   );
                   $_SESSION['dni'] = $datos["DNI"];
                   // Define encryption parameters and encode the data.
-                  $_SESSION['token'] = JWT::encode($token, $info['secret']);
+                  $_SESSION['token'] = JWT::encode($token, $security['secret']);
 
                   print PASS;
                 } else {
@@ -742,29 +760,19 @@
             }
             break;
             case 'cancelarOrden':
-            $dni = isset($_POST['content'][1]) ? $_POST['content'][1] : $_SESSION['dni'];
-              $sql = "UPDATE ".$tables['orders']." SET
-              DNI_Cancelado = ".$dni." WHERE ID_Pedido = ".$_POST['content'][0];  
+              $dni = isset($_POST['content'][1]) ? $_POST['content'][1] : $_SESSION['dni'];
+              $sql = "UPDATE " . $tables['orders'] . "
+                      SET    DNI_Cancelado = " . $dni . "
+                      WHERE  ID_Pedido     = " . $_POST['content'][0];
+
               $lookup = $server->query($sql);
-              //print $sql;
               if ($lookup) {
                 print PASS;
-              }else{
+              } else {
                 print ERROR;
               }
-            break;
-          case 'cancelarOrden':
-            $dni = isset($_POST['content'][1]) ? $_POST['content'][1] : $_SESSION['dni'];
-              $sql = "UPDATE ".$tables['orders']." SET
-              DNI_Cancelado = ".$dni." WHERE ID_Pedido = ".$_POST['content'][0];  
-              $lookup = $server->query($sql);
-              //print $sql;
-              if ($lookup) {
-                print PASS;
-              }else{
-                print ERROR;
-              }
-            break;
+              break;
+            
           default:
             print ERROR;
         }
@@ -934,10 +942,49 @@
             if ($lookup) { // is ok, then..
               $rowCount = $lookup->rowCount();
               if ($rowCount > 0) { // and there is any data
-                print json_encode($lookup->fetchAll());
+                $order = $lookup->fetchAll();
+
+                if ($order[0]['DNI_Cancelado'] == $order[0]['DNI_Usuario']) {
+                  print NO_ORDERS;
+                } else {
+                  print json_encode($order);
+                }
               } else {
                 print NO_ORDERS;
               }
+            } else {
+              print ERROR;
+            }
+          } else {
+            print NOT_ALLOWED;
+          }
+          break;
+        case 'cancelOrder':
+          if (isset($_SESSION['dni'])) {
+            $sql = 'UPDATE pedidos
+                    SET    DNI_Cancelado = ' . $_SESSION['dni'] . '
+                    WHERE  DNI_Usuario   = ' . $_SESSION['dni'] . '
+                    AND    FH_Tomado     IS NULL 
+                    AND    FH_Listo      IS NULL
+                    AND    FH_Entregado  IS NULL
+                    AND    DNI_Cancelado IS NULL
+                    AND    ID_Pedido = (
+                            SELECT ID_Pedido FROM (
+                              SELECT
+                                  ID_Pedido
+                              FROM
+                                  pedidos
+                              ORDER BY
+                                  FH_Recibido
+                              DESC
+                              LIMIT 1
+                            ) AS ultimo_pedido
+                    )';
+
+            $cancelled = $server->query($sql);
+            //print $sql;
+            if ($cancelled && $cancelled->rowCount() == 1) {
+              print PASS;
             } else {
               print ERROR;
             }
