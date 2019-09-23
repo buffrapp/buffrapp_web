@@ -896,12 +896,12 @@
 
           if (isset($_SESSION['dni'])) { // a DNI is set
             $sql = 'SELECT pedidos.ID_Producto AS ID_Producto, productos.Nombre AS Producto_Nombre, productos.Precio AS Producto_Precio, administrador.Nombre AS Nombre_Administrador, FH_Recibido, FH_Tomado, FH_Listo, FH_Entregado, DNI_Cancelado
-                    FROM   pedidos
-                    JOIN   administrador
-                           ON administrador.DNI = pedidos.DNI_Administrador
-                    JOIN   productos
-                           ON productos.ID_Producto = pedidos.ID_Producto
-                    WHERE  pedidos.DNI_Usuario = ' . $_SESSION['dni'] .'
+                    FROM      pedidos
+                    LEFT JOIN administrador
+                                ON administrador.DNI = pedidos.DNI_Administrador
+                    JOIN      productos
+                                ON productos.ID_Producto = pedidos.ID_Producto
+                    WHERE     pedidos.DNI_Usuario = ' . $_SESSION['dni'] .'
                     ORDER  BY ID_Pedido DESC';
             // print $sql;
             $lookup = $server->query($sql);
