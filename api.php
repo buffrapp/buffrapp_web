@@ -136,7 +136,7 @@
 
             $lookup = $server->query('SELECT COUNT(\'id\') FROM ' . $tables['users'] . ' WHERE DNI = ' . $server->quote($_POST['content']));
             if ($lookup) {
-              if ($lookup->fetch()[0] > 1) {
+              if ($lookup->fetch()[0] > 0) {
                 print ALREADY_REGISTERED;
               } else {
                 print PASS;
@@ -239,7 +239,7 @@
                               DNI_Cancelado IS NULL';
               $lookup = $server->query($query);
               if ($lookup) {
-                  if ($lookup->fetch()[0] > 1) {
+                  if ($lookup->fetch()[0] > 0) {
 
                     print ALREADY_ORDERED;
 
@@ -750,7 +750,7 @@
             WHERE (o.DNI_Cancelado IS NOT NULL OR o.FH_Entregado IS NOT NULL) AND
             ('.$donde.')
             ORDER BY o.ID_Pedido DESC';
-            // print $sql;
+             //print $sql;
             $lookup   =     $server->query($sql);
             if($lookup){
                 print json_encode($lookup->fetchall());

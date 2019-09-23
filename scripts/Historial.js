@@ -140,8 +140,11 @@ function verOrden(id_pedido){
 
 function Buscar(){
   let valor = $('#search').val();
-  if (valor.length>0) {
-    let uni='';
+  let uni='';
+  
+  
+  if (valor.length>0 || !$('#Cancelado').prop('checked') || !$('#Cancelado').prop('checked') || !$('#Todo').prop('checked')) {
+    
     if ($('#ID_Pedido').prop('checked')) {
       uni = unir(uni,'ID_Pedido = '+valor);
     }else if ($('#Nombre_Alumno').prop('checked')) {
@@ -153,8 +156,28 @@ function Buscar(){
     }else if ($('#DNI_Alumno').prop('checked')) {
       uni = unir(uni,'DNI_Usuario = '+valor);
     };
-    //console.log(uni);
-      $('.modal').modal();
+  }else{
+    todo();
+  }
+  if (uni == '') {
+    if ($('#Cancelado').prop('checked')) {
+      uni = 'o.DNI_Cancelado IS NOT NULL';
+    }else if ($('#NoCancelado').prop('checked')) {
+      uni = 'o.DNI_Cancelado IS NULL';
+    }
+  }else{
+    if ($('#Cancelado').prop('checked')) {
+      uni = 'AND o.DNI_Cancelado IS NOT NULL';
+    }else if ($('#NoCancelado').prop('checked')) {
+      uni = 'AND o.DNI_Cancelado IS NULL';
+    }
+  }
+  if ($('#Cancelado').prop('checked')) {
+      uni = unir(uni,'o.DNI_Cancelado IS NOT NULL');
+    }else if ($('#NoCancelado').prop('checked')) {
+      uni = unir(uni,'o.DNI_Cancelado IS NULL');
+    }
+    console.log(uni);
   $.ajax({
     url: 'api.php',
     type: 'POST',
@@ -217,9 +240,6 @@ function Buscar(){
    $('#pedidos').html(html);
    $('#total').html(total);
  });
-  }else{
-    todo();
-  }
 }
 
 function todo(){
@@ -293,4 +313,10 @@ function unir(html,sql){
     html+=' OR '+sql;
   }
   return html;
+}
+function Activar(){
+  Buscar();
+}
+function Desactivar(){
+  Buscar();
 }
