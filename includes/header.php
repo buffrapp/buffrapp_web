@@ -55,7 +55,7 @@
  }
 ?>
 
-<html>
+<html lang="es">
   <head>
     <meta charset="utf-8"/>
     <title>BuffRApp - <?php echo $title; ?></title>
@@ -75,43 +75,47 @@
       <nav class="green">
         <div class="nav-wrapper">
           <a href="#" class="brand-logo">BuffRApp</a>
-          <?php echo ($secure ? '<a href="logout.php" class="right" id="account_greeter">Cerrar sesión</a>':""); ?>
+          <?php echo ($secure ? '
+                          <a href="#" data-target="mobile-navbar" class="sidenav-trigger">
+                                <i class="material-icons">menu</i>
+                            </a>    
+                          <a href="logout.php" class="right" id="account_greeter">Cerrar sesión</a>':""); ?>
         </div>
       </nav>
     </header>
     <main><?php echo ($showmenu ? '
-      <div class="row">
-        <div class="col s2  "> <!-- Left side-->
+        <div class="row">
+        <div class="col s2 nav-mobile hide-on-med-and-down"> <!-- Left side-->
           <ul id="area_picker" class="collection">
-
-            <li id="area_picker_pedidos" class="collection-item">
+            <li class="collection-item area_picker_pedidos">
               <span class="title"><h5>Pedidos</h5></span>
               <p>Gestioná los pedidos, verificá la reputación del usuario y otros.</p>
             </li>
 
-            <li id="area_picker_productos" class="collection-item">
+            <li class="collection-item area_picker_productos">
               <span class="title"><h5>Productos</h5></span>
               <p>Administrá los productos, controlá la disponibilidad y más.</p>
             </li>
 
-            <li id="area_picker_historial" class="collection-item">
+            <li class="collection-item area_picker_historial">
               <span class="title"><h5>Historial</h5></span>
               <p>Consultá el historial de ventas.</p>
             </li>
 
 
-            <li id="area_picker_estadisticas" class="collection-item">
+            <li class="collection-item area_picker_estadisticas">
               <span class="title"><h5>Estadísticas</h5></span>
               <p>Echále un vistazo al estado del sistema, la cantidad de ventas y otros datos.</p>
             </li>
 
-            <li id="area_picker_configuraciones" class="collection-item">
+            <li class="collection-item area_picker_configuraciones">
               <span class="title"><h5>Configuraciones</h5></span>
               <p>Editá la configuración del sistema.</p>
             </li>
           </ul>
         </div>
-        <div class="col s9"> <!-- Right side -->
-        ' : ''); 
+        <div class="col s9"><!-- Right side -->
+        ' : '');
 
 ?>
+

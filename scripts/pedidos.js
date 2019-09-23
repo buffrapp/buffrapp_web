@@ -44,10 +44,10 @@ function aceptar_pedido(id_pedido) {
 				                <div class="card">
 				                    <div class="card-content">
 				                        <span class="card-title">Pedido #` + data[0]["ID_Pedido"] + `</span>
-				                        <span class="card-title">Recibido: ` + data[0]["Recibido"] + `</span>
-				                        <span class="card-title">Tomado: ` + data[0]["Tomado"] + `</span>
-				                        <p><a id="" href="#" onclick="ver_alumno(`+data[0][0]+`)">` + data[0][6]+ `</a> te pidió ` + data[0][8]+ `.</p>
-				                   		<p>$ ` + data[0][9] + `</p>
+				                        <span class="card-title">Recibido: ` + data[0]["Recibido"] + `hs</span>
+				                        <span class="card-title">Tomado: ` + data[0]["Tomado"] + `hs</span>
+				                        <p><a id="" href="#" onclick="ver_alumno(`+data[0][0]+`)">` + data[0]["Usuario"]+ `</a> te pidió ` + data[0]["Producto"]+ `.</p>
+				                   		<p>$ ` + data[0]["Precio"] + `</p>
 				                    </div>
 
 				                  <div class="card-action">
@@ -56,7 +56,9 @@ function aceptar_pedido(id_pedido) {
 				                  </div>
 				              </div>
 				            </div>
-				        `
+				        `;
+           $('#del' + data["ID_Pedido"]).hide().fadeIn();
+           $('#del' + id_pedido).remove();
 			     if ($('#queue_empty').length > 0) {
 			         setTimeout(function() {
 			             $('#queue_empty').fadeOut();
@@ -67,7 +69,7 @@ function aceptar_pedido(id_pedido) {
 			     } else {
 			       $('#queued_requests_cards_container').append(html);
 			     }
-			     $('#del' + data["ID_Pedido"]).hide().fadeIn();
+			     
 			   } else {
 			    $('#queue_empty').html(NO_ORDERS);
 			   }
@@ -173,9 +175,9 @@ function listo_pedido(id_pedido){
                         <div class="card">
                             <div class="card-content">
                                 <span class="card-title">Pedido #` + data[0]["ID_Pedido"] + `</span>
-                                <span class="card-title">Recibido: ` + data[0]["Recibido"] + `</span>
-                                <span class="card-title">Tomado: ` + data[0]["Tomado"] + `</span>
-                                <span class="card-title">Listo: ` + data[0]["Listo"] + `</span>
+                                <span class="card-title">Recibido: ` + data[0]["Recibido"] + `hs</span>
+                                <span class="card-title">Tomado: ` + data[0]["Tomado"] + `hs</span>
+                                <span class="card-title">Listo: ` + data[0]["Listo"] + `hs</span>
                                 <p><a id="" href="#" onclick="ver_alumno(`+data[0][0]+`)">` + data[0]["Usuario"]+ `</a> te pidió ` + data[0]["Producto"]+ `.</p>
                               <p>$ ` + data[0]["Precio"] + `</p>
                             </div>
@@ -188,6 +190,8 @@ function listo_pedido(id_pedido){
                     </div>
                 `
            if ($('#done_empty').length > 0) {
+            $('#del' + data["ID_Pedido"]).hide().fadeIn();
+           $('#del' + id_pedido).remove();
                setTimeout(function() {
                    $('#done_empty').fadeOut();
                }, atime);
@@ -197,7 +201,7 @@ function listo_pedido(id_pedido){
            } else {
              $('#done_requests_cards_container').append(html);
            }
-           $('#del' + data["ID_Pedido"]).hide().fadeIn();
+
          } else {
           $('#done_empty').html(NO_ORDERS);
          }
@@ -265,9 +269,9 @@ function todo(){
                 <div class="card">
                     <div class="card-content">
                         <span class="card-title" >Pedido #` + data[i]["ID_Pedido"] + `</span>
-                        <span class="card-title">` + data[i][2] + `</span>
-                        <p><a href="#" class="tooltipped" data-position="bottom" data-tooltip="I am a tooltip">` + data[i][3]+ `</a> te pidió ` + data[i][4]+ `.</p>
-                        <p>$ ` + data[i][5] + `</p>
+                        <span class="card-title">Recibido: ` + data[i]["Recibido"] + `hs</span>
+                        <p><a href="#">` + data[i]["Usuario"]+data[i]["Curso"]+  `</a> te pidió ` + data[i]["Producto"]+ `.</p>
+                        <p>$ ` + data[i]["Precio"] + `</p>
                     </div>
 
                   <div class="card-action">
@@ -314,10 +318,10 @@ function todo(){
                         <div class="card">
                             <div class="card-content">
                                 <span class="card-title">Pedido #` + data[i]["ID_Pedido"] + `</span>
-                                <span class="card-title">Recibido ` + data[i][4] + `hs</span>
-                                <span class="card-title">Tomado: ` + data[i][5] + `hs</span>
-                                <p><a id="" href="#" onclick="ver_alumno(`+data[i][0]+`)">` + data[i][6]+ `</a> te pidió ` + data[i][8]+ `.</p>
-                              <p>$ ` + data[i][9] + `</p>
+                                <span class="card-title">Recibido ` + data[i]["Recibido"] + `hs</span>
+                                <span class="card-title">Tomado: ` + data[i]["Tomado"] + `hs</span>
+                                <p><a id="" href="#" onclick="ver_alumno(`+data[i][0]+`)">` + data[i]["Usuario"]+data[i]["Curso"]+  `</a> te pidió ` + data[i][8]+ `.</p>
+                              <p>$ ` + data[i]["Precio"] + `</p>
                             </div>
 
                           <div class="card-action">
@@ -365,10 +369,10 @@ function todo(){
                         <div class="card">
                             <div class="card-content">
                                 <span class="card-title">Pedido #` + data[i]["ID_Pedido"] + `</span>
-                                <span class="card-title">Recibido: ` + data[i]["Recibido"] + `</span>
-                                <span class="card-title">Tomado: ` + data[i]["Tomado"] + `</span>
-                                <span class="card-title">Listo: ` + data[i]["Listo"] + `</span>
-                                <p><a id="" href="#" onclick="ver_alumno(`+data[i][0]+`)">` + data[i]["Usuario"]+ `</a> te pidió ` + data[i]["Producto"]+ `.</p>
+                                <span class="card-title">Recibido: ` + data[i]["Recibido"] + `hs</span>
+                                <span class="card-title">Tomado: ` + data[i]["Tomado"] + `hs</span>
+                                <span class="card-title">Listo: ` + data[i]["Listo"] + `hs</span>
+                                <p><a id="" href="#" onclick="ver_alumno(`+data[i][0]+`)">` + data[i]["Usuario"]+data[i]["Curso"]+ `</a> te pidió ` + data[i]['Producto']+ `.</p>
                               <p>$ ` + data[i]["Precio"] + `</p>
                             </div>
 
