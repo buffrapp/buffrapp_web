@@ -1,3 +1,8 @@
-<?php $title = 'Inicio'; $secure = true; require_once('includes/header.php'); ?>
-
-<?php require_once('includes/footer.php'); ?>
+<html>
+    <head>
+        <meta http-equiv="refresh" content="0; URL = 'productos.php'">
+    </head>
+    <body>
+        <p>Si no estás en <b>Productos</b> <a href="productos.php">hacé clic acá</a>.
+    </body>
+</html>
