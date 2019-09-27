@@ -32,6 +32,7 @@
   define('PASS', 0);
   define('ERROR', 1);
   define('NOT_ALLOWED', 2);
+  define('ALREADY_EXIST',3);
 
   if (isset($_POST['request']))
   {
@@ -48,29 +49,74 @@
             {
               if (is_array($_POST['content']))
               {
-                $server->query('INSERT INTO ' . $tables['products'] . '
-                (
-                  Nombre,
-                  Precio,
-                  Estado
-                )
-                VALUES
-                (
-                  ' . $server->quote($_POST['content'][0]) . ',
-                  ' . $server->quote($_POST['content'][1]) . ',
-                  ' . str_replace('\'', '', $server->quote($_POST['content'][2])) . '
-                )
-                ');
-                print PASS;
+                $sql = "SELECT COUNT(ID_Producto) FROM ".$tables['products']."
+                        WHERE Nombre = ". $server->quote($_POST['content'][0]);
+                $lookup=$server->query($sql);
+                if ($lookup) {
+                  if ($lookup->fetch()[0] > 0) {
+                    print ALREADY_EXIST;
+                  } else {
+                    $server->query('INSERT INTO ' . $tables['products'] . '
+                                    (
+                                      Nombre,
+                                      Precio,
+                                      Estado
+                                    )
+                                    VALUES
+                                    (
+                                      ' . $server->quote($_POST['content'][0]) . ',
+                                      ' . $server->quote($_POST['content'][1]) . ',
+                                      ' . str_replace('\'', '', $server->quote($_POST['content'][2])) . '
+                                    )
+                                    ');
+                    $sql = "SELECT ID_Producto FROM ".$tables['products'];
+                    $lookup=$server->query($sql);
+                    print json_encode($lookup->fetchall());
+                  }
+                } else {
+                  print ERROR;
+                }
+                
               } else {
                 print ERROR;
               }
-            }
-            else
-            {
+            }else{
               print NOT_ALLOWED;
             }
 
+            break;
+          case 'getProduct':
+              $id = $server->quote($_POST['content'][0]);
+              $sql = "SELECT * FROM ".$tables['products'].
+                      "WHERE ID_Producto = ".$id;
+              $lookup=$server->query($sql);
+              if ($lookup) {
+                print json_encode($lookup->fetchall());
+              }else{
+                print ERROR;
+              }
+            break;
+          case 'modifyProduct':
+            $id = $server->quote($_POST['content'][0]);
+            $name = $server->quote($_POST['content'][1]);
+            $price = $server->quote($_POST['content'][2]);
+            $status = $server->quote($_POST['content'][3]);
+            $sql = "SELECT * FROM ".$tables['products'].
+                      "WHERE ID_Producto = ".$id;
+            $lookup=$server->query($sql);
+            if ($lookup) {
+                $sql = "UPDATE ".$tables['products']."  
+                        (Nombre,Precio,Estado)
+                        SET
+                        (".$name.",".$price.",".$status.")";
+                $server->query($sql);
+                $sql = "SELECT * FROM ".$tables['products'].
+                        "WHERE ID_Producto = ".$id;
+                $lookup=$server->query($sql);
+                print json_encode($lookup->fetchall());
+            }else{
+                print ERROR;
+            }
             break;
           case 'usernameLookup':
             /*
@@ -90,7 +136,7 @@
 
             $lookup = $server->query('SELECT COUNT(\'id\') FROM ' . $tables['users'] . ' WHERE DNI = ' . $server->quote($_POST['content']));
             if ($lookup) {
-              if ($lookup->fetch()[0] > 1) {
+              if ($lookup->fetch()[0] > 0) {
                 print ALREADY_REGISTERED;
               } else {
                 print PASS;
@@ -193,7 +239,7 @@
                               DNI_Cancelado IS NULL';
               $lookup = $server->query($query);
               if ($lookup) {
-                  if ($lookup->fetch()[0] > 1) {
+                  if ($lookup->fetch()[0] > 0) {
 
                     print ALREADY_ORDERED;
 
@@ -261,8 +307,9 @@
                         o.ID_Producto, o.DNI_Administrador,
                         CONCAT(HOUR(o.FH_Recibido),":",MINUTE(o.FH_Recibido)) AS "Recibido",
                       CONCAT(HOUR(o.FH_Tomado),":",MINUTE(o.FH_Tomado)) AS "Tomado",
-                        u.Nombre, a.Nombre,
-                        p.Nombre, p.Precio
+                        u.Nombre AS "Usuario", a.Nombre AS "Admin",
+                        p.Nombre AS "Producto", p.Precio,
+                        CONCAT(" ",u.Curso," ",u.Division) AS "Curso"
                         FROM ' .$tables['orders'] . ' o
                         INNER JOIN ' .$tables['users'] . ' u
                         ON u.DNI = DNI_Usuario 
@@ -305,7 +352,8 @@
                       CONCAT(HOUR(o.FH_Tomado),":",MINUTE(o.FH_Tomado)) AS "Tomado",
                       CONCAT(HOUR(o.FH_Listo),":",MINUTE(o.FH_Listo)) AS "Listo",
                       u.Nombre AS "Usuario", a.Nombre AS "Admin",
-                      p.Nombre AS "Producto", p.Precio
+                      p.Nombre AS "Producto", p.Precio,
+                      CONCAT(" ",u.Curso," ",u.Division) AS "Curso"
                       FROM ' .$tables['orders'] . ' o
                       INNER JOIN ' .$tables['users'] . ' u
                       ON u.DNI = DNI_Usuario 
@@ -333,17 +381,31 @@
               CONCAT(HOUR(o.FH_Tomado),":",MINUTE(o.FH_Tomado)) AS "Tomado",
               CONCAT(HOUR(o.FH_Listo),":",MINUTE(o.FH_Listo)) AS "Listo",
               CONCAT(HOUR(o.FH_Entregado),":",MINUTE(o.FH_Entregado)) AS "Entregado",
-            o.DNI_Cancelado,
+            CASE 
+              WHEN o.DNI_Cancelado IS NOT NULL THEN CONCAT(
+                                          "ORDEN CANCELADA POR ",
+                                          CASE 
+                                            WHEN can1.DNI IS NOT NULL THEN CONCAT("EL ADMINISTRADOR ",can1.Nombre)
+                                            WHEN can2.DNI IS NOT NULL THEN CONCAT("EL ALUMNO ",can2.Nombre," DEL CURSO ",can2.Curso," ",can2.Division)
+                                          END
+                                        )
+            END AS "CANCELADO",
             u.Nombre AS "Usuario", a.Nombre AS "Admin",
             CONCAT(u.Curso," ",u.Division) AS "curso",
             p.Nombre AS "Producto", p.Precio
+
+
             FROM ' .$tables['orders'] . ' o
             INNER JOIN ' .$tables['users'] . ' u
             ON u.DNI = DNI_Usuario
-            INNER JOIN ' .$tables['admin'] . ' a
+            LEFT JOIN ' .$tables['admin'] . ' a
             ON a.DNI = DNI_Administrador
             INNER JOIN ' .$tables['products']. ' p
             ON p.ID_Producto = o.ID_Producto
+            LEFT JOIN ' .$tables['admin']. ' can1
+            ON can1.DNI = o.DNI_Cancelado
+            LEFT JOIN ' .$tables['users']. ' can2
+            ON can2.DNI = o.DNI_Cancelado
             WHERE
             ID_Pedido = ' . $server->quote($_POST['content'][0]);
             $lookup   =     $server->query($sql);
@@ -544,7 +606,8 @@
 
             // Try to update a matching entry.
 
-            $sql = 'SELECT DNI, 
+            $sql = 'SELECT DNI,
+                           Nombre,
                            Password
                     FROM ' . $tables['users'] . '
                     WHERE
@@ -585,7 +648,7 @@
                   // Define encryption parameters and encode the data.
                   $_SESSION['token'] = JWT::encode($token, $security['secret']);
 
-                  print PASS;
+                  print json_encode(array( $datos['Nombre'] ));
                 } else {
                   print BAD_CREDENTIALS;
                 }
@@ -670,19 +733,25 @@
             $donde = $server->quote($_POST['content'][0]);
           }
             $sql = 'SELECT
-              o.ID_Pedido, o.DNI_Cancelado,
-              u.Nombre AS "Usuario", a.Nombre AS "Admin"     
+              o.ID_Pedido, o.DNI_Cancelado AS "CANCELADO",
+              u.Nombre AS "Usuario",
+              CASE 
+                WHEN a.Nombre IS NULL THEN "NO FUE TOMADO" 
+                ELSE a.Nombre
+              END AS "Admin"
             FROM ' .$tables['orders'] . ' o  
             INNER JOIN ' .$tables['users'] . ' u
             ON u.DNI = DNI_Usuario 
             INNER JOIN ' .$tables['products'] . ' p
             ON p.ID_Producto = o.ID_Producto 
-            INNER JOIN ' .$tables['admin'] . ' a
-            ON a.DNI = DNI_Administrador OR a.DNI=DNI_Cancelado
-            WHERE o.FH_Entregado IS NOT NULL AND
+            LEFT JOIN ' .$tables['admin'] . ' a
+            ON a.DNI = DNI_Administrador
+            LEFT JOIN ' .$tables['admin'] . ' can
+            ON can.DNI=DNI_Cancelado
+            WHERE (o.DNI_Cancelado IS NOT NULL OR o.FH_Entregado IS NOT NULL) AND
             ('.$donde.')
             ORDER BY o.ID_Pedido DESC';
-            // print $sql;
+             //print $sql;
             $lookup   =     $server->query($sql);
             if($lookup){
                 print json_encode($lookup->fetchall());
@@ -733,14 +802,15 @@
             o.ID_Producto, o.DNI_Administrador,
               CONCAT(HOUR(o.FH_Recibido),":",MINUTE(o.FH_Recibido)) AS "Recibido",
               CONCAT(HOUR(o.FH_Tomado),":",MINUTE(o.FH_Tomado)) AS "Tomado",
-            u.Nombre, a.Nombre,
-            p.Nombre, p.Precio
-            FROM ' .$tables['orders'] . ' o
-            INNER JOIN ' .$tables['users'] . ' u
+            u.Nombre AS "Usuario", a.Nombre,
+            p.Nombre AS "Producto", p.Precio,
+            CONCAT(" ",u.Curso," ",u.Division) AS "Curso"
+            FROM ' .$tables["orders"] . ' o
+            INNER JOIN ' .$tables["users"] . ' u
             ON u.DNI = DNI_Usuario 
-            INNER JOIN ' .$tables['admin'] . ' a
+            INNER JOIN ' .$tables["admin"] . ' a
             ON a.DNI = DNI_Administrador 
-            INNER JOIN ' .$tables['products']. ' p
+            INNER JOIN ' .$tables["products"]. ' p
             ON p.ID_Producto = o.ID_Producto
             WHERE o.DNI_Administrador IS NOT NULL AND 
                 o.DNI_Cancelado IS NULL AND 
@@ -760,8 +830,9 @@
               CONCAT(HOUR(o.FH_Recibido),":",MINUTE(o.FH_Recibido)) AS "Recibido",
               CONCAT(HOUR(o.FH_Tomado),":",MINUTE(o.FH_Tomado)) AS "Tomado",
               CONCAT(HOUR(o.FH_Listo),":",MINUTE(o.FH_Listo)) AS "Listo",
-            u.Nombre, a.Nombre,
-            p.Nombre, p.Precio
+            u.Nombre AS "Usuario", a.Nombre AS "Admin",
+            p.Nombre AS "Producto", p.Precio,
+            CONCAT(" ",u.Curso," ",u.Division) AS "Curso"
             FROM ' .$tables['orders'] . ' o
             INNER JOIN ' .$tables['users'] . ' u
             ON u.DNI = DNI_Usuario 
@@ -794,8 +865,9 @@
         $sql ='SELECT
             o.DNI_Usuario, o.ID_Pedido,
               CONCAT(HOUR(o.FH_Recibido),":",MINUTE(o.FH_Recibido)) AS "Recibido",
-            u.Nombre,
-            p.Nombre, p.Precio
+            u.Nombre AS "Usuario",
+            p.Nombre AS "Producto", p.Precio,
+            CONCAT(" ",u.Curso," ",u.Division) AS "Curso"
             FROM ' .$tables['orders'] . ' o
             INNER JOIN ' .$tables['users'] . ' u
             ON u.DNI = o.DNI_Usuario 
@@ -813,20 +885,35 @@
             
           break;
         case 'getProducts':
-          print json_encode($server->query('SELECT *      FROM ' . $tables['products'] . '
+          print json_encode($server->query('SELECT * FROM ' . $tables['products'] . '
                                             WHERE  estado >    -1')->fetchAll());
+          break;
+        case 'getUserProducts':
+          print json_encode($server->query('SELECT   * FROM ' . $tables['products'] . '
+                                            WHERE    estado >    0
+                                            ORDER BY ID_Producto DESC')->fetchAll());
           break;
         case 'getUserHistory':
           define('EMPTY_RESULT', 3);
 
           if (isset($_SESSION['dni'])) { // a DNI is set
-            $sql = 'SELECT pedidos.ID_Producto AS ID_Producto, productos.Nombre AS Producto_Nombre, productos.Precio AS Producto_Precio, administrador.Nombre AS Nombre_Administrador, FH_Recibido, FH_Tomado, FH_Listo, FH_Entregado, DNI_Cancelado
-                    FROM   pedidos
-                    JOIN   administrador
-                           ON administrador.DNI = pedidos.DNI_Administrador
-                    JOIN   productos
-                           ON productos.ID_Producto = pedidos.ID_Producto
-                    WHERE  pedidos.DNI_Usuario = ' . $_SESSION['dni'] .'
+            $sql = 'SELECT
+                              DNI_Usuario, 
+                              pedidos.ID_Producto AS ID_Producto, 
+                              productos.Nombre AS Producto_Nombre, 
+                              productos.Precio AS Producto_Precio, 
+                              administrador.Nombre AS Nombre_Administrador, 
+                              FH_Recibido, 
+                              FH_Tomado, 
+                              FH_Listo, 
+                              FH_Entregado, 
+                              DNI_Cancelado
+                    FROM      pedidos
+                    LEFT JOIN administrador
+                                ON administrador.DNI = pedidos.DNI_Administrador
+                    JOIN      productos
+                                ON productos.ID_Producto = pedidos.ID_Producto
+                    WHERE     pedidos.DNI_Usuario = ' . $_SESSION['dni'] .'
                     ORDER  BY ID_Pedido DESC';
             // print $sql;
             $lookup = $server->query($sql);

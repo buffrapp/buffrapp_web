@@ -1,8 +1,11 @@
+<?php
+ header('location: pedidos.php');
+?>
+
 <html>
     <head>
-        <meta http-equiv="refresh" content="0; URL = 'productos.php'">
     </head>
     <body>
-        <p>Si no estás en <b>Productos</b> <a href="productos.php">hacé clic acá</a>.
+        <p>Si no estás en <b>Pedidos</b> <a href="pedidos.php">hacé clic acá</a>.
     </body>
 </html>

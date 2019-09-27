@@ -3,50 +3,67 @@
   $scripts = [ 'Historial' ]; 
 ?>
   <br>
-    <nav  class="green">
-      <div class="nav-wrapper">
-      <form>
-        <div class="input-field">
-          <input id="search" type="search" onkeyup="Buscar()" required>
-          <label class="label-icon" for="search"><i class="material-icons">search</i></label>
-          <div class="row center-align">
-                <label>
-                  <input class="with-gap" name="radio" id="ID_Pedido" type="radio" onclick="Buscar()" />
-                  <span>ID Pedido</span>
-                </label>
-                <label>
-                  <input class="with-gap" name="radio" id="Nombre_Producto" type="radio" onclick="Buscar()" />
-                  <span>Nombre del producto</span>
-                </label>
-                <label>
-                  <input class="with-gap" name="radio" id="Nombre_Encargado" type="radio" onclick="Buscar()" />
-                  <span>Nombre del encargado</span>
-                </label>
-                <label>
-                  <input class="with-gap" name="radio" id="Nombre_Alumno" type="radio" onclick="Buscar()" />
-                  <span>Nombre/apellido de alumno</span>
-                </label>
-                <label>
-                  <input class="with-gap" name="radio" id="DNI_Alumno" type="radio" onclick="Buscar()" />
-                  <span>DNI de alumno</span>
-                </label>
-                
+  <nav>
+    <div class="nav-wrapper green">
+        <form>
+          <div class="input-field">
+            <input id="search" type="search" onkeyup="Buscar()" required>
+            <label class="label-icon" for="search"><i class="material-icons">search</i></label> 
           </div>
-        </div>
-      </form>
+          
+        </form>
+                 
+                  
     </div>
   </nav>
- <div class="col s8"> <!-- Inner left -->
-    <div class="row">
-      <h5 class="col s12 grey-text center-align"></h5>
-    </div>
-    <br>
-     Total de ventas: <span id="total"></span>
-    <div id="pedidos">
+  <div class="row center-align">
+                  <label>
+                    <input class="with-gap" name="radio" id="ID_Pedido" type="radio" onclick="Activar()" />
+                    <span>ID Pedido</span>
+                  </label>
+                  <label>
+                    <input class="with-gap" name="radio" id="Nombre_Producto" type="radio" onclick="Activar()" />
+                    <span>Nombre del producto</span>
+                  </label>
+                  <label>
+                    <input class="with-gap" name="radio" id="Nombre_Encargado" type="radio" onclick="Activar()" />
+                    <span>Nombre del encargado</span>
+                  </label>
+                  <label>
+                    <input class="with-gap" name="radio" id="Nombre_Alumno" type="radio" onclick="Activar()" />
+                    <span>Nombre/apellido de alumno</span>
+                  </label>
+                  <label>
+                    <input class="with-gap" name="radio" id="DNI_Alumno" type="radio" onclick="Activar()" />
+                    <span>DNI de alumno</span>
+                  </label>
+                  <label>
+                    <input class="with-gap" name="radio" id="Todo" type="radio" onclick="Desactivar()" />
+                    <span>Ver todo</span>
+                  </label>         
+        </div>
+        <div class="row center-align">
+                  <label>
+                    <input class="with-gap" name="op" id="Cancelado" type="radio" onclick="Buscar()" />
+                    <span>Cancelados</span>
+                  </label>
+                  <label>
+                    <input class="with-gap" name="op" id="NoCancelado" type="radio" onclick="Buscar()" />
+                    <span>No cancelados</span>
+                  </label>   
+                  <label>
+                    <input class="with-gap" name="op" checked="true" id="Todos" type="radio" onclick="Buscar()" />
+                    <span>Todos</span>
+                  </label>  
+        </div>
+        <div class="row">
+          Total de ventas: <span id="total"></span>
+        </div>
+     
+    <div id="pedidos" class="row col s10">
       
     </div>
-   
-  </div>
+
       <!-- Modal Trigger -->
   <!-- Modal Structure -->
   <div id="modal1" class="modal">
