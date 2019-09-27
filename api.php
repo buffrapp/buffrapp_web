@@ -889,8 +889,9 @@
                                             WHERE  estado >    -1')->fetchAll());
           break;
         case 'getUserProducts':
-          print json_encode($server->query('SELECT * FROM ' . $tables['products'] . '
-                                              WHERE  estado >    0')->fetchAll());
+          print json_encode($server->query('SELECT   * FROM ' . $tables['products'] . '
+                                            WHERE    estado >    0
+                                            ORDER BY ID_Producto DESC')->fetchAll());
           break;
         case 'getUserHistory':
           define('EMPTY_RESULT', 3);
