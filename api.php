@@ -1008,6 +1008,99 @@
             print NOT_ALLOWED;
           }
           break;
+        case 'getUserProfile':
+          if (isset($_SESSION['dni'])) {
+            $sql = 'SELECT
+                      DNI,
+                      `E-Mail`,
+                      Password,
+                      Nombre,
+                      Curso,
+                      Division
+                    FROM  ' . $tables['users'] . '
+                    WHERE DNI = ' . $_SESSION['dni'];
+            $user = $server->query($sql);
+            //print $sql;
+            if ($user) {
+              $matches = $user->rowCount();
+              if ($matches > 0) {
+                if ($matches > 1) {
+                  print ERROR;
+                } else {
+                  print json_encode($user->fetch());
+                }
+              } else {
+                print PASS;
+              }
+            } else {
+              print ERROR;
+            }
+          } else {
+            print NOT_ALLOWED;
+          }
+          break;
+        case 'setUserProfile':
+            if (isset($_SESSION['dni'])) {
+              define('NOT_ENOUGH_FIELDS', 3);
+
+              /*
+              // Inputs:
+              //
+              // 1 -> Mail address.
+              // 2 -> Password.
+              // 3 -> Name.
+              // 4 -> Course.
+              // 5 -> Division.
+              */
+
+              $inputs = array(
+                'email'    => $_POST['content'][0],
+                'password' => $_POST['content'][1],
+                'name'     => $_POST['content'][2],
+                'course'   => $_POST['content'][3],
+                'division' => $_POST['content'][4]
+              );
+
+              $shouldProceed = true;
+              foreach($inputs as $input) {
+                if (empty($input)) {
+                  $shouldProceed = false;
+                  break;
+                }
+              }
+
+              if ($shouldProceed) {
+                $sql = 'UPDATE ' . $tables['users'] . '
+                        SET
+                          `E-Mail` = ' . $server->quote($inputs['email'])    . ',
+                          Password = ' . $server->quote($inputs['password']) . ',
+                          Nombre   = ' . $server->quote($inputs['name'])     . ',
+                          Curso    = ' . $server->quote($inputs['course'])   . ',
+                          Division = ' . $server->quote($inputs['division']) . '
+                        WHERE DNI  = ' . $_SESSION['dni'];
+                $user = $server->query($sql);
+                //print $sql;
+                if ($user) {
+                  $matches = $user->rowCount();
+                  if ($matches > 0) {
+                    if ($matches > 1) {
+                      print ERROR;
+                    } else {
+                      print PASS;
+                    }
+                  } else {
+                    print ERROR;
+                  }
+                } else {
+                  print ERROR;
+                }
+              } else {
+                print NOT_ENOUGH_FIELDS;
+              }
+            } else {
+              print NOT_ALLOWED;
+            }
+            break;
         default:
           print ERROR;
       }
