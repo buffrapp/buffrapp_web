@@ -803,7 +803,7 @@
               }
             }
 
-            $shouldChangePassword = false;
+            $shouldChangePassword = false; $isPasswordCorrect = false;
             if (!(empty($input['password'])) && !(empty($input['currentPassword']))) {
               $sql = 'SELECT Password
                       FROM  ' . $tables['users'] . '
@@ -812,32 +812,39 @@
               $password = $server->query($sql);
               if ($password &&
                   $password->rowCount() > 0 &&
-                  $password->rowCount() < 2 && // TODO: All of the API cases should be refactored like this.
-                  password_verify($input['currentPassword'], $password->fetch()['Password'])) {
+                  $password->rowCount() < 2) { // TODO: All of the API cases should be refactored like this.
+                  
+                  $shouldChangePassword = true;
 
-                $shouldChangePassword = true;
+                  if (password_verify($input['currentPassword'], $password->fetch()['Password'])) {
+                    $isPasswordCorrect = true;
+                  }
               }
             }
 
             if ($shouldProceed) {
-              $sql = 'UPDATE ' . $tables['users'] . '
-                      SET
-                        `E-Mail` = ' . $server->quote($inputs['email'])                                     . ',' .
-  ($shouldChangePassword ? 'Password = ' . $server->quote(password_hash($inputs['password'], PASSWORD_DEFAULT)) . ',' : '') . '
-                        Curso    = ' . $server->quote($inputs['course'])                                    . ',
-                        Division = ' . $server->quote($inputs['division'])                                  . '
-                      WHERE DNI  = ' . $_SESSION['dni'];
-              $user = $server->query($sql);
-              //print $sql;
-              if ($user) {
-                $matches = $user->rowCount();
-                if ($matches > 1) {
-                  print ERROR;
-                } else {
-                  print PASS;
-                }
+              if ($shouldChangePassword && !$isPasswordCorrect) {
+                print NOT_ALLOWED;
               } else {
-                print ERROR;
+                $sql = 'UPDATE ' . $tables['users'] . '
+                        SET
+                         `E-Mail`  = ' . $server->quote($inputs['email'])                                     . ',' .
+($shouldChangePassword ? 'Password = ' . $server->quote(password_hash($inputs['password'], PASSWORD_DEFAULT)) . ',' : '') . '
+                          Curso    = ' . $server->quote($inputs['course'])                                    . ',
+                          Division = ' . $server->quote($inputs['division'])                                  . '
+                        WHERE DNI  = ' . $_SESSION['dni'];
+                $user = $server->query($sql);
+                //print $sql;
+                if ($user) {
+                  $matches = $user->rowCount();
+                  if ($matches > 1) {
+                    print ERROR;
+                  } else {
+                    print PASS;
+                  }
+                } else {
+                  print ERROR;
+                }
               }
             } else {
               print NOT_ENOUGH_FIELDS;
