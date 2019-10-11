@@ -1052,27 +1052,44 @@
               */
 
               $inputs = array(
-                'email'    => $_POST['content'][0],
-                'password' => $_POST['content'][1],
-                'course'   => $_POST['content'][2],
-                'division' => $_POST['content'][3]
+                'email'           => $_POST['content'][0],
+                'password'        => $_POST['content'][1],
+                'course'          => $_POST['content'][2],
+                'division'        => $_POST['content'][3],
+                'currentPassword' => $_POST['content'][4]
               );
 
               $shouldProceed = true;
-              foreach($inputs as $input) {
-                if (empty($input)) {
+              foreach($inputs as $key => $input) {
+                if (empty($input) && $key != 'password' && $key != 'currentPassword') {
                   $shouldProceed = false;
                   break;
+                }
+              }
+
+              $shouldChangePassword = false;
+              if (!(empty($input['password'])) && !(empty($input['currentPassword']))) {
+                $sql = 'SELECT Password
+                        FROM  ' . $tables['users'] . '
+                        WHERE DNI  = ' . $_SESSION['dni'];
+
+                $password = $server->query($sql);
+                if ($password &&
+                    $password->rowCount() > 0 &&
+                    $password->rowCount() < 2 && // TODO: All of the API cases should be refactored like this.
+                    password_verify($input['currentPassword'], $password->fetch()['Password'])) {
+
+                  $shouldChangePassword = true;
                 }
               }
 
               if ($shouldProceed) {
                 $sql = 'UPDATE ' . $tables['users'] . '
                         SET
-                          `E-Mail` = ' . $server->quote($inputs['email'])    . ',
-                          Password = ' . $server->quote($inputs['password']) . ',
-                          Curso    = ' . $server->quote($inputs['course'])   . ',
-                          Division = ' . $server->quote($inputs['division']) . '
+                          `E-Mail` = ' . $server->quote($inputs['email'])                                     . ',' .
+($shouldChangePassword ? 'Password = ' . $server->quote(password_hash($inputs['password'], PASSWORD_DEFAULT)) . ',' : '') . '
+                          Curso    = ' . $server->quote($inputs['course'])                                    . ',
+                          Division = ' . $server->quote($inputs['division'])                                  . '
                         WHERE DNI  = ' . $_SESSION['dni'];
                 $user = $server->query($sql);
                 //print $sql;
