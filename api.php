@@ -1013,7 +1013,6 @@
             $sql = 'SELECT
                       DNI,
                       `E-Mail`,
-                      Password,
                       Nombre,
                       Curso,
                       Division
@@ -1048,17 +1047,15 @@
               //
               // 1 -> Mail address.
               // 2 -> Password.
-              // 3 -> Name.
-              // 4 -> Course.
-              // 5 -> Division.
+              // 3 -> Course.
+              // 4 -> Division.
               */
 
               $inputs = array(
                 'email'    => $_POST['content'][0],
                 'password' => $_POST['content'][1],
-                'name'     => $_POST['content'][2],
-                'course'   => $_POST['content'][3],
-                'division' => $_POST['content'][4]
+                'course'   => $_POST['content'][2],
+                'division' => $_POST['content'][3]
               );
 
               $shouldProceed = true;
@@ -1074,7 +1071,6 @@
                         SET
                           `E-Mail` = ' . $server->quote($inputs['email'])    . ',
                           Password = ' . $server->quote($inputs['password']) . ',
-                          Nombre   = ' . $server->quote($inputs['name'])     . ',
                           Curso    = ' . $server->quote($inputs['course'])   . ',
                           Division = ' . $server->quote($inputs['division']) . '
                         WHERE DNI  = ' . $_SESSION['dni'];
