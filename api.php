@@ -805,7 +805,7 @@
             }
 
             $shouldChangePassword = false; $isPasswordCorrect = false;
-            if (!(empty($inputs['password'])) && !(empty($inputs['currentPassword']))) {
+            if ((!empty($inputs['password'])) && (!empty($inputs['currentPassword']))) {
               $sql = 'SELECT Password
                       FROM  ' . $tables['users'] . '
                       WHERE DNI  = ' . $_SESSION['dni'];
