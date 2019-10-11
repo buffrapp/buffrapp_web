@@ -777,6 +777,7 @@
         case 'setUserProfile':
           if (isset($_SESSION['dni'])) {
             define('NOT_ENOUGH_FIELDS', 3);
+            define('INCORRECT_PASSWORD', 4);
 
             /*
             // Inputs:
@@ -824,7 +825,7 @@
 
             if ($shouldProceed) {
               if ($shouldChangePassword && !$isPasswordCorrect) {
-                print NOT_ALLOWED;
+                print INCORRECT_PASSWORD;
               } else {
                 $sql = 'UPDATE ' . $tables['users'] . '
                         SET
