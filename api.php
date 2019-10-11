@@ -838,10 +838,10 @@
                 //print $sql;
                 if ($user) {
                   $matches = $user->rowCount();
-                  if ($matches > 1) {
-                    print ERROR;
-                  } else {
+                  if ($matches > 0 && $matches < 2) {
                     print PASS;
+                  } else {
+                    print ERROR;
                   }
                 } else {
                   print ERROR;

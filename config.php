@@ -32,7 +32,9 @@
 
     // Open a connection to the database.
     try {
-        $server = new PDO('mysql:host=' . $server['hostname'] . ':' . $server['port'] . ';dbname=' . $server['database'] .';charset=utf8', $server['username'], $server['password']);
+        $server = new PDO('mysql:host=' . $server['hostname'] . ':' . $server['port'] . ';dbname=' . $server['database'] .';charset=utf8', $server['username'], $server['password'], array(
+          PDO::MYSQL_ATTR_FOUND_ROWS => true
+        ));
     } catch (PDOException $e) {
         $secure = false; $title = 'Error fatal';
         echo '
