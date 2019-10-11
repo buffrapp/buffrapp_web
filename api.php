@@ -774,10 +774,85 @@
               }
               break;
             
-          default:
+        case 'setUserProfile':
+          if (isset($_SESSION['dni'])) {
+            define('NOT_ENOUGH_FIELDS', 3);
+
+            /*
+            // Inputs:
+            //
+            // 1 -> Mail address.
+            // 2 -> Password.
+            // 3 -> Course.
+            // 4 -> Division.
+            */
+
+            $inputs = array(
+              'email'           => $_POST['content'][0],
+              'password'        => $_POST['content'][1],
+              'course'          => $_POST['content'][2],
+              'division'        => $_POST['content'][3],
+              'currentPassword' => $_POST['content'][4]
+            );
+
+            $shouldProceed = true;
+            foreach($inputs as $key => $input) {
+              if (empty($input) && $key != 'password' && $key != 'currentPassword') {
+                $shouldProceed = false;
+                break;
+              }
+            }
+
+            $shouldChangePassword = false;
+            if (!(empty($input['password'])) && !(empty($input['currentPassword']))) {
+              $sql = 'SELECT Password
+                      FROM  ' . $tables['users'] . '
+                      WHERE DNI  = ' . $_SESSION['dni'];
+
+              $password = $server->query($sql);
+              if ($password &&
+                  $password->rowCount() > 0 &&
+                  $password->rowCount() < 2 && // TODO: All of the API cases should be refactored like this.
+                  password_verify($input['currentPassword'], $password->fetch()['Password'])) {
+
+                $shouldChangePassword = true;
+              }
+            }
+
+            if ($shouldProceed) {
+              $sql = 'UPDATE ' . $tables['users'] . '
+                      SET
+                        `E-Mail` = ' . $server->quote($inputs['email'])                                     . ',' .
+  ($shouldChangePassword ? 'Password = ' . $server->quote(password_hash($inputs['password'], PASSWORD_DEFAULT)) . ',' : '') . '
+                        Curso    = ' . $server->quote($inputs['course'])                                    . ',
+                        Division = ' . $server->quote($inputs['division'])                                  . '
+                      WHERE DNI  = ' . $_SESSION['dni'];
+              $user = $server->query($sql);
+              //print $sql;
+              if ($user) {
+                $matches = $user->rowCount();
+                if ($matches > 0) {
+                  if ($matches > 1) {
+                    print ERROR;
+                  } else {
+                    print PASS;
+                  }
+                } else {
+                  print ERROR;
+                }
+              } else {
+                print ERROR;
+              }
+            } else {
+              print NOT_ENOUGH_FIELDS;
+            }
+          } else {
+            print NOT_ALLOWED;
+          }
+          break;
+        default:
             print ERROR;
-        }
-        
+      }  
     } elseif (isset($_POST['request'])) {
       switch ($_POST['request']) {
         // TODO: Check this case, it doesn't seem to be necessary.
@@ -1038,82 +1113,6 @@
             print NOT_ALLOWED;
           }
           break;
-        case 'setUserProfile':
-            if (isset($_SESSION['dni'])) {
-              define('NOT_ENOUGH_FIELDS', 3);
-
-              /*
-              // Inputs:
-              //
-              // 1 -> Mail address.
-              // 2 -> Password.
-              // 3 -> Course.
-              // 4 -> Division.
-              */
-
-              $inputs = array(
-                'email'           => $_POST['content'][0],
-                'password'        => $_POST['content'][1],
-                'course'          => $_POST['content'][2],
-                'division'        => $_POST['content'][3],
-                'currentPassword' => $_POST['content'][4]
-              );
-
-              $shouldProceed = true;
-              foreach($inputs as $key => $input) {
-                if (empty($input) && $key != 'password' && $key != 'currentPassword') {
-                  $shouldProceed = false;
-                  break;
-                }
-              }
-
-              $shouldChangePassword = false;
-              if (!(empty($input['password'])) && !(empty($input['currentPassword']))) {
-                $sql = 'SELECT Password
-                        FROM  ' . $tables['users'] . '
-                        WHERE DNI  = ' . $_SESSION['dni'];
-
-                $password = $server->query($sql);
-                if ($password &&
-                    $password->rowCount() > 0 &&
-                    $password->rowCount() < 2 && // TODO: All of the API cases should be refactored like this.
-                    password_verify($input['currentPassword'], $password->fetch()['Password'])) {
-
-                  $shouldChangePassword = true;
-                }
-              }
-
-              if ($shouldProceed) {
-                $sql = 'UPDATE ' . $tables['users'] . '
-                        SET
-                          `E-Mail` = ' . $server->quote($inputs['email'])                                     . ',' .
-($shouldChangePassword ? 'Password = ' . $server->quote(password_hash($inputs['password'], PASSWORD_DEFAULT)) . ',' : '') . '
-                          Curso    = ' . $server->quote($inputs['course'])                                    . ',
-                          Division = ' . $server->quote($inputs['division'])                                  . '
-                        WHERE DNI  = ' . $_SESSION['dni'];
-                $user = $server->query($sql);
-                //print $sql;
-                if ($user) {
-                  $matches = $user->rowCount();
-                  if ($matches > 0) {
-                    if ($matches > 1) {
-                      print ERROR;
-                    } else {
-                      print PASS;
-                    }
-                  } else {
-                    print ERROR;
-                  }
-                } else {
-                  print ERROR;
-                }
-              } else {
-                print NOT_ENOUGH_FIELDS;
-              }
-            } else {
-              print NOT_ALLOWED;
-            }
-            break;
         default:
           print ERROR;
       }
