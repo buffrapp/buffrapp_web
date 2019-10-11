@@ -789,10 +789,10 @@
 
             $inputs = array(
               'email'           => $_POST['content'][0],
-              'password'        => $_POST['content'][1],
+              'password'        => (isset($_POST['content'][1]) ? $_POST['content'][1] : ''),
               'course'          => $_POST['content'][2],
               'division'        => $_POST['content'][3],
-              'currentPassword' => $_POST['content'][4]
+              'currentPassword' => (isset($_POST['content'][4]) ? $_POST['content'][4] : '')
             );
 
             $shouldProceed = true;
