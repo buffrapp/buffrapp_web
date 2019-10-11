@@ -831,14 +831,10 @@
               //print $sql;
               if ($user) {
                 $matches = $user->rowCount();
-                if ($matches > 0) {
-                  if ($matches > 1) {
-                    print ERROR;
-                  } else {
-                    print PASS;
-                  }
-                } else {
+                if ($matches > 1) {
                   print ERROR;
+                } else {
+                  print PASS;
                 }
               } else {
                 print ERROR;
