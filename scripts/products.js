@@ -144,7 +144,8 @@ function todo(){
      if (data.length > 0) {
        for (let i = 0; i < data.length; i++) {
           console.log(data[i]);
-
+          let checked = data[i][3]==1 ? "checked='true'":"";
+          let status = data[i][3]==1?"Disponible":"No disponible";
           html += `
           <div id="producto` + data[i][0] + `" class="producto col s3">
               <div class="card">
@@ -154,8 +155,8 @@ function todo(){
                     <input type="hidden" name="product_id" id="product_id" value="` + data[i][0] + `">
                     <p>
                       <label>
-                        <input id="product_avaliable_` + data[i][0] + `" type="checkbox" checked="true" disabled />
-                        <span id="product_available_text_` + data[i][0] + `"></span>
+                        <input id="product_avaliable_` + data[i][0] + `" type="checkbox" ` + checked + ` checked="true" disabled />
+                        <span id="product_available_text_` + data[i][0] + `">` + status + `</span>
                       </label>
                     </p>
                   </div>
@@ -166,13 +167,6 @@ function todo(){
               </div>
           </div>
           `
-          if (data[i]['Estado']==1) {
-              $('#product_avaliable_'+data[i][0]).attr('checked',true);
-              $('#product_available_text_'+data[i][0]).html('Disponible');
-            }else{
-              $('#product_avaliable_'+data[i][0]).attr('checked',false);
-              $('#product_available_text_'+data[i][0]).html('No disponible');
-            }
        }
 
 
