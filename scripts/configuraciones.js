@@ -27,11 +27,11 @@ function reportes(){
 			      <h4>Agregá un motivo de reporte</h4>
 			        <div class="row">
 			         <div class="input-feld col s12">
+			         <label>Reportar un</label>
 						    <select id="reportarA">
 						      <option value="1">Pedido</option>
 						      <option value="2">Alumno</option>
 						    </select>
-						    <label>Reportar un</label>
 			          </div>
 			        </div>
 
@@ -58,12 +58,47 @@ function reportes(){
 	     }
 	   })
 	   .done(function (data) {
+	     data = JSON.parse(data);
 	     console.log(data);
 	   });
-	   	$('#motivo').val('Nuevo motivo');
+	   	$('#motivo').val('');
 		M.textareaAutoResize($('#motivo'));
 	   	$('select').formSelect();
 	   	$('.modal').modal();
+}
+
+function report_add(){
+	if ($('#motivo').val().length < 1) {
+	    M.toast({ 'html': 'No podés dejar ningún campo vacío.' });
+	  } else {
+	    $.ajax({
+	      url: 'api.php',
+	      type: 'POST',
+	      data: {
+	        request: 'addReason',
+	        content: [$('#motivo').val()]
+	      }
+	    })
+	    .done(function (dataO) {
+	      console.log(dataO);
+	      data = parseInt(dataO);
+
+	      switch (data) {
+	        case 1:
+	          M.toast({ 'html': 'Hubo un error al agregar el motivo, intentálo otra vez.' });
+	          break;
+	        case 2:
+	          M.toast({ 'html': 'No tenés permitido agregar motivos.' });
+	          break;
+	        case 3:
+	          M.toast({ 'html': 'Este motivo ya existe.' });
+	          break;
+	        default:
+	        	M.toast({ 'html': 'Motivo agregado con éxito.' });
+	        	$('#motivo').val('');
+	        break;
+	    }
+	}
 }
 
 function horarios(){

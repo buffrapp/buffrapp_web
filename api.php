@@ -455,6 +455,44 @@
                 print ERROR;
               }
             break;
+            case 'addReason':
+              if (isset($_SESSION['dni']))
+              {
+                  if (is_array($_POST['content']))
+                  {
+                    $sql = "SELECT COUNT(ID_Motivo) FROM ".$tables['reasons']."
+                            WHERE Motivo = ". $server->quote($_POST['content'][0]);
+                    $lookup=$server->query($sql);
+                    if ($lookup) {
+                      if ($lookup->fetch()[0] > 0) {
+                        print ALREADY_EXIST;
+                      } else {
+                        $server->query('INSERT INTO ' . $tables['reasons'] . '
+                                        (
+                                          Motivo,
+                                          Tipo
+                                        )
+                                        VALUES
+                                        (
+                                          ' . $server->quote($_POST['content'][0]) . ',
+                                          ' . $server->quote($_POST['content'][1]) . '
+                                        )
+                                        ');
+                        $sql = "SELECT * FROM ".$tables['reasons'];
+                        $lookup=$server->query($sql);
+                        print json_encode($lookup->fetchall());
+                      }
+                    } else {
+                      print ERROR;
+                    }
+                    
+                  } else {
+                    print ERROR;
+                  }
+                }else{
+                  print NOT_ALLOWED;
+                }
+            break;
             case 'finishOrder':
                /*
                   El pedido ya esta listo
