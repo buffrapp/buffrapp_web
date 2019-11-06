@@ -118,12 +118,11 @@
                   $lookup=$server->query($sql);
                   print json_encode($lookup->fetchall());
                 }else{
-                  print $sql;
+                  //print $sql;
                   print ERROR;
                 }
-                
             }else{
-              print $sql;
+              //print $sql;
                 print ERROR;
             }
             break;

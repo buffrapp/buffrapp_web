@@ -155,7 +155,7 @@ function todo(){
                     <p>
                       <label>
                         <input id="product_avaliable_` + data[i][0] + `" type="checkbox" ` + (data[i][3] == 1 ? 'checked' : '') + ` disabled />
-                        <span id="product_avaliable_text_` + data[i][0] + `">` + (data[i][3] == 1 ? 'Disponible' : 'No disponible') + `</span>
+                        <span id="product_available_text_` + data[i][0] + `">` + (data[i][3] == 1 ? 'Disponible' : 'No disponible') + `</span>
                       </label>
                     </p>
                   </div>
@@ -220,8 +220,14 @@ function product_modify(){
             $('#product_name_'+data[0]['ID_Producto']).html(data[0]['Nombre']);
             $('#product_price_'+data[0]['ID_Producto']).html(data[0]['Precio']);
             $('#product_id_'+data[0]['ID_Producto']).html(data[0]['ID_Producto']);
-            data[0]['Estado']=='1'?$('#product_available_'+data[0]['ID_Producto']).prop(true):$('#product_available_'+data[0]['ID_Producto']).prop(false);
-            data[0]['Estado']=='1'?$('#product_available_text_'+data[0]['ID_Producto']).html('Disponible'):$('#product_available_text_'+data[0]['ID_Producto']).html('No disponible');
+            if (data[0]['Estado']==1) {
+              $('#product_available_'+data[0]['ID_Producto']).prop(true);
+              $('#product_available_text_'+data[0]['ID_Producto']).html('Disponible');
+            }else{
+              $('#product_available_'+data[0]['ID_Producto']).prop(false);
+              $('#product_available_text_'+data[0]['ID_Producto']).html('No disponible');
+            }
+            ?:;
             $('#products_modify').modal('close');
             M.toast({ 'html': 'Producto modificado con éxito.' });
             break;
