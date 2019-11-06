@@ -111,16 +111,19 @@
                         SET
                         (".$name.",".$price.",".$status.")";
                 $lookup = $server->query($sql);
+
                 if ($lookup) {
                   $sql = "SELECT * FROM ".$tables['products'].
                         " WHERE ID_Producto = ".$id;
                   $lookup=$server->query($sql);
                   print json_encode($lookup->fetchall());
                 }else{
+                  print $sql;
                   print ERROR;
                 }
                 
             }else{
+              print $sql;
                 print ERROR;
             }
             break;
