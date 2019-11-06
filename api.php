@@ -103,6 +103,7 @@
             $status = $server->quote($_POST['content'][3]);
             $sql = "SELECT * FROM ".$tables['products'].
                       "WHERE ID_Producto = ".$id;
+            print $sql;
             $lookup=$server->query($sql);
             if ($lookup) {
                 $sql = "UPDATE ".$tables['products']."  
