@@ -102,8 +102,8 @@
             $price = $server->quote($_POST['content'][2]);
             $status = $server->quote($_POST['content'][3]);
             $sql = "SELECT * FROM ".$tables['products'].
-                      "WHERE ID_Producto = ".$id;
-            print $sql;
+                      " WHERE ID_Producto = ".$id;
+            //print $sql;
             $lookup=$server->query($sql);
             if ($lookup) {
                 $sql = "UPDATE ".$tables['products']."  
@@ -113,7 +113,7 @@
                 $lookup = $server->query($sql);
                 if ($lookup) {
                   $sql = "SELECT * FROM ".$tables['products'].
-                        "WHERE ID_Producto = ".$id;
+                        " WHERE ID_Producto = ".$id;
                   $lookup=$server->query($sql);
                   print json_encode($lookup->fetchall());
                 }else{
