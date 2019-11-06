@@ -150,7 +150,7 @@ function todo(){
               <div class="card">
                   <div class="card-content">
                     <span "class="card-title tooltipped truncate" data-html="true" data-position="top" data-tooltip="` + data[i][1] + `" id="product_name_` + data[i][0] + `">` + data[i][1] + `</span>
-                    $ <p id="product_price_` + data[i][0] + `">` + data[i][2] + `</p>
+                    <p>$ <span id="product_price_` + data[i][0] + `"> ` + data[i][2] + `</span></p>
                     <input type="hidden" name="product_id" id="product_id" value="` + data[i][0] + `">
                     <p>
                       <label>
@@ -201,7 +201,7 @@ function product_modify(){
       type: 'POST',
       data: {
         request: 'modifyProduct',
-        content: [$('#product_name_new').val(),$('#product_price_new').val(),$('#product_available_new').prop()]
+        content: [ $('#product_name_new').val(), $('#product_price_new').val(), $('#product_available_new').prop('checked') ]
       }
     })
     .done(function (data) {
