@@ -216,7 +216,7 @@ function product_modify(){
             M.toast({ 'html': 'ERROR.' });
             break;
           default:
-            data = JSON.parse(dataO);
+            data = JSON.parse(data);
             $('#product_name_'+data[0]['ID_Producto']).html(data[0]['Nombre']);
             $('#product_price_'+data[0]['ID_Producto']).html(data[0]['Precio']);
             $('#product_id_'+data[0]['ID_Producto']).html(data[0]['ID_Producto']);
