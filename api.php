@@ -100,7 +100,7 @@
             $id = $server->quote($_POST['content'][0]);
             $name = $server->quote($_POST['content'][1]);
             $price = $_POST['content'][2];
-            $status = $server->quote($_POST['content'][3]);
+            $status = $_POST['content'][3];
             $sql = "SELECT * FROM ".$tables['products'].
                       " WHERE ID_Producto = ".$id;
             //print $sql;
