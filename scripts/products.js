@@ -208,15 +208,15 @@ function product_modify(){
           content: [$('#product_id_new').val(), $('#product_name_new').val(), $('#product_price_new').val(), $('#product_available_new').prop('checked') ]
         }
       })
-      .done(function (data) {
-        console.log(data);
-        data = parseInt(data);
+      .done(function (dataO) {
+        console.log(dataO);
+        data = parseInt(dataO);
         switch (data) {
           case 1:
             M.toast({ 'html': 'ERROR.' });
             break;
           default:
-            data = JSON.parse(data);
+            data = JSON.parse(dataO);
             $('#product_name_'+data[0]['ID_Producto']).html(data[0]['Nombre']);
             $('#product_price_'+data[0]['ID_Producto']).html(data[0]['Precio']);
             $('#product_id_'+data[0]['ID_Producto']).html(data[0]['ID_Producto']);
