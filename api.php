@@ -56,7 +56,7 @@
                   if ($lookup->fetch()[0] > 0) {
                     print ALREADY_EXIST;
                   } else {
-                    $server->query('INSERT INTO ' . $tables['products'] . '
+                    $lookup = $server->query('INSERT INTO ' . $tables['products'] . '
                                     (
                                       Nombre,
                                       Precio,
@@ -69,9 +69,13 @@
                                       ' . str_replace('\'', '', $server->quote($_POST['content'][2])) . '
                                     )
                                     ');
-                    $sql = "SELECT ID_Producto FROM ".$tables['products'];
-                    $lookup=$server->query($sql);
-                    print json_encode($lookup->fetchall());
+                    if ($lookup) {
+                          $sql = "SELECT ID_Producto FROM ".$tables['products'];
+                          $lookup=$server->query($sql);
+                          print json_encode($lookup->fetchall());
+                        }else{
+                          print ERROR;
+                        }
                   }
                 } else {
                   print ERROR;
@@ -467,7 +471,7 @@
                       if ($lookup->fetch()[0] > 0) {
                         print ALREADY_EXIST;
                       } else {
-                        $server->query('INSERT INTO ' . $tables['reasons'] . '
+                        $lookup = $server->query('INSERT INTO ' . $tables['reasons'] . '
                                         (
                                           Motivo,
                                           Tipo
@@ -478,9 +482,14 @@
                                           ' . $server->quote($_POST['content'][1]) . '
                                         )
                                         ');
-                        $sql = "SELECT * FROM ".$tables['reasons'];
-                        $lookup=$server->query($sql);
-                        print json_encode($lookup->fetchall());
+                        if ($lookup) {
+                          $sql = "SELECT * FROM ".$tables['reasons'];
+                          $lookup=$server->query($sql);
+                          print json_encode($lookup->fetchall());
+                        }else{
+                          print ERROR;
+                        }
+                        
                       }
                     } else {
                       print ERROR;
