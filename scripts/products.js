@@ -202,7 +202,7 @@ function product_modify(){
       type: 'POST',
       data: {
         request: 'modifyProduct',
-        content: [ $('#product_name_new').val(), $('#product_price_new').val(), $('#product_available_new').prop('checked') ]
+        content: [$('#product_id_new').val(), $('#product_name_new').val(), $('#product_price_new').val(), $('#product_available_new').prop('checked') ]
       }
     })
     .done(function (data) {
