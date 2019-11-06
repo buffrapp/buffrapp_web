@@ -155,7 +155,7 @@ function todo(){
                     <p>
                       <label>
                         <input id="product_avaliable_` + data[i][0] + `" type="checkbox" ` + (data[i][3] == 1 ? 'checked' : '') + ` disabled />
-                        <span>` + (data[i][3] == 1 ? 'Disponible' : 'No disponible') + `</span>
+                        <span id="product_avaliable_text_` + data[i][0] + `">` + (data[i][3] == 1 ? 'Disponible' : 'No disponible') + `</span>
                       </label>
                     </p>
                   </div>
@@ -197,16 +197,36 @@ function product_open_modify(id){
 }
 
 function product_modify(){
-  $.ajax({
-      url: 'api.php',
-      type: 'POST',
-      data: {
-        request: 'modifyProduct',
-        content: [$('#product_id_new').val(), $('#product_name_new').val(), $('#product_price_new').val(), $('#product_available_new').prop('checked') ]
+  if ($('#product_name_new').val().length < 1 || $('#product_price_new').val().length < 1) {
+    M.toast({ 'html': 'No podés dejar ningún campo vacío.' });
+  } else{
+    $.ajax({
+        url: 'api.php',
+        type: 'POST',
+        data: {
+          request: 'modifyProduct',
+          content: [$('#product_id_new').val(), $('#product_name_new').val(), $('#product_price_new').val(), $('#product_available_new').prop('checked') ]
+        }
+      })
+      .done(function (data) {
+        console.log(data);
+        data = parseInt(data);
+        switch (data) {
+          case 1:
+            M.toast({ 'html': 'ERROR.' });
+            break;
+          default:
+            data = JSON.parse(dataO);
+            $('#product_name_'+data[0]['ID_Producto']).html(data[0]['Nombre']);
+            $('#product_price_'+data[0]['ID_Producto']).html(data[0]['Precio']);
+            $('#product_id_'+data[0]['ID_Producto']).html(data[0]['ID_Producto']);
+            data[0]['Estado']=='1'?$('#product_available_'+data[0]['ID_Producto']).prop(true):$('#product_available_'+data[0]['ID_Producto']).prop(false);
+            data[0]['Estado']=='1'?$('#product_available_text_'+data[0]['ID_Producto']).html('Disponible'):$('#product_available_text_'+data[0]['ID_Producto']).html('No disponible');
+            $('#products_modify').modal('close');
+            M.toast({ 'html': 'Producto modificado con éxito.' });
+            break;
       }
-    })
-    .done(function (data) {
-      console.log(data);
- });
+    });
+  }
 }
 
