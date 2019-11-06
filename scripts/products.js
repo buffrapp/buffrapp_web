@@ -39,22 +39,23 @@ function product_add() {
           let checked = $('#product_available').prop('checked') ? "checked='true'":"";
           let status = checked=="checked='true'"?"Disponible":"No disponible";
           data = JSON.parse(dataO);
+
           html = `
           <div id="producto` + data[0][0] + `" class="producto col">
               <div class="card">
                   <div class="card-content">
-                    <span class="card-title tooltipped truncate" data-html="true" data-position="top" data-tooltip="` + $('#product_name').val() + `">` + $('#product_name').val() + `</span>
-                    <p>$ ` + $('#product_price').val() + `</p>
+                    <span class="card-title tooltipped truncate" data-html="true" data-position="top" data-tooltip="` + $('#product_name').val() + `" id="product_name_` + data[0][0] + `">` + $('#product_name').val() + `</span>
+                    <p>$ <span id="product_price_` + data[0][0] + `">` + $('#product_price').val() + `</span></p>
                     <input type="hidden" name="product_id" id="product_id" value="` + data[0][0] + `">
                     <p>
                       <label>
-                        <input type="checkbox" `+checked+` disabled="disabled" />
-                        <span>`+status+`</span>
+                        <input id="product_avaliable_` + data[0][0] + `" type="checkbox" `+checked+` disabled="disabled" />
+                        <span id="product_available_text_` + data[0][0] + `">`+status+`</span>
                       </label>
                     </p>
                   </div>
                   <div class="card-action">
-                      <a id="product_edit" class="green-text" href="#" onclick="product_edit(` + data[0][0] + `)">Editar</a>
+                      <a id="product_edit" class="green-text modal-trigger" href="#products_modify" onclick="product_open_modify(` + data[0][0] + `)">Editar</a>
                       <a id="product_delete" class="green-text" href="#" onclick="product_delete_request(` + data[0][0] + `)">Eliminar</a>
                   </div>
               </div>
@@ -155,7 +156,7 @@ function todo(){
                     <input type="hidden" name="product_id" id="product_id" value="` + data[i][0] + `">
                     <p>
                       <label>
-                        <input id="product_avaliable_` + data[i][0] + `" type="checkbox" ` + checked + ` checked="true" disabled />
+                        <input id="product_avaliable_` + data[i][0] + `" type="checkbox" ` + checked + ` disabled />
                         <span id="product_available_text_` + data[i][0] + `">` + status + `</span>
                       </label>
                     </p>
