@@ -938,7 +938,7 @@
         case 'getReasons':
           $sql = 'SELECT * 
                   FROM '.$tables['reasons'];
-                  print $sql;
+                  //print $sql;
                 $lookup =     $server->query($sql);
                 if ($lookup) {
                   print json_encode($lookup->fetchall());

@@ -22,4 +22,10 @@
 		<h5 class="col s12" id="explicacion" >Elegí lo que quieras modificar</h5>
 	</div>
 </div>
+
+<div id="Modal">
+	<!-- AGREGAR UN PRODUCTO  -->
+
+  	
+</div>
 <?php require_once('includes/footer.php'); ?>
