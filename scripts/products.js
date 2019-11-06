@@ -221,7 +221,7 @@ function product_modify(){
             $('#product_price_'+data[0]['ID_Producto']).html(data[0]['Precio']);
             $('#product_id_'+data[0]['ID_Producto']).html(data[0]['ID_Producto']);
             if (data[0]['Estado']==1) {
-              $('#product_available_'+data[0]['ID_Producto']).prop(attr('checked',true);
+              $('#product_available_'+data[0]['ID_Producto']).attr('checked',true);
               $('#product_available_text_'+data[0]['ID_Producto']).html('Disponible');
             }else{
               $('#product_available_'+data[0]['ID_Producto']).attr('checked',false);
