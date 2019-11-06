@@ -76,7 +76,7 @@ function report_add(){
 	      type: 'POST',
 	      data: {
 	        request: 'addReason',
-	        content: [$('#motivo').val()]
+	        content: [$('#motivo').val(),$('#reportarA').val()]
 	      }
 	    })
 	    .done(function (dataO) {
