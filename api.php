@@ -937,7 +937,7 @@
           break;
         case 'getReasons':
           $sql = 'SELECT * 
-                  FROM '.$tables['reasons'].' GROUP BY Tipo';
+                  FROM '.$tables['reasons'];
                   print $sql;
                 $lookup =     $server->query($sql);
                 if ($lookup) {

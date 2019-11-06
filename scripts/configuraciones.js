@@ -58,9 +58,7 @@ function misdatos(){
 }
 
 function configurarOpcion(){
-	if (add != ''){
-		$('#buttonAdd').html(add);
-	}
+	$('#buttonAdd').html(add);
 	$('#TituloC').html(titulo);
 	$('#explicacion').html(explicacion);
 }
