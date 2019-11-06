@@ -154,8 +154,8 @@ function todo(){
                     <input type="hidden" name="product_id" id="product_id" value="` + data[i][0] + `">
                     <p>
                       <label>
-                        <input id="product_avaliable_` + data[i][0] + `" type="checkbox" ` + (data[i][3] == 1 ? 'checked' : '') + ` disabled />
-                        <span id="product_available_text_` + data[i][0] + `">` + (data[i][3] == 1 ? 'Disponible' : 'No disponible') + `</span>
+                        <input id="product_avaliable_` + data[i][0] + `" type="checkbox" disabled />
+                        <span id="product_available_text_` + data[i][0] + `"></span>
                       </label>
                     </p>
                   </div>
@@ -166,7 +166,15 @@ function todo(){
               </div>
           </div>
           `
+          if (data[i]['Estado']==1) {
+              $('#product_available_'+data[i]['ID_Producto']).attr('checked',true);
+              $('#product_available_text_'+data[i]['ID_Producto']).html('Disponible');
+            }else{
+              $('#product_available_'+data[i]['ID_Producto']).attr('checked',false);
+              $('#product_available_text_'+data[i]['ID_Producto']).html('No disponible');
+            }
        }
+
 
        if ($('#products_empty').length > 0) {
            setTimeout(function() {
