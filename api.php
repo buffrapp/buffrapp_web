@@ -107,9 +107,8 @@
             $lookup=$server->query($sql);
             if ($lookup) {
                 $sql = "UPDATE ".$tables['products']."  
-                        (Nombre,Precio,Estado)
                         SET
-                        (".$name.",".$price.",".$status.") 
+                        Nombre=".$name.",Precio=".$price.",Estado=".$status.")
                         WHERE ID_Producto = ".$id;
                 $lookup = $server->query($sql);
 
