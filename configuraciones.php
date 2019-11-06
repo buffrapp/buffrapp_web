@@ -8,6 +8,9 @@
 	<a class="waves-effect waves-light btn-large" id="reportes" onclick="reportes()"><i class="material-icons right">notification_important</i>Motivos de reportes</a>
 </div>
 
+<div class="fixed-action-btn" id="buttonAdd">
+</div>
+
 <div class="row">
 	<div class="center-align">
 		<h5 class="col s12 grey-text" id="TituloC">Configuraciones</h5>

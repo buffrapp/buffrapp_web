@@ -518,15 +518,6 @@
             }
 
             break;
-          case 'getReasons':
-                $lookup =     $server->query('SELECT * 
-                  FROM '.$tables['reasons'].' WHERE ');
-                if ($lookup) {
-                  print json_encode($lookup->fetchall());
-                } else {
-                  print ERROR;
-                }
-          break;
           case 'doAdministratorLogin':
             /*
             // Inputs:
@@ -943,6 +934,15 @@
         case 'getHome':
           print json_encode($info['home']);
 
+          break;
+        case 'getReasons':
+                $lookup =     $server->query('SELECT * 
+                  FROM '.$tables['reasons'].' GROUP BY Tipo');
+                if ($lookup) {
+                  print json_encode($lookup->fetchall());
+                } else {
+                  print ERROR;
+                }
           break;
          case 'viewOrderQueve':
         //DEVUELVE:

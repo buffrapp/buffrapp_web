@@ -151,7 +151,7 @@ function todo(){
           <div id="producto` + data[i][0] + `" class="producto col s3">
               <div class="card">
                   <div class="card-content">
-                    <span "class="card-title tooltipped truncate" data-html="true" data-position="top" data-tooltip="` + data[i][1] + `" id="product_name_` + data[i][0] + `">` + data[i][1] + `</span>
+                    <span class="card-title tooltipped truncate" data-html="true" data-position="top" data-tooltip="` + data[i][1] + `" id="product_name_` + data[i][0] + `">` + data[i][1] + `</span>
                     <p>$ <span id="product_price_` + data[i][0] + `">` + data[i][2] + `</span></p>
                     <input type="hidden" name="product_id" id="product_id" value="` + data[i][0] + `">
                     <p>
