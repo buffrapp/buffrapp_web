@@ -189,9 +189,12 @@ function todo(){
 }
 
 function product_open_modify(id){
+  console.log($('#product_name_'+id).html());
+  console.log($('#product_price_'+id).html());
+  console.log($('#product_avaliable_'+id).prop('checked'));
   $('#product_name_new').val($('#product_name_'+id).html());
   $('#product_price_new').val($('#product_price_'+id).html());
-  $('#product_available_new').val($('#product_avaliable_'+id).prop('checked'));
+  $('#product_available_new').attr('checked',$('#product_avaliable_'+id).prop('checked'));
 
 }
 
