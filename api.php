@@ -432,21 +432,20 @@
          $sql = 'SELECT * 
             FROM '.$tables['reports'].' 
             WHERE DNI     = ' . $server->quote($_POST['content'][0]);
-          $lookup =     $server->query($sql);
+            $lookup =     $server->query($sql);
             if ($lookup) {
               print json_encode($lookup->fetchall());
             } else {
               print ERROR;
             }
             break;
-            case 'viewReports':
-          $lookup =     $server->query('SELECT * 
-            FROM '.$tables['reports'].'');
-            if ($lookup) {
-              print json_encode($lookup->fetchall());
-            } else {
-              print ERROR;
-            }
+            case 'getReasons':
+              $lookup =     $server->query('SELECT * FROM '.$tables['reasons'].'');
+              if ($lookup) {
+                print json_encode($lookup->fetchall());
+              } else {
+                print ERROR;
+              }
             break;
             case 'finishOrder':
                /*
@@ -513,7 +512,7 @@
             break;
           case 'getReasons':
                 $lookup =     $server->query('SELECT * 
-                  FROM '.$tables['reasons'].'');
+                  FROM '.$tables['reasons'].' WHERE ');
                 if ($lookup) {
                   print json_encode($lookup->fetchall());
                 } else {
@@ -677,22 +676,36 @@
             $_POST['content'][1] = DNI DEL USUARIO
             $_POST['content'][2] = DNI DEL ADMINISTRADOR
            */
-            $sql = 'INSERT INTO '.$tables['orders'].'
+          $sql = 'SELECT * FROM '.$tables['reasons'].'
+                  WHERE ID_Motivo = '.$_POST['content'][0];
+
+          $lookup = $server->query($sql);
+          if ($lookup) {
+            $matches = $lookup->rowCount();
+            if ($matches==0) {
+              $sql = 'INSERT INTO '.$tables['reports'].'
                 (
-                  `Motivo`,
-                  `DNI_U`,
-                  `DNI_A`,
+                  `ID_Motivo`,
+                  `DNI_Usuario`,
+                  `DNI_Administrador`,
                   `Fecha_Hora`
                 )
                 VALUES
                 (
-                  "'.$_POST['content'][0].'", ' /* Motivo*/ . '
+                  "'.$_POST['content'][0].'", ' /* IDMotivo*/ . '
                   '.$_POST['content'][1].', ' /* DNI_U*/ . '
                   '.$_POST['content'][2].', ' /* DNI_A*/ . '
                   NULL,   '/* Fecha_Hora*/ . '
                 )';
               $server->query($sql);
-            break;
+            }else{
+              print ERROR;
+            }
+          }else{
+            print ERROR;
+          }
+            
+          break;
           case 'deleteProduct':
               $lookup = $server->query('SELECT COUNT(ID_Producto) FROM ' . $tables['orders'] . '
                                         WHERE  ID_Producto        =    ' . $server->quote($_POST['content'][0]));
@@ -773,7 +786,66 @@
                 print ERROR;
               }
               break;
-            
+        case 'setCalendar':
+          if (isset($_SESSION['dni'])) {
+            $horaI = $_POST['content'][0];
+            $horaF = $_POST['content'][1];
+            $dia = ucfirst(strtolower($server->quote($_POST['content'][2])));
+            $dias = ['Lunes','Martes','Miercoles','Jueves','Viernes'];
+            //VERIFICACION DE DATOS
+            if (count(explode(":",$horaI))==3 && count(explode(":",$horaF))==3) {
+              $cont = 0;
+              while ($dias[$cont] <> $dia) {
+                $cont++;
+              }
+              if ($dias[$cont] == $dia) {
+                $verificar = explode(":",$horaI)[0]>=7 && explode(":",$horaI)[0]<=21;
+                $verificar = $verificar && explode(":",$horaF)[0]>=7 && explode(":",$horaF)[0]<=21;
+                if ($verificar) {
+                  if (explode(":",$horaI)[0]>=7 && explode(":",$horaI)[0]<=12) 
+                    $turno = 'Mañana';
+                  elseif (explode(":",$horaI)[0]>=13 && explode(":",$horaI)[0]<=17) 
+                    $turno = 'Tarde';
+                  else
+                    $turno = 'Noche';
+                }else{
+                  print ERROR;
+                }
+              }else{
+                print ERROR;
+                break;
+              }
+            }else{
+              print ERROR;
+              break;
+            }
+            //SI TODO SALE BIEN SIGUE
+            $sql = "SELECT * FROM ".$tables['horarios']."
+                    WHERE 
+                    Dia = ".$dia."
+                    HoraI =  ".$horaI;
+            $lookup = $server->query($sql);
+            if ($lookup) {
+              $matches = $lookup->rowCount();
+              if ($matches==0) {
+                $sql = "INSERT INTO ".$tables['horarios']."
+                        (HoraI,HoraF,Turno,Dia) VALUES
+                        (".$HoraI.",".$HoraF.",".$Turno.",".$Dia.")";
+                $lookup = $server->query($sql);
+                if ($lookup) {
+                  print PASS;
+                }else{
+                  print ERROR;
+                }
+              }else{
+                print BAD_CREDENTIALS;
+              }
+            } else {
+              print ERROR;
+            }
+
+          }
+        break;
         case 'setUserProfile':
           if (isset($_SESSION['dni'])) {
             define('NOT_ENOUGH_FIELDS', 3);

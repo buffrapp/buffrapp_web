@@ -160,7 +160,7 @@ function todo(){
                     </p>
                   </div>
                   <div class="card-action">
-                      <a id="product_edit" class="green-text modal-trigger" href="#products_modify" onclick="product_edit(` + data[i][0] + `)">Editar</a>
+                      <a id="product_edit" class="green-text modal-trigger" href="#products_modify" onclick="product_modify(` + data[i][0] + `)">Editar</a>
                       <a id="product_delete" class="green-text" href="#" onclick="product_delete_request(` + data[i][0] + `)">Eliminar</a>
                   </div>
               </div>
@@ -198,12 +198,6 @@ function product_modify(){
     .done(function (data) {
       console.log(data);
       data = JSON.parse(data);
-
-     let html = '';
-
-     if (data.length > 0) {
-       
-     }
  });
 }
 
