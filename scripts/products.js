@@ -149,18 +149,18 @@ function todo(){
           <div id="producto` + data[i][0] + `" class="producto col s3">
               <div class="card">
                   <div class="card-content">
-                    <span class="card-title tooltipped truncate" data-html="true" data-position="top" data-tooltip="` + data[i][1] + `">` + data[i][1] + `</span>
-                    <p>$ ` + data[i][2] + `</p>
-                    <input type="hidden" name="product_id" id="product_id" value="">
+                    <span id="product_name_` + data[i][0] + `" "class="card-title tooltipped truncate" data-html="true" data-position="top" data-tooltip="` + data[i][1] + `">` + data[i][1] + `</span>
+                    <p id="product_price_` + data[i][0] + `">$ ` + data[i][2] + `</p>
+                    <input type="hidden" name="product_id" id="product_id" value="` + data[i][0] + `">
                     <p>
                       <label>
-                        <input type="checkbox" ` + (data[i][3] == 1 ? 'checked' : '') + ` disabled />
+                        <input id="product_avaliable_` + data[i][0] + `" type="checkbox" ` + (data[i][3] == 1 ? 'checked' : '') + ` disabled />
                         <span>` + (data[i][3] == 1 ? 'Disponible' : 'No disponible') + `</span>
                       </label>
                     </p>
                   </div>
                   <div class="card-action">
-                      <a id="product_edit" class="green-text modal-trigger" href="#products_modify" onclick="product_modify(` + data[i][0] + `)">Editar</a>
+                      <a id="product_edit" class="green-text modal-trigger" href="#products_modify" onclick="product_open_modify(` + data[i][0] + `)">Editar</a>
                       <a id="product_delete" class="green-text" href="#" onclick="product_delete_request(` + data[i][0] + `)">Eliminar</a>
                   </div>
               </div>
@@ -187,12 +187,21 @@ function todo(){
      }
  });
 }
+
+function product_modify(id){
+  $('#product_name_new').val($('#product_name_'+id).html());
+  $('#product_price_new').val($('#product_price_'+id).html());
+  $('#product_available_new').val($('#product_avaliable_'+id).prop('checked'));
+
+}
+
 function product_modify(){
   $.ajax({
       url: 'api.php',
       type: 'POST',
       data: {
-        request: 'modifyProduct'
+        request: 'modifyProduct',
+        content: []
       }
     })
     .done(function (data) {
