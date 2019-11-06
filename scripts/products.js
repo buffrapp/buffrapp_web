@@ -188,7 +188,7 @@ function todo(){
  });
 }
 
-function product_modify(id){
+function product_open_modify(id){
   $('#product_name_new').val($('#product_name_'+id).html());
   $('#product_price_new').val($('#product_price_'+id).html());
   $('#product_available_new').val($('#product_avaliable_'+id).prop('checked'));
