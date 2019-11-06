@@ -63,6 +63,7 @@ function reportes(){
 	   	$('#motivo').val('Nuevo motivo');
 		M.textareaAutoResize($('#motivo'));
 	   	$('select').formSelect();
+	   	$('.modal').modal();
 }
 
 function horarios(){
