@@ -79,6 +79,7 @@
             <span>¿Está disponible?</span>
           </label>
         </p>
+        <input type="hidden" name="id" id="product_id_new">
     </div>
     <!-- BOTONES PARA AGREGAR O CANCELAR UN PEDIDO-->
     <div class="modal-footer">

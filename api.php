@@ -110,11 +110,16 @@
                         (Nombre,Precio,Estado)
                         SET
                         (".$name.",".$price.",".$status.")";
-                $server->query($sql);
-                $sql = "SELECT * FROM ".$tables['products'].
+                $lookup = $server->query($sql);
+                if ($lookup) {
+                  $sql = "SELECT * FROM ".$tables['products'].
                         "WHERE ID_Producto = ".$id;
-                $lookup=$server->query($sql);
-                print json_encode($lookup->fetchall());
+                  $lookup=$server->query($sql);
+                  print json_encode($lookup->fetchall());
+                }else{
+                  print ERROR;
+                }
+                
             }else{
                 print ERROR;
             }
