@@ -167,10 +167,10 @@ function todo(){
           </div>
           `
           if (data[i]['Estado']==1) {
-              $('#product_available_'+data[i][0]).attr('checked',true);
+              $('#product_avaliable_'+data[i][0]).attr('checked',true);
               $('#product_available_text_'+data[i][0]).html('Disponible');
             }else{
-              $('#product_available_'+data[i][0]).attr('checked',false);
+              $('#product_avaliable_'+data[i][0]).attr('checked',false);
               $('#product_available_text_'+data[i][0]).html('No disponible');
             }
        }
@@ -229,10 +229,10 @@ function product_modify(){
             $('#product_price_'+data[0]['ID_Producto']).html(data[0]['Precio']);
             $('#product_id_'+data[0]['ID_Producto']).html(data[0]['ID_Producto']);
             if (data[0]['Estado']==1) {
-              $('#product_available_'+data[0]['ID_Producto']).attr('checked',$('#product_available_new').prop('checked'));
+              $('#product_avaliable_'+data[0]['ID_Producto']).attr('checked',$('#product_available_new').prop('checked'));
               $('#product_available_text_'+data[0]['ID_Producto']).html('Disponible');
             }else{
-              $('#product_available_'+data[0]['ID_Producto']).attr('checked',$('#product_available_new').prop('checked'));
+              $('#product_avaliable_'+data[0]['ID_Producto']).attr('checked',$('#product_available_new').prop('checked'));
               $('#product_available_text_'+data[0]['ID_Producto']).html('No disponible');
             }
             $('#products_modify').modal('close');
