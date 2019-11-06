@@ -99,7 +99,7 @@
           case 'modifyProduct':
             $id = $server->quote($_POST['content'][0]);
             $name = $server->quote($_POST['content'][1]);
-            $price = $server->quote($_POST['content'][2]);
+            $price = $_POST['content'][2];
             $status = $server->quote($_POST['content'][3]);
             $sql = "SELECT * FROM ".$tables['products'].
                       " WHERE ID_Producto = ".$id;
@@ -109,7 +109,8 @@
                 $sql = "UPDATE ".$tables['products']."  
                         (Nombre,Precio,Estado)
                         SET
-                        (".$name.",".$price.",".$status.")";
+                        (".$name.",".$price.",".$status.") 
+                        WHERE ID_Producto = ".$id;
                 $lookup = $server->query($sql);
 
                 if ($lookup) {
