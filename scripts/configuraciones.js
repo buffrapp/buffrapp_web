@@ -83,21 +83,22 @@ function report_add(){
 	      console.log(dataO);
 	      data = parseInt(dataO);
 
-	      switch (data) {
-	        case 1:
-	          M.toast({ 'html': 'Hubo un error al agregar el motivo, intentálo otra vez.' });
-	          break;
-	        case 2:
-	          M.toast({ 'html': 'No tenés permitido agregar motivos.' });
-	          break;
-	        case 3:
-	          M.toast({ 'html': 'Este motivo ya existe.' });
-	          break;
-	        default:
-	        	M.toast({ 'html': 'Motivo agregado con éxito.' });
-	        	$('#motivo').val('');
-	        break;
-	    }
+	      	switch (data) {
+		        case 1:
+		          M.toast({ 'html': 'Hubo un error al agregar el motivo, intentálo otra vez.' });
+		          break;
+		        case 2:
+		          M.toast({ 'html': 'No tenés permitido agregar motivos.' });
+		          break;
+		        case 3:
+		          M.toast({ 'html': 'Este motivo ya existe.' });
+		          break;
+		        default:
+		        	M.toast({ 'html': 'Motivo agregado con éxito.' });
+		        	$('#motivo').val('');
+		        break;
+	    	}
+		});
 	}
 }
 
