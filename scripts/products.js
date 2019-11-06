@@ -149,7 +149,7 @@ function todo(){
           <div id="producto` + data[i][0] + `" class="producto col s3">
               <div class="card">
                   <div class="card-content">
-                    <span id="product_name_` + data[i][0] + `" "class="card-title tooltipped truncate" data-html="true" data-position="top" data-tooltip="` + data[i][1] + `">` + data[i][1] + `</span>
+                    <span "class="card-title tooltipped truncate" data-html="true" data-position="top" data-tooltip="` + data[i][1] + `" id="product_name_` + data[i][0] + `">` + data[i][1] + `</span>
                     $ <p id="product_price_` + data[i][0] + `">` + data[i][2] + `</p>
                     <input type="hidden" name="product_id" id="product_id" value="` + data[i][0] + `">
                     <p>
@@ -201,12 +201,11 @@ function product_modify(){
       type: 'POST',
       data: {
         request: 'modifyProduct',
-        content: []
+        content: [$('#product_name_new').val(),$('#product_price_new').val(),$('#product_available_new').prop()]
       }
     })
     .done(function (data) {
       console.log(data);
-      data = JSON.parse(data);
  });
 }
 
