@@ -227,7 +227,6 @@ function product_modify(){
               $('#product_available_'+data[0]['ID_Producto']).prop(false);
               $('#product_available_text_'+data[0]['ID_Producto']).html('No disponible');
             }
-            ?:;
             $('#products_modify').modal('close');
             M.toast({ 'html': 'Producto modificado con éxito.' });
             break;
