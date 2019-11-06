@@ -30,7 +30,7 @@ function reportes(){
 			         <label>Reportar un</label>
 						    <select id="reportarA">
 						      <option value="1">Pedido</option>
-						      <option value="2">Alumno</option>
+						      <option value="0">Alumno</option>
 						    </select>
 			          </div>
 			        </div>
