@@ -58,7 +58,7 @@ function misdatos(){
 }
 
 function configurarOpcion(){
-	if (add == ''){
+	if (add <> ''){
 		$('#buttonAdd').html(add);
 	}
 	$('#TituloC').html(titulo);

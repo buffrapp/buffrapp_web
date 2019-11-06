@@ -936,8 +936,10 @@
 
           break;
         case 'getReasons':
-                $lookup =     $server->query('SELECT * 
-                  FROM '.$tables['reasons'].' GROUP BY Tipo');
+          $sql = 'SELECT * 
+                  FROM '.$tables['reasons'].' GROUP BY Tipo';
+                  print $sql;
+                $lookup =     $server->query($sql);
                 if ($lookup) {
                   print json_encode($lookup->fetchall());
                 } else {
