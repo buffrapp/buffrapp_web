@@ -1273,6 +1273,25 @@
             print NOT_ALLOWED;
           }
           break;
+	case 'getCrashes':
+	  if (isset($_SESSION['dni'])) {
+            $sql = 'SELECT * FROM ' . $tables['crashes'];
+
+            $crashes = $server->query($sql);
+            if ($crashes) {
+              if ($crashes->rowCount() < 1) {
+                print ERROR;
+              } else {
+                print json_encode($crashes->fetchAll());
+              }
+            } else {
+              print ERROR;
+            }
+          } else {
+            print NOT_ALLOWED;
+          }
+
+          break;
         default:
           print ERROR;
       }
