@@ -991,6 +991,9 @@
 
             $problem = $_POST['content'][0];
 
+            // 6 -> Fix value (microseconds to milliseconds).
+            $_POST['content'][6] = ( (int) $_POST['content'][6] / 1000 );
+
             // Try to push the report content.
 
             $sql = 'INSERT INTO ' . $tables['crashes'] . '
@@ -1007,16 +1010,16 @@
                       os_sdk,
                       content
                     ) VALUES (
-                      ' . $server->quote($_POST['content'][0]) . ',
-                      ' . $server->quote($_POST['content'][1]) . ',
-                      ' . $server->quote($_POST['content'][2]) . ',
-                      ' . $server->quote($_POST['content'][3]) . ',
-                      ' . $server->quote($_POST['content'][4]) . ',
-                      ' . $server->quote($_POST['content'][5]) . ',
-                      ' . $server->quote($_POST['content'][6]) . ',
-                      ' . $server->quote($_POST['content'][7]) . ',
-                      ' . $server->quote($_POST['content'][8]) . ',
-                      ' . $server->quote($_POST['content'][9]) . ',
+                      ' . $server->quote($_POST['content'][0])  . ',
+                      ' . $server->quote($_POST['content'][1])  . ',
+                      ' . $server->quote($_POST['content'][2])  . ',
+                      ' . $server->quote($_POST['content'][3])  . ',
+                      ' . $server->quote($_POST['content'][4])  . ',
+                      ' . $server->quote($_POST['content'][5])  . ',
+        FROM_UNIXTIME(' . $server->quote($_POST['content'][6])  . '),
+                      ' . $server->quote($_POST['content'][7])  . ',
+                      ' . $server->quote($_POST['content'][8])  . ',
+                      ' . $server->quote($_POST['content'][9])  . ',
                       ' . $server->quote($_POST['content'][10]) . '
                     )';
 
@@ -1302,6 +1305,25 @@
           } else {
             print NOT_ALLOWED;
           }
+          break;
+	case 'getCrashes':
+	  if (isset($_SESSION['dni'])) {
+            $sql = 'SELECT * FROM ' . $tables['crashes'];
+
+            $crashes = $server->query($sql);
+            if ($crashes) {
+              if ($crashes->rowCount() < 1) {
+                print ERROR;
+              } else {
+                print json_encode($crashes->fetchAll());
+              }
+            } else {
+              print ERROR;
+            }
+          } else {
+            print NOT_ALLOWED;
+          }
+
           break;
         default:
           print ERROR;
