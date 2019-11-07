@@ -110,6 +110,7 @@ function reportes(){
           `;
 	     };
 	     html += `</div>`;
+	   console.log(html);
 	   $('#datos').html(html);
 	   });
 
