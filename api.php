@@ -972,6 +972,33 @@
             print NOT_ALLOWED;
           }
           break;
+          case 'sendTechnicalReport':
+            /*
+            // Inputs:
+            //
+            // 0 -> Technical report content.
+            */
+
+            $problem = $_POST['content'][0];
+
+            // Try to push the report content.
+
+            $sql = 'INSERT INTO ' . $tables['crashes'] . '
+                    (
+                      content
+                    ) VALUES (
+                      ' . $server->quote($_POST['content'][0]) . '
+                    )';
+
+            $insert = $server->query($sql);
+
+            if ($insert) {
+              print PASS;
+            } else {
+              print ERROR;
+            }
+
+            break;
         default:
             print ERROR;
       }  

@@ -17,11 +17,12 @@
     $tables = array(
         'users'      => 'usuarios',
         'admin'      => 'administrador',
-        'horarios'      => 'horarios_de_atencion',
-        'products'      => 'productos',
-        'orders'      => 'pedidos',
-        'reports'      => 'reportes',
-        'reasons'      => 'motivos'
+        'horarios'   => 'horarios_de_atencion',
+        'products'   => 'productos',
+        'orders'     => 'pedidos',
+        'reports'    => 'reportes',
+        'reasons'    => 'motivos',
+        'crashes'    => 'crashes'
     );
 
     // Security
