@@ -109,10 +109,10 @@ function reportes(){
           </div>
           `;
 	     };
-	   });
-	   html += `</div>`;
-	   console.log(html);
+	     html += `</div>`;
 	   $('#datos').html(html);
+	   });
+
 	   	$('#motivo').val('');
 		M.textareaAutoResize($('#motivo'));
 	   	$('select').formSelect();
