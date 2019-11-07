@@ -101,7 +101,7 @@ function reportes(){
 	     console.log(data);
 	     let html = `<div class="col s12">`;
 	     for (let i = 0 ; i < data.length; i++) {
-	     	html = `
+	     	html += `
           <div id="motivo` + data[i]['ID_Motivo'] + `" class="row">
           	<span>` + data[i]['Motivo'] + `</span>
           	<a class="btn-floating right red waves-effect waves-light modal-trigger" onclick="report_delete_request(` + data[i]['ID_Motivo'] + `)"><i class="material-icons">close</i></a>
@@ -110,7 +110,7 @@ function reportes(){
           `;
 	     };
 	   });
-	   html = `</div>`;
+	   html += `</div>`;
 	   $('#datos').html(html);
 	   	$('#motivo').val('');
 		M.textareaAutoResize($('#motivo'));
