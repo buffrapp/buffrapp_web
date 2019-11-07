@@ -976,7 +976,17 @@
             /*
             // Inputs:
             //
-            // 0 -> Technical report content.
+            // 0  -> Activity name.
+            // 1  -> Device brand.
+            // 2  -> Device model.
+            // 3  -> Device codename.
+            // 4  -> OS Build fingerprint.
+            // 5  -> Motherboard/SoC.
+            // 6  -> Compilation date.
+            // 7  -> OS release.
+            // 8  -> OS codename.
+            // 9  -> OS SDK version.
+            // 10 -> Additional human content.
             */
 
             $problem = $_POST['content'][0];
@@ -985,9 +995,29 @@
 
             $sql = 'INSERT INTO ' . $tables['crashes'] . '
                     (
+                      activity,
+                      device_brand,
+                      device_model,
+                      device_codename,
+                      fingerprint,
+                      motherboard,
+                      compilation_date,
+                      os_release,
+                      os_codename,
+                      os_sdk,
                       content
                     ) VALUES (
-                      ' . $server->quote($_POST['content'][0]) . '
+                      ' . $server->quote($_POST['content'][0]) . ',
+                      ' . $server->quote($_POST['content'][1]) . ',
+                      ' . $server->quote($_POST['content'][2]) . ',
+                      ' . $server->quote($_POST['content'][3]) . ',
+                      ' . $server->quote($_POST['content'][4]) . ',
+                      ' . $server->quote($_POST['content'][5]) . ',
+                      ' . $server->quote($_POST['content'][6]) . ',
+                      ' . $server->quote($_POST['content'][7]) . ',
+                      ' . $server->quote($_POST['content'][8]) . ',
+                      ' . $server->quote($_POST['content'][9]) . ',
+                      ' . $server->quote($_POST['content'][10]) . '
                     )';
 
             $insert = $server->query($sql);
