@@ -1,10 +1,10 @@
 <?php
-  $title   = 'Gestor de problemas técnicos'; $secure = true; require_once('includes/header.php');
+  $title   = 'Gestor de problemas técnicos'; $secure = true; $showmenu = false; require_once('includes/header.php');
   $scripts = [ 'crashes' ];
 ?>
       <div id="crashes_table_container" class="row"> <!-- Card container -->
         <h5 id="crashes_empty" class="center-align grey-text">Cargando...</h5>
-        <table id="crashes_table" class="striped highlight centered">
+        <table id="crashes_table" class="striped highlight centered hide">
           <thead>
             <th> Fecha y hora </th>
             <th> Actividad </th>
