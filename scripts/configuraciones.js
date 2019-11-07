@@ -50,6 +50,45 @@ function reportes(){
 			</div>`;
 
 	$('#Modal').html(modal);
+	modal = `<div id="report_remove" class="modal modal-fixed-footer">
+			    <div class="modal-content">
+			      <h4>¿Querés eliminar este reporte?</h4>
+			      <p>El reporte se eliminará permantemente.</p>
+			      <input type="hidden" name="report_id" value="">
+			    </div>
+			    <div class="modal-footer">
+			      <a href="#!" class="modal-close waves-effect waves-green btn-flat" onclick="report_delete()">Sí</a>
+			      <a href="#!" class="modal-close waves-effect waves-green btn-flat">No</a>
+			    </div>
+			  </div>`;
+	$('#Modal').append(modal);
+	modal = `<div id="report_edit" class="modal modal-fixed-footer">
+			    <div class="modal-content">
+			      <h4>Agregá un motivo de reporte</h4>
+			        <div class="row">
+			         <div class="input-feld col s12">
+			         <label>Reportar un</label>
+						    <select id="reportarA">
+						      <option value="1">Pedido</option>
+						      <option value="0">Alumno</option>
+						    </select>
+			          </div>
+			        </div>
+					<input type="hidden" name="report_id_edit" value="">
+			        <div class="row">
+			          <div class="input-feld col s12">
+			            <textarea id="motivo" class="materialize-textarea"></textarea>
+          				<label for="motivo">Reporte</label>
+			          </div>
+			        </div>
+
+			    </div>
+			    <div class="modal-footer">
+			      <button class="waves-effect waves-green btn-flat" onclick="report_edit()">Aceptar</button>
+			      <button class="modal-close waves-effect waves-green btn-flat">Cancelar</button>
+			    </div>
+			</div>`;
+	$('#Modal').append(modal);
 	$.ajax({
 	     url: 'api.php',
 	     type: 'POST',
@@ -60,12 +99,55 @@ function reportes(){
 	   .done(function (data) {
 	     data = JSON.parse(data);
 	     console.log(data);
+	     html = `<div class="col s12">`;
+	     for (let i = 0 ; i < data.length; i++) {
+	     	html = `
+          <div id="motivo` + data[i]['ID_Motivo'] + `" class="row">
+          	<span>` + data[i]['Motivo'] + `</span>
+          	<a class="btn-floating right red waves-effect waves-light modal-trigger" onclick="report_delete_request(` + data[i]['ID_Motivo'] + `)"><i class="material-icons">close</i></a>
+          	<a class="btn-floating right red waves-effect waves-light modal-trigger" onclick="report_edit(` + data[i]['ID_Motivo'] + `)"><i class="material-icons">edit</i></a>
+          </div>
+          `;
+	     };
 	   });
 	   	$('#motivo').val('');
 		M.textareaAutoResize($('#motivo'));
 	   	$('select').formSelect();
 	   	$('.modal').modal();
 }
+function report_edit(){
+	$('#report_id_edit').val(product_id);
+    $('#report_edit').modal('open');
+}
+function report_delete_request(id){
+    $('#report_id').val(product_id);
+    $('#report_remove').modal('open');
+}
+ function report_delete() {
+   $.ajax({
+     url: 'api.php',
+     type: 'POST',
+     data: {
+       request: 'deleteReport',
+       content: [ $('#report_id').val() ]
+     }
+   })
+   .done(function (data) {
+     console.log(data);
+     data = parseInt(data);
+
+     switch (data) {
+       case 0:
+         M.toast({ 'html': 'El reporte se eliminó con éxito.' });
+         $('#reporte' + $('#reporte_id').val()).remove();
+         break;
+       case 1:
+         M.toast({ 'html': 'Hubo un error al eliminar el producto.' })
+         break;
+     }
+   });
+}
+
 
 function report_add(){
 	if ($('#motivo').val().length < 1) {

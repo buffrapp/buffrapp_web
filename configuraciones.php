@@ -23,6 +23,11 @@
 	</div>
 </div>
 
+<div class="row">
+	<div id="datos">
+	</div>
+</div>
+
 <div id="Modal">
 	<!-- AGREGAR UN PRODUCTO  -->
 
