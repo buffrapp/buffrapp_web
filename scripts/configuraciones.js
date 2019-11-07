@@ -111,6 +111,7 @@ function reportes(){
 	     };
 	   });
 	   html += `</div>`;
+	   console.log(html);
 	   $('#datos').html(html);
 	   	$('#motivo').val('');
 		M.textareaAutoResize($('#motivo'));
