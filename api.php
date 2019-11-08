@@ -461,7 +461,8 @@
             break;
             case 'deleteReasons':
               $id = $_POST['content'][0];
-              $lookup = $server->query('SELECT * FROM '.$tables['reasons'].' where ID_Motivo = '.$id);
+              $sql = 'SELECT * FROM '.$tables['reasons'].' where ID_Motivo = '.$id;
+              $lookup = $server->query($sql);
 
               if ($lookup && $lookup->rowCount() == 1) {
                 $sql = 'DELETE FROM '.$tables["reasons"].' WHERE ID_Motivo = '.$id;
@@ -478,7 +479,8 @@
             break;
             case 'editReasons':
               $id = $_POST['content'][0];
-              $lookup = $server->query('SELECT * FROM '.$tables['reasons'].' where ID_Motivo = '.$id);
+              $sql = 'SELECT * FROM '.$tables['reasons'].' where ID_Motivo = '.$id;
+              $lookup = $server->query($sql);
 
               if ($lookup && $lookup->rowCount() == 1) {
                 $sql = 'UPDATE FROM '.$tables["reasons"].' 
