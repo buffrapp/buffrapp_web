@@ -240,8 +240,43 @@ function horarios(){
 	$('#misdatos').attr("disabled", false);
 	titulo = "Editar Horarios";
 	explicacion = "Editá los horarios de atención";
-	add = '';
+	add = `<a class="btn-floating btn-large waves-effect waves-light modal-trigger green" href="#horarios_add">
+		      <i class="waves-effect waves-light large material-icons">add</i>
+		    </a>`;
+	modal = `<div id="horarios_add" class="modal modal-fixed-footer">
+			    <div class="modal-content">
+			      <h4>Agregá tus horarios disponibles</h4>
+			        <div class="row">
+			         <div class="input-feld col s12">
+			        <div class="row">
+			          <div class="input-feld col s12">
+			            <input type="text" name='time' id='time' class="timepicker">
+          				<label for="tiempo">Horario</label>
+			          </div>
+			        </div>
+			         <label>Dia</label>
+						    <select id="Dia" multiple>
+						    	<option value="Todo">Todos</option>
+							    <option value="Lunes">Lunes</option>
+							    <option value="Martes">Martes</option>
+							    <option value="Miercoles">Miercoles</option>
+							    <option value="Jueves">Jueves</option>
+							    <option value="Viernes">Viernes</option>
+						    </select>
+			          </div>
+			        </div>
 
+			    </div>
+			    <div class="modal-footer">
+			      <button class="waves-effect waves-green btn-flat" onclick="report_add()">Aceptar</button>
+			      <button class="modal-close waves-effect waves-green btn-flat">Cancelar</button>
+			    </div>
+			</div>`;
+
+	$('#Modal').html(modal);
+	$('.timepicker').timepicker();
+	$('select').formSelect();
+	$('.modal').modal();
 	let datos =  `<table>
 			        <thead>
 			          <tr>
