@@ -148,21 +148,22 @@ function report_edit(){
 	     type: 'POST',
 	     data: {
 	       request: 'editReasons',
-	       content: [ $('#report_id').val(),$('#motivo_new').val(),$('#reportarA_new').val() ]
+	       content: [ $('#report_id_edit').val(),$('#motivo_new').val(),$('#reportarA_new').val() ]
 	     }
 	   })
-	   .done(function (data) {
-	     console.log(data);
-	     data = parseInt(data);
+	   .done(function (dataO) {
+	     console.log(dataO);
+	     data = parseInt(dataO);
 
 	     switch (data) {
-	       case 0:
-	         M.toast({ 'html': 'El reporte se editó con éxito.' });
-	         $('#report_edit').modal('close');
-	         break;
 	       case 1:
 	         M.toast({ 'html': 'Hubo un error al editar el motivo.' })
 	         break;
+	       default:
+	       	data = JSON.parse(dataO);
+	       	M.toast({ 'html': 'El reporte se editó con éxito.' });
+	         $('#report_edit').modal('close');
+	       break;
 	     }
 	   });
 	}
