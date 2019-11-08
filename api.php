@@ -1176,14 +1176,23 @@
               CONCAT(HOUR(o.FH_Recibido),":",MINUTE(o.FH_Recibido)) AS "Recibido",
             u.Nombre AS "Usuario",
             p.Nombre AS "Producto", p.Precio,
-            CONCAT(" ",u.Curso," ",u.Division) AS "Curso"
+            CONCAT(" ",u.Curso," ",u.Division) AS "Curso",
+            DNI_Cancelado
             FROM ' .$tables['orders'] . ' o
             INNER JOIN ' .$tables['users'] . ' u
             ON u.DNI = o.DNI_Usuario 
             INNER JOIN ' .$tables['products']. ' p 
             ON p.ID_Producto =  o.ID_Producto
-            WHERE o.DNI_Cancelado IS NULL and 
-                  o.DNI_Administrador IS NULL;';
+            WHERE o.DNI_Administrador IS NULL';
+
+          if (isset($_POST['optional']) && is_array($_POST['optional'])) {
+            $sql .= '
+            AND ID_Pedido > ' . $server->quote($_POST['optional'][0]);
+          } else {
+            $sql .= '
+            AND o.DNI_Cancelado IS NULL';
+          }
+
           $lookup   =     $server->query($sql);
           //print $sql;
             if($lookup){
@@ -1347,8 +1356,8 @@
             print NOT_ALLOWED;
           }
           break;
-	case 'getCrashes':
-	  if (isset($_SESSION['dni'])) {
+        case 'getCrashes':
+          if (isset($_SESSION['dni'])) {
             $sql = 'SELECT * FROM ' . $tables['crashes'];
 
             $crashes = $server->query($sql);
@@ -1363,6 +1372,27 @@
             }
           } else {
             print NOT_ALLOWED;
+          }
+
+          break;
+        case 'getLastOrderId':
+          $sql = 'SELECT
+                    ID_Pedido
+                  FROM ' . $tables['orders'] . '
+                  ORDER BY
+                    ID_Pedido DESC
+                  LIMIT 1';
+
+          $lastId = $server->query($sql);
+
+          if ($lastId) {
+            if ($lastId->rowCount() > 0) {
+              print json_encode($lastId->fetch()[0]);
+            } else {
+              print json_encode(0);
+            }
+          } else {
+            print ERROR;
           }
 
           break;
