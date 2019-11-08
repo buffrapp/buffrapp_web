@@ -53,7 +53,7 @@ function todo(){
                   +  td(cur['device_brand'])
                   +  td(cur['device_model'])
                   +  td(cur['device_codename'])
-                  +  td(cur['fingerprint'])
+//                  +  td(cur['fingerprint'])
                   +  td(cur['motherboard'])
                   +  td(cur['compilation_date'])
                   +  td('Android ' + cur['os_release'] + ' (' + cur['os_codename'] + ', SDK ' + cur['os_sdk'] + ')')

@@ -11,7 +11,7 @@
             <th> Marca </th>
             <th> Modelo </th>
             <th> Nombre clave </th>
-            <th> Huella digital </th>
+<!--        <th> Huella digital </th> -->
             <th> Placa base / SoC </th>
             <th> Fecha de compilación </th>
             <th> Sistema operativo </th>
