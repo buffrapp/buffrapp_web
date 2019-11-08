@@ -1,6 +1,7 @@
 let atime = 200;
 
-const NO_CRASHES = 'No hay problemas.';
+const NO_CRASHES  = 'No hay problemas.';
+const TBODY_EMPTY = '<tbody></tbody>';
 
 function td(data) {
   return '<td>' + data + '</td>';
@@ -8,7 +9,25 @@ function td(data) {
 
 $('document').ready(function () {
   todo();
+
+  $('#update').on('click', function() {
+    update();
+  });
 });
+
+function update() {
+  setTimeout(function() {
+      $('#crashes_table_container').fadeOut();
+  }, atime);
+  setTimeout(function() {
+      $('#crashes_empty').fadeIn();
+      $('#crashes_table_body').html(TBODY_EMPTY);
+      $('#crashes_table').addClass('hide');
+  }, atime * 2);
+  setTimeout(function() {
+      todo();
+  }, atime * 4);
+}
 
 function todo(){
     $.ajax({
@@ -34,7 +53,7 @@ function todo(){
                   +  td(cur['device_brand'])
                   +  td(cur['device_model'])
                   +  td(cur['device_codename'])
-                  +  td(cur['fingerprint'])
+//                  +  td(cur['fingerprint'])
                   +  td(cur['motherboard'])
                   +  td(cur['compilation_date'])
                   +  td('Android ' + cur['os_release'] + ' (' + cur['os_codename'] + ', SDK ' + cur['os_sdk'] + ')')
@@ -47,8 +66,8 @@ function todo(){
                $('#crashes_empty, #crashes_table_container').fadeOut();
            }, atime);
            setTimeout(function() {
-              $('#crashes_table_body').append(html);
-              $('#crashes_table,  #crashes_table_container').removeClass('hide').fadeIn();
+               $('#crashes_table_body').append(html);
+               $('#crashes_table,  #crashes_table_container').removeClass('hide').fadeIn();
            }, atime * 2);
        } else {
          $('#crashes_table_body').append(html);
