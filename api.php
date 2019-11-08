@@ -452,7 +452,7 @@
             }
             break;
             case 'getReasons':
-              $lookup =     $server->query('SELECT * FROM '.$tables['reasons'].'');
+              $lookup =     $server->query('SELECT * FROM '.$tables['reasons']);
               if ($lookup) {
                 print json_encode($lookup->fetchall());
               } else {
@@ -472,6 +472,7 @@
                   print ERROR;
                 }
               }else{
+                print $sql;
                 print ERROR;
               }
             break;
@@ -491,6 +492,7 @@
                   print ERROR;
                 }
               }else{
+                print $sql;
                 print ERROR;
               }
             break;
