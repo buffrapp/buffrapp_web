@@ -459,6 +459,22 @@
                 print ERROR;
               }
             break;
+            case 'deleteReasons':
+              $id = $_POST['content'][0];
+              $lookup = $server->query('SELECT * FROM '.$tables['reasons'].' where ID_Motivo = '.$id);
+
+              if ($lookup && $lookup->rowCount() == 1) {
+                $sql = 'DELETE FROM '.$tables["reasons"].' WHERE ID_Motivo = '.$id;
+                $lookup =     $server->query($sql);
+                if ($lookup) {
+                  print json_encode($lookup->fetchall());
+                } else {
+                  print ERROR;
+                }
+              }else{
+                print ERROR;
+              }
+            break;
             case 'addReason':
               if (isset($_SESSION['dni']))
               {

@@ -24,7 +24,7 @@
 </div>
 
 <div class="row">
-	<div id="datos">
+	<div id="datos" class="col s12">
 	</div>
 </div>
 

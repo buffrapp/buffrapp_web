@@ -68,7 +68,7 @@ function reportes(){
 			        <div class="row">
 			         <div class="input-feld col s12">
 			         <label>Reportar un</label>
-						    <select id="reportarA">
+						    <select id="reportarA_new">
 						      <option value="1">Pedido</option>
 						      <option value="0">Alumno</option>
 						    </select>
@@ -77,7 +77,7 @@ function reportes(){
 					<input type="hidden" name="report_id_edit" value="">
 			        <div class="row">
 			          <div class="input-feld col s12">
-			            <textarea id="motivo" class="materialize-textarea"></textarea>
+			            <textarea id="motivo_new" class="materialize-textarea"></textarea>
           				<label for="motivo">Reporte</label>
 			          </div>
 			        </div>
@@ -99,19 +99,35 @@ function reportes(){
 	   .done(function (data) {
 	     data = JSON.parse(data);
 	     console.log(data);
-	     let html = `<div class="col s12">`;
+	     let html;
+
+	     let Alumnos = `<div class="col s5">`;
+	     let Pedidos = `<div class="col s5">`;
+
+	     Alumnos += `<div class="row green lighten-3">`;
+	     Pedidos += `<div class="row green lighten-2">`;
+
+	     
 	     for (let i = 0 ; i < data.length; i++) {
-	     	html += `
-          <div id="motivo` + data[i]['ID_Motivo'] + `" class="row">
-          	<span>` + data[i]['Motivo'] + `</span>
-          	<a class="btn-floating right red waves-effect waves-light modal-trigger" onclick="report_delete_request(` + data[i]['ID_Motivo'] + `)"><i class="material-icons">close</i></a>
-          	<a class="btn-floating right red waves-effect waves-light modal-trigger" onclick="report_edit(` + data[i]['ID_Motivo'] + `)"><i class="material-icons">edit</i></a>
-          </div>
-          `;
+	     	html = `<div id="motivo` + data[i]['ID_Motivo'] + `" class="row">
+		          	<span id="motivo_` + data[i]['ID_Motivo'] + `">` + data[i]['Motivo'] + `</span>
+		          	<a class="btn-floating right red waves-effect waves-light modal-trigger" onclick="report_delete_request(` + data[i]['ID_Motivo'] + `)"><i class="material-icons">close</i></a>
+		          	<a class="btn-floating right red waves-effect waves-light modal-trigger" onclick="report_edit(` + data[i]['ID_Motivo'] + `)"><i class="material-icons">edit</i></a>
+		          </div>
+		          `;
+	     	if (data[i]['Tipo'] == '0') {
+	     		Alumnos +=html;
+	     	}else if(data[i]['Tipo'] == '1'){
+	     		Pedidos += html;
+	     	}
+	     	
 	     };
-	     html += `</div>`;
+	     html = `</div></div>`;
+	     Alumnos += html;
+	     Pedidos += html;
 	   //console.log(html);
-	   $('#datos').html(html);
+	   $('#datos').html(Pedidos);
+	   $('#datos').append(Alumnos);
 	   });
 
 	   	$('#motivo').val('');
@@ -121,6 +137,7 @@ function reportes(){
 }
 function report_edit(id){
 	$('#report_id_edit').val(id);
+	$('#motivo_new').val($('#motivo_'+id).html());
     $('#report_edit').modal('open');
 }
 function report_delete_request(id){
@@ -144,9 +161,10 @@ function report_delete_request(id){
        case 0:
          M.toast({ 'html': 'El reporte se eliminó con éxito.' });
          $('#reporte' + $('#reporte_id').val()).remove();
+         $('#report_remove').modal('close');
          break;
        case 1:
-         M.toast({ 'html': 'Hubo un error al eliminar el producto.' })
+         M.toast({ 'html': 'Hubo un error al eliminar el motivo.' })
          break;
      }
    });
