@@ -1,11 +1,57 @@
+var utime = 500;
+var offcount = 0;
+var isBusy = false;
+var first_id = -1;
+
 let atime = 100;
+
+const GENERAL_OFF_COUNT = 20;
+const RESPONSE_ERROR = '1';
+const UPDATE_FAILURE = 'Hubo un error al actualizar los pedidos, vamos a probar otra vez en un rato.'
 
 const NO_ORDERS = 'No hay solicitudes.';
 const NO_ORDERS_QUEVE = 'No hay pedidos en cola.';
 const NO_ORDERS_DONE = 'No hay pedidos finalizados.';
+
 $('document').ready(function () {
   $('.modal').modal();
   $('.tooltipped').tooltip();
+  setInterval(function() {
+    if (!isBusy && offcount == 0) {
+      isBusy = false;
+      
+      let first_pending = $('.del_pending').last();
+      if (first_pending.length > 0) {
+        first_id = $('.del_pending').first().attr('id').replace('del', '');
+        first_id -= 2;
+      }
+
+      if (first_id < 0) {
+        $.ajax({
+          url: 'api.php',
+          type: 'POST',
+          data: {
+            request: 'getLastOrderId'
+          }
+        })
+        .done(function (data) {
+          data = JSON.parse(data);
+          
+          // Shift slightly to prevent missing data bugs.
+          first_id = data - 2;
+          
+          isBusy = false;
+          return;
+        });
+      } else {
+        dynamicUpdatesWorker();
+      }
+    } else {
+      if (offcount > 0) {
+        offcount--;
+      }
+    }
+  }, utime);
 todo();
 });
 
@@ -246,6 +292,96 @@ function ver_alumno(dni){
   });
 }
 
+function dynamicUpdatesWorker() {
+  isBusy = true;
+
+  $.ajax({
+    url: 'api.php',
+    type: 'POST',
+    data: {
+      request: 'viewOrderRequest',
+      optional: [first_id]
+    }
+  })
+  .done(function (data) {
+    if (data == RESPONSE_ERROR) {
+      M.toast({ html : UPDATE_FAILURE });
+      offcount = GENERAL_OFF_COUNT;
+      isBusy = false;
+    } else {
+      data = JSON.parse(data);
+      let html = '';
+  
+      if (data.length > 0) {
+        for (let i = 0; i < data.length; i++) {
+          if (data[i]['DNI_Cancelado'] != null) {
+            if ($('#del' + data[i]['ID_Pedido']).length > 0) {
+              let order = $('#del' + data[i]['ID_Pedido']);
+
+              order.fadeOut();
+
+              setTimeout(function () {
+                order.remove();
+
+                setTimeout(function () {
+                  if ($('.del_pending').last().length < 1) {
+                    $('#del_empty').html(NO_ORDERS).fadeIn();
+                  }
+                }, atime);
+              }, atime);
+            }
+          } else {
+            if ($('#del' + data[i]['ID_Pedido']).length < 1) {
+              //console.log(data[i]);
+              html += `
+                  <div id="del` + data[i]["ID_Pedido"] + `" class="del_pending col">
+      
+                      <div class="card">
+                          <div class="card-content">
+                              <span class="card-title" >Pedido #` + data[i]["ID_Pedido"] + `</span>
+                              <span class="card-title">Recibido: ` + data[i]["Recibido"] + `hs</span>
+                              <p><a href="#">` + data[i]["Usuario"]+data[i]["Curso"]+  `</a> te pidió ` + data[i]["Producto"]+ `.</p>
+                              <p>$ ` + data[i]["Precio"] + `</p>
+                          </div>
+      
+                        <div class="card-action">
+                          <a id="del_aceptar" class="green-text" href="#" onclick="aceptar_pedido(` + data[i]["ID_Pedido"] + `)">Aceptar</a>
+                          <a id="del_rechazar" class="green-text" href="#" onclick="rechazar_pedido(` + data[i]["ID_Pedido"] + `)">Rechazar</a>
+                        </div>
+                    </div>
+                  </div>
+              `;
+                  
+              if ($('#del_empty').length > 0) {
+                setTimeout(function() {
+                    $('#del_empty').fadeOut();
+                }, atime);
+                setTimeout(function() {
+                    $('#requests_cards_container').append(html);
+                }, atime * 2);
+              } else {
+                $('#requests_cards_container').append(html);
+              }
+            }
+          }
+        }
+      } else {
+        if ($('.del_pending').length < 1) {
+          $('#del_empty').html(NO_ORDERS);
+        }
+      }
+      
+      isBusy = false;
+    }
+  })
+  .fail(function (error) {
+    console.error('Unable to fetch updates: ' + error.responseText);
+    M.toast({ html : UPDATE_FAILURE });
+    offcount = GENERAL_OFF_COUNT;
+    isBusy = false;
+  });
+}
+
 function todo(){
       
   //------PEDIDOS
@@ -264,7 +400,7 @@ function todo(){
      for (let i = 0; i < data.length; i++) {
         //console.log(data[i]);
         html += `
-            <div id="del` + data[i]["ID_Pedido"] + `" class="col">
+            <div id="del` + data[i]["ID_Pedido"] + `" class="del_pending col">
 
                 <div class="card">
                     <div class="card-content">
