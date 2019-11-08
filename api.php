@@ -475,6 +475,25 @@
                 print ERROR;
               }
             break;
+            case 'editReasons':
+              $id = $_POST['content'][0];
+              $lookup = $server->query('SELECT * FROM '.$tables['reasons'].' where ID_Motivo = '.$id);
+
+              if ($lookup && $lookup->rowCount() == 1) {
+                $sql = 'UPDATE FROM '.$tables["reasons"].' 
+                        Motivo = ' .$server->quote($_POST['content'][1]).',
+                        Tipo = '. $server->quote($_POST['content'][2]).'
+                        WHERE ID_Motivo = '.$id;
+                $lookup =     $server->query($sql);
+                if ($lookup) {
+                  print json_encode($lookup->fetchall());
+                } else {
+                  print ERROR;
+                }
+              }else{
+                print ERROR;
+              }
+            break;
             case 'addReason':
               if (isset($_SESSION['dni']))
               {

@@ -78,7 +78,7 @@ function reportes(){
 			        <div class="row">
 			          <div class="input-feld col s12">
 			            <textarea id="motivo_new" class="materialize-textarea"></textarea>
-          				<label for="motivo">Reporte</label>
+          				<label for="motivo">Nuevo reporte</label>
 			          </div>
 			        </div>
 
@@ -123,6 +123,7 @@ function reportes(){
 	     Pedidos += html;
 	   //console.log(html);
 	   $('#datos').html(Pedidos);
+	   $('#datos').append('<div class="col s1 inner"></div>');
 	   $('#datos').append(Alumnos);
 	   });
 
@@ -131,11 +132,42 @@ function reportes(){
 	   	$('select').formSelect();
 	   	$('.modal').modal();
 }
-function report_edit(id){
+function report_edit_modal(id){
 	$('#report_id_edit').val(id);
+
 	$('#motivo_new').val($('#motivo_'+id).html());
     $('#report_edit').modal('open');
 }
+
+function report_edit(){
+	if ($('#motivo_new').val().length < 1) {
+	    M.toast({ 'html': 'No podés dejar ningún campo vacío.' });
+	  } else {
+		$.ajax({
+	     url: 'api.php',
+	     type: 'POST',
+	     data: {
+	       request: 'editReasons',
+	       content: [ $('#report_id').val(),$('#motivo_new').val(),$('#reportarA_new').val() ]
+	     }
+	   })
+	   .done(function (data) {
+	     console.log(data);
+	     data = parseInt(data);
+
+	     switch (data) {
+	       case 0:
+	         M.toast({ 'html': 'El reporte se editó con éxito.' });
+	         $('#report_edit').modal('close');
+	         break;
+	       case 1:
+	         M.toast({ 'html': 'Hubo un error al editar el motivo.' })
+	         break;
+	     }
+	   });
+	}
+}
+
 function report_delete_request(id){
     $('#report_id').val(id);
     $('#report_remove').modal('open');
@@ -145,7 +177,7 @@ function report_delete_request(id){
      url: 'api.php',
      type: 'POST',
      data: {
-       request: 'deleteReport',
+       request: 'deleteReasons',
        content: [ $('#report_id').val() ]
      }
    })
