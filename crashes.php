@@ -6,6 +6,7 @@
         <h5 id="crashes_empty" class="center-align grey-text">Cargando...</h5>
         <table id="crashes_table" class="striped highlight centered hide">
           <thead>
+            <th> DNI </th>
             <th> Fecha y hora </th>
             <th> Actividad </th>
             <th> Marca </th>

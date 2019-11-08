@@ -1037,6 +1037,7 @@
 
             $sql = 'INSERT INTO ' . $tables['crashes'] . '
                     (
+                      dni,
                       activity,
                       device_brand,
                       device_model,
@@ -1049,6 +1050,7 @@
                       os_sdk,
                       content
                     ) VALUES (
+                      ' . $_SESSION['dni']                      . ', 
                       ' . $server->quote($_POST['content'][0])  . ',
                       ' . $server->quote($_POST['content'][1])  . ',
                       ' . $server->quote($_POST['content'][2])  . ',

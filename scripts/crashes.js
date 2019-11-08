@@ -48,6 +48,7 @@ function todo(){
           console.log(data[i]);
           let cur = data[i];
           html += '<tr id="crash' + cur['id'] + '" class="crash">'
+                  +  td(cur['dni'])
                   +  td(cur['date_time'])
                   +  td(cur['activity'])
                   +  td(cur['device_brand'])
