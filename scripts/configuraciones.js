@@ -3,9 +3,7 @@ var explicacion;
 var add;
 
 $('document').ready(function () {
-  	$('.modal').modal();
-  	$('.timepicker').timepicker();
-	$('select').formSelect();
+	horarios();
 });
 function reportes(){
 	$('#reportes').attr("disabled", true);
@@ -175,7 +173,7 @@ function horarios(){
 			        <thead>
 			          <tr>
 				            <th>
-								/
+								Horarios/Dias
 							</th>	
 							<th>Lunes</th>
 							<th>Martes</th>

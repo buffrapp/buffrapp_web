@@ -95,7 +95,10 @@
 			      <button class="modal-close waves-effect waves-green btn-flat">Cancelar</button>
 			    </div>
 			</div>
-
+<div class="input-feld col s12">
+			            <input type="text" name='time' id='time' class="timepicker">
+          				<label for="tiempo">Horario</label>
+			          </div>
 <div id="horarios_add" class="modal modal-fixed-footer">
 			    <div class="modal-content">
 			      <h4>Agregá tus horarios disponibles</h4>

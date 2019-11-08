@@ -1,6 +1,9 @@
 $('document').ready(function() {
     $('.sidenav').sidenav();
     $('.collapsible').collapsible(); 
+    $('.modal').modal();
+    $('.timepicker').timepicker();
+  $('select').formSelect();
   $('.area_picker_pedidos').on('click', function() {
       window.location = 'pedidos.php';
   });
