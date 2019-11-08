@@ -473,7 +473,7 @@
                   print ERROR;
                 }
               }else{
-                print $sql;
+                //print $sql;
                 print ERROR;
               }
             break;
@@ -494,7 +494,7 @@
                   print ERROR;
                 }
               }else{
-                print $sql;
+                //print $sql;
                 print ERROR;
               }
             break;

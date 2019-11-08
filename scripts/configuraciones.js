@@ -241,6 +241,52 @@ function horarios(){
 	titulo = "Editar Horarios";
 	explicacion = "Editá los horarios de atención";
 	add = '';
+
+	let datos =  `<table>
+			        <thead>
+			          <tr>
+				            <th>
+								/
+							</th>	
+							<th>Lunes</th>
+							<th>Martes</th>
+							<th>Miercoles</th>
+							<th>Jueves</th>
+							<th>Viernes</th>
+			          </tr>
+			        </thead>
+
+			        <tbody>
+			         	<tr>
+							<td>7:30AM</td>
+						</tr>
+						<tr>
+							<td>9AM</td>
+						</tr>
+						<tr>
+							<td>11AM</td>
+						</tr>
+						<tr>
+							<td>13PM</td>
+						</tr>
+						<tr>
+							<td>15PM</td>
+						</tr>
+						<tr>
+							<td>17PM</td>
+						</tr>
+						<tr>
+							<td>19PM</td>
+						</tr>
+						<tr>
+							<td>21PM</td>
+						</tr>
+						<tr>
+							<td>21:40PM</td>
+						</tr>
+			        </tbody>
+			      </table>`;
+	$('#datos').html(datos);
 	configurarOpcion();
 
 }
@@ -252,6 +298,38 @@ function misdatos(){
 	titulo = "Editar mis datos";
 	explicacion = "Editá tus datos personales";
 	add = '';
+	$.ajax({
+     url: 'api.php',
+     type: 'POST',
+     data: {
+       request: 'deleteReasons',
+       content: [ $('#report_id').val() ]
+     }
+   })
+   .done(function (data) {
+     	console.log(data);
+     	data = JSON.parse(data);
+     	let datos = `<div class="row">
+		          <div class="input-feld col s12">
+		            <input class="validate" type="text" name="email_new" id="email_new" />
+		            <label for="email_new">Ingresá tu correo electrónico o DNI</label>
+		          </div>
+		        </div>
+
+		        <div class="row">
+		          <div class="input-feld col s12">
+		            <input class="validate" type="password" name="password_new" id="password_new" />
+		            <label for="password_new">Ingresá tu contraseña</label>
+		          </div>
+		        </div>
+
+		        <div class="row">
+		          <div class="input-feld col s12">
+		            <button id="button" type="submit" class="waves-effect waves-light btn green right">Iniciar sesión</button>
+		          </div>
+		        </div>`;
+		$('#datos').html(datos);
+   });
 	configurarOpcion();
 
 
