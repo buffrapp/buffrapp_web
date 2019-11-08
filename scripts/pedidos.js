@@ -324,7 +324,11 @@ function dynamicUpdatesWorker() {
                 order.remove();
 
                 setTimeout(function () {
+<<<<<<< HEAD
                   if ($('.del_pending').last().length > 0) {
+=======
+                  if ($('.del_pending').last().length < 1) {
+>>>>>>> 5701494d853c2c5e7ca4c425c64360abd31a9b18
                     $('#del_empty').html(NO_ORDERS).fadeIn();
                   }
                 }, atime);
