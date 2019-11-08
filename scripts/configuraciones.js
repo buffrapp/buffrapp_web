@@ -54,7 +54,7 @@ function reportes(){
 			    <div class="modal-content">
 			      <h4>¿Querés eliminar este reporte?</h4>
 			      <p>El reporte se eliminará permantemente.</p>
-			      <input type="hidden" name="report_id" value="">
+			      <input type="hidden" name="report_id">
 			    </div>
 			    <div class="modal-footer">
 			      <a href="#!" class="modal-close waves-effect waves-green btn-flat" onclick="report_delete()">Sí</a>
@@ -74,7 +74,7 @@ function reportes(){
 						    </select>
 			          </div>
 			        </div>
-					<input type="hidden" name="report_id_edit" value="">
+					<input type="hidden" name="report_id_edit">
 			        <div class="row">
 			          <div class="input-feld col s12">
 			            <textarea id="motivo_new" class="materialize-textarea"></textarea>
@@ -134,7 +134,6 @@ function reportes(){
 }
 function report_edit_modal(id){
 	$('#report_id_edit').val(id);
-
 	$('#motivo_new').val($('#motivo_'+id).html());
     $('#report_edit').modal('open');
 }
