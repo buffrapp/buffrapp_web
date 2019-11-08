@@ -101,12 +101,8 @@ function reportes(){
 	     console.log(data);
 	     let html;
 
-	     let Alumnos = `<div class="col s5">`;
-	     let Pedidos = `<div class="col s5">`;
-
-	     Alumnos += `<div class="row green lighten-3">`;
-	     Pedidos += `<div class="row green lighten-2">`;
-
+	     let Alumnos = `<div class="col s5 lighten-3">`;
+	     let Pedidos = `<div class="col s5 lighten-2">`;
 	     
 	     for (let i = 0 ; i < data.length; i++) {
 	     	html = `<div id="motivo` + data[i]['ID_Motivo'] + `" class="row">
