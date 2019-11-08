@@ -108,7 +108,7 @@ function reportes(){
 	     	html = `<div id="motivo` + data[i]['ID_Motivo'] + `" class="row">
 		          	<span id="motivo_` + data[i]['ID_Motivo'] + `">` + data[i]['Motivo'] + `</span>
 		          	<a class="btn-floating right red waves-effect waves-light modal-trigger" onclick="report_delete_request(` + data[i]['ID_Motivo'] + `)"><i class="material-icons">close</i></a>
-		          	<a class="btn-floating right red waves-effect waves-light modal-trigger" onclick="report_edit(` + data[i]['ID_Motivo'] + `)"><i class="material-icons">edit</i></a>
+		          	<a class="btn-floating right red waves-effect waves-light modal-trigger" onclick="report_edit_modal(` + data[i]['ID_Motivo'] + `)"><i class="material-icons">edit</i></a>
 		          </div>
 		          `;
 	     	if (data[i]['Tipo'] == '0') {
