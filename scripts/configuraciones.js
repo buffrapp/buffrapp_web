@@ -119,12 +119,12 @@ function reportes(){
 	   	$('select').formSelect();
 	   	$('.modal').modal();
 }
-function report_edit(){
-	$('#report_id_edit').val(product_id);
+function report_edit(id){
+	$('#report_id_edit').val(id);
     $('#report_edit').modal('open');
 }
 function report_delete_request(id){
-    $('#report_id').val(product_id);
+    $('#report_id').val(id);
     $('#report_remove').modal('open');
 }
  function report_delete() {
