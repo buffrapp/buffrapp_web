@@ -151,9 +151,9 @@ function rechazar_pedido(id_pedido) {
 }
 
 function rechazar_pedido_request(id_pedido) {
-    $('#product_id').val(id_pedido);
-    console.log($('#product_id').val());
-    $('#products_remove').modal('open');
+    $('#order_id').val(id_pedido);
+    console.log($('#order_id').val());
+    $('#order_remove').modal('open');
     $.ajax({
        url: 'api.php',
        type: 'POST',
