@@ -170,7 +170,7 @@ function rechazar_pedido_request(id_pedido) {
        let Pedidos = `<div class="col s5 lighten-2"><h3>Pedidos</h3>`;
        
        for (let i = 0 ; i < data.length; i++) {
-        html = `<input type="radio" name="motivo" id="motivo_` + data[i]['ID_Motivo'] + `">` + data[i]['Motivo'] + `</input>`;
+        html = `<input class="with-gap" type="radio" name="motivo">` + data[i]['Motivo'] + `</input>`;
         if (data[i]['Tipo'] == '0') {
           Alumnos +=html;
         }else if(data[i]['Tipo'] == '1'){
@@ -181,7 +181,6 @@ function rechazar_pedido_request(id_pedido) {
        html = `</div></div>`;
        Alumnos += html;
        Pedidos += html;
-     console.log(html);
      $('#motivos').html(Pedidos);
      $('#motivos').append('<div class="col s1 inner"></div>');
      $('#motivos').append(Alumnos);
