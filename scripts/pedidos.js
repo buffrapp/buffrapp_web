@@ -170,12 +170,7 @@ function rechazar_pedido_request(id_pedido) {
        let Pedidos = `<div class="col s5 lighten-2"><h3>Pedidos</h3>`;
        
        for (let i = 0 ; i < data.length; i++) {
-        html = `<div id="motivo` + data[i]['ID_Motivo'] + `" class="row">
-                <span id="motivo_` + data[i]['ID_Motivo'] + `">` + data[i]['Motivo'] + `</span>
-                <a class="btn-floating right red waves-effect waves-light modal-trigger" onclick="report_delete_request(` + data[i]['ID_Motivo'] + `)"><i class="material-icons">close</i></a>
-                <a class="btn-floating right red waves-effect waves-light modal-trigger" onclick="report_edit_modal(` + data[i]['ID_Motivo'] + `)"><i class="material-icons">edit</i></a>
-              </div>
-              `;
+        html = `<input type="radio" name="motivo" id="motivo_` + data[i]['ID_Motivo'] + `">` + data[i]['Motivo'] + `</input>`;
         if (data[i]['Tipo'] == '0') {
           Alumnos +=html;
         }else if(data[i]['Tipo'] == '1'){
