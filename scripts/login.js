@@ -15,7 +15,7 @@ $('document').ready(function() {
 				switch (data) {
 					case 0:
 						M.toast({ 'html': 'Cargando...' });
-					  window.location = 'index.php';
+					  	window.location = 'pedidos.php';
 						break;
 					case 1:
 						M.toast({ 'html': 'Hubo un problema al iniciar sesión.' });
