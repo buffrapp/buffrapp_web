@@ -128,10 +128,10 @@ function aceptar_pedido(id_pedido) {
 
 }
 
-function rechazar_pedido(id_pedido) {
-  $('#del' + id_pedido).fadeOut();
+function rechazar_pedido() {
+  $('#del' + $('#order_id').val()).fadeOut();
     setTimeout(function () {
-        $('#del' + id_pedido).remove();
+        $('#del' + $('#order_id').val()).remove();
         //$('#area_picker_pedidos').effect('shake');
         verificar_existencia();
         $.ajax({
@@ -139,12 +139,12 @@ function rechazar_pedido(id_pedido) {
           type: 'POST',
           data: {
             request: 'cancelarOrden',
-            content: [id_pedido]
+            content: [$('#order_id').val()]
           }
         })
         .done(function (data) {
          console.log(data);
-         M.toast({ html: 'El pedido '+id_pedido+' fue rechazado.' });
+         M.toast({ html: 'El pedido '+$('#order_id').val()+' fue rechazado.' });
         });
     
     }, atime);
@@ -186,10 +186,10 @@ function rechazar_pedido_request(id_pedido) {
        html = `</div></div>`;
        Alumnos += html;
        Pedidos += html;
-     //console.log(html);
-     //$('#datos').html(Pedidos);
-     //$('#datos').append('<div class="col s1 inner"></div>');
-     //$('#datos').append(Alumnos);
+     console.log(html);
+     $('#motivos').html(Pedidos);
+     $('#motivos').append('<div class="col s1 inner"></div>');
+     $('#motivos').append(Alumnos);
      });
  }
 

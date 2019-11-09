@@ -36,6 +36,9 @@ $scripts = [ 'pedidos' ];?>
       <h4>¿Querés cancelar este pedido?</h4>
       <p>Se le enviará una notificación al usuario de dicha acción.</p>
       <input type="hidden" name="order_id" value="">
+      <div id="motivos">
+        
+      </div>
     </div>
     <div class="modal-footer">
       <a href="#!" class="modal-close waves-effect waves-green btn-flat" onclick="order_delete(true)">Sí</a>
