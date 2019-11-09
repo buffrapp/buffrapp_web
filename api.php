@@ -1401,7 +1401,7 @@
       }
     }
   } else {
-    $title = 'API';
+    $title = 'API'; $showmenu = false;
     require_once('includes/header.php');
     print '
     <div id="vcentered_message" class="row valign-wrapper">
@@ -1411,7 +1411,10 @@
             ¡Hola! Esta es nuestra API.
           </h5>
           <h6>
-            Podés ejecutar los siguientes casos: addProduct. <br>
+            <br>
+            Para saber cómo podés usarla, visitá <a href="https://github.com/buffrapp/buffrapp_web">nuestro repositorio</a>. <br>
+            <br>
+            Además, si querés saber cómo funciona el resto, podés ver más información y el código fuente en <a href="https://github.com/buffrapp">nuestra organización</a>.
           </h6>
       </div>
     </div>';
