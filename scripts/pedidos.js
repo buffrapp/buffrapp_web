@@ -98,7 +98,7 @@ function aceptar_pedido(id_pedido) {
 
 				                  <div class="card-action">
 				                    <a id="del_aceptar" class="green-text" href="#" onclick="listo_pedido(` + data[0]["ID_Pedido"] + `)">Listo</a>
-				                    <a id="del_rechazar" class="green-text" href="#" onclick="rechazar_pedido(` + data[0]["ID_Pedido"] + `)">Rechazar</a>
+				                    <a id="del_rechazar" class="green-text" href="#" onclick="rechazar_pedido_request(` + data[0]["ID_Pedido"] + `)">Rechazar</a>
 				                  </div>
 				              </div>
 				            </div>
@@ -187,9 +187,9 @@ function rechazar_pedido_request(id_pedido) {
        Alumnos += html;
        Pedidos += html;
      //console.log(html);
-     $('#datos').html(Pedidos);
-     $('#datos').append('<div class="col s1 inner"></div>');
-     $('#datos').append(Alumnos);
+     //$('#datos').html(Pedidos);
+     //$('#datos').append('<div class="col s1 inner"></div>');
+     //$('#datos').append(Alumnos);
      });
  }
 
@@ -267,7 +267,7 @@ function listo_pedido(id_pedido){
 
                           <div class="card-action">
                             <a id="del_aceptar" class="green-text" href="#" onclick="completar_pedido(` + data[0]["ID_Pedido"] + `)">Enregado</a>
-                            <a id="del_rechazar" class="green-text" href="#" onclick="rechazar_pedido(` + data[0]["ID_Pedido"] + `)">No vino</a>
+                            <a id="del_rechazar" class="green-text" href="#" onclick="rechazar_pedido_request(` + data[0]["ID_Pedido"] + `)">No vino</a>
                           </div>
                       </div>
                     </div>
@@ -383,7 +383,7 @@ function dynamicUpdatesWorker() {
       
                         <div class="card-action">
                           <a id="del_aceptar" class="green-text" href="#" onclick="aceptar_pedido(` + data[i]["ID_Pedido"] + `)">Aceptar</a>
-                          <a id="del_rechazar" class="green-text" href="#" onclick="rechazar_pedido(` + data[i]["ID_Pedido"] + `)">Rechazar</a>
+                          <a id="del_rechazar" class="green-text" href="#" onclick="rechazar_pedido_request(` + data[i]["ID_Pedido"] + `)">Rechazar</a>
                         </div>
                     </div>
                   </div>
@@ -449,7 +449,7 @@ function todo(){
 
                   <div class="card-action">
                     <a id="del_aceptar" class="green-text" href="#" onclick="aceptar_pedido(` + data[i]["ID_Pedido"] + `)">Aceptar</a>
-                    <a id="del_rechazar" class="green-text" href="#" onclick="rechazar_pedido(` + data[i]["ID_Pedido"] + `)">Rechazar</a>
+                    <a id="del_rechazar" class="green-text" href="#" onclick="rechazar_pedido_request(` + data[i]["ID_Pedido"] + `)">Rechazar</a>
                   </div>
               </div>
             </div>
@@ -499,7 +499,7 @@ function todo(){
 
                           <div class="card-action">
                             <a id="del_aceptar" class="green-text" href="#" onclick="listo_pedido(` + data[i]["ID_Pedido"] + `)">Listo</a>
-                            <a id="del_rechazar" class="green-text" href="#" onclick="rechazar_pedido(` + data[i]["ID_Pedido"] + `)">Rechazar</a>
+                            <a id="del_rechazar" class="green-text" href="#" onclick="rechazar_pedido_request(` + data[i]["ID_Pedido"] + `)">Rechazar</a>
                           </div>
                       </div>
                     </div>
@@ -551,7 +551,7 @@ function todo(){
 
                           <div class="card-action">
                             <a id="del_aceptar" class="green-text" href="#" onclick="completar_pedido(` + data[i]["ID_Pedido"] + `)">Entregado</a>
-                            <a id="del_rechazar" class="green-text" href="#" onclick="rechazar_pedido(` + data[i]["ID_Pedido"] + `)">No vino</a>
+                            <a id="del_rechazar" class="green-text" href="#" onclick="rechazar_pedido_request(` + data[i]["ID_Pedido"] + `)">No vino</a>
                           </div>
                       </div>
                     </div>
