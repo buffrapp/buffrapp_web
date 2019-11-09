@@ -154,6 +154,43 @@ function rechazar_pedido_request(id_pedido) {
     $('#product_id').val(id_pedido);
     console.log($('#product_id').val());
     $('#products_remove').modal('open');
+    $.ajax({
+       url: 'api.php',
+       type: 'POST',
+       data: {
+         request: 'getReasons'
+       }
+     })
+     .done(function (data) {
+       data = JSON.parse(data);
+       console.log(data);
+       let html;
+
+       let Alumnos = `<div class="col s5 lighten-3"><h3>Alumnos</h3>`;
+       let Pedidos = `<div class="col s5 lighten-2"><h3>Pedidos</h3>`;
+       
+       for (let i = 0 ; i < data.length; i++) {
+        html = `<div id="motivo` + data[i]['ID_Motivo'] + `" class="row">
+                <span id="motivo_` + data[i]['ID_Motivo'] + `">` + data[i]['Motivo'] + `</span>
+                <a class="btn-floating right red waves-effect waves-light modal-trigger" onclick="report_delete_request(` + data[i]['ID_Motivo'] + `)"><i class="material-icons">close</i></a>
+                <a class="btn-floating right red waves-effect waves-light modal-trigger" onclick="report_edit_modal(` + data[i]['ID_Motivo'] + `)"><i class="material-icons">edit</i></a>
+              </div>
+              `;
+        if (data[i]['Tipo'] == '0') {
+          Alumnos +=html;
+        }else if(data[i]['Tipo'] == '1'){
+          Pedidos += html;
+        }
+        
+       };
+       html = `</div></div>`;
+       Alumnos += html;
+       Pedidos += html;
+     //console.log(html);
+     $('#datos').html(Pedidos);
+     $('#datos').append('<div class="col s1 inner"></div>');
+     $('#datos').append(Alumnos);
+     });
  }
 
 function cancelar_pedido(id_pedido) {
