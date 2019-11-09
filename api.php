@@ -758,8 +758,7 @@
           /*
           REPORTAR UN USUARIO
             $_POST['content'][0] = TIENE EL REPORTE
-            $_POST['content'][1] = DNI DEL USUARIO
-            $_POST['content'][2] = DNI DEL ADMINISTRADOR
+            $_POST['content'][1] = ID DEL PEDIDO
            */
           $sql = 'SELECT * FROM '.$tables['reasons'].'
                   WHERE ID_Motivo = '.$_POST['content'][0];
@@ -771,18 +770,23 @@
               $sql = 'INSERT INTO '.$tables['reports'].'
                 (
                   `ID_Motivo`,
-                  `DNI_Usuario`,
+                  `ID_Pedido`,
                   `DNI_Administrador`,
                   `Fecha_Hora`
                 )
                 VALUES
                 (
                   "'.$_POST['content'][0].'", ' /* IDMotivo*/ . '
-                  '.$_POST['content'][1].', ' /* DNI_U*/ . '
-                  '.$_POST['content'][2].', ' /* DNI_A*/ . '
-                  NULL,   '/* Fecha_Hora*/ . '
+                  '.$_POST['content'][1].', ' /* ID_PEDIDO*/ . '
+                  '.$_SESSION['dni'].', ' /* DNI_A*/ . '
+                  NULL   '/* Fecha_Hora*/ . '
                 )';
-              $server->query($sql);
+              $lookup = $server->query($sql);
+              if ($lookup) {
+                print PASS;
+              }else{
+                print ERROR;
+              }
             }else{
               print ERROR;
             }

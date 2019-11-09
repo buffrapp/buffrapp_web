@@ -170,7 +170,7 @@ function rechazar_pedido_request(id_pedido) {
        let Pedidos = `<div class="col s5 lighten-2"><h3>Pedidos</h3>`;
        
        for (let i = 0 ; i < data.length; i++) {
-        html = `<p><label><input class="with-gap" type="radio" name="motivo" /><span>` + data[i]['Motivo'] + `</span></label></p>`;
+        html = `<p><label><input class="with-gap radio" type="radio" name="motivo" checked value='` + data[i]['ID_Motivo'] + `' /><span id="Motivo_` + data[i]['ID_Motivo'] + `">` + data[i]['Motivo'] + `</span></label></p>`;
         if (data[i]['Tipo'] == '0') {
           Alumnos +=html;
         }else if(data[i]['Tipo'] == '1'){
@@ -187,11 +187,31 @@ function rechazar_pedido_request(id_pedido) {
      });
  }
 
-function cancelar_pedido(id_pedido) {
-    completar_pedido(id_pedido);
-    M.toast({ html: 'El pedido '+id_pedido+' fue cancelado por x razon.' });
-    
-    verificar_existencia();
+function cancelar_pedido() {
+  let id_pedido = $('#order_id').val(id_pedido);
+    let id = $(".radio").val();
+    $.ajax({
+       url: 'api.php',
+       type: 'POST',
+       data: {
+         request: 'addReport',
+         content:[id,id_pedido]
+       }
+     })
+     .done(function (data) {
+       data = parseInt(data);
+       switch (data) {
+         case 0:
+            completar_pedido(id_pedido);
+            let motivo = $("#Motivo_"+id).html()
+            M.toast({ html: 'El pedido '+id_pedido+' fue cancelado porque '+motivo+'.' });
+            verificar_existencia();
+          break;
+         case 1:
+          M.toast({ html: 'Hubo un error al cancelar el pedido' });
+         break;
+       }
+     });
 }
 
 function completar_pedido(id_pedido) {
