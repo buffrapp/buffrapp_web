@@ -11,6 +11,8 @@
           </h6>
           <br>
           <a href="../buffrapp_beta-0.1.apk" class="waves-effect waves-light btn btn-flat waves-green green white-text">Descargar ahora</a>
+          <br>
+          <p>¿Sos un administrador? Hacé <a href="login.php">clic acá</a>.
       </div>
     </div>
 
