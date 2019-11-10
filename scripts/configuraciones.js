@@ -184,12 +184,13 @@ function horarios(){
 				</div>`
 				$('#datos').html(select);
 				 $('select').formSelect();
+				 console.log($('#DiaSelect').val());
 	$.ajax({
      url: 'api.php',
      type: 'POST',
      data: {
        request: 'getOneDay',
-       content: [$("#DiaSelect option:selected").text()]
+       content: [$('#DiaSelect').val()]
      }
    })
    .done(function (data) {
