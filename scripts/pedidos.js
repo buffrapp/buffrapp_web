@@ -179,10 +179,10 @@ function rechazar_pedido_request(id_pedido) {
         }
         
        };
-       html = `<p><label><input class="with-gap radio" type="radio" name="motivo" value='` + data[i+1]['ID_Motivo'] + `' /><span id="Motivo_` + data[i+1]['ID_Motivo'] + `">` + data[i]['Motivo'] + `</span></label></p>`;
-        if (data[i+1]['Tipo'] == '0') {
+       html = `<p><label><input class="with-gap radio" type="radio" name="motivo" value='` + data[i]['ID_Motivo'] + `' /><span id="Motivo_` + data[i]['ID_Motivo'] + `">` + data[i]['Motivo'] + `</span></label></p>`;
+        if (data[i]['Tipo'] == '0') {
           Alumnos +=html;
-        }else if(data[i+1]['Tipo'] == '1'){
+        }else if(data[i]['Tipo'] == '1'){
           Pedidos += html;
         }
        html = `</div></div>`;
