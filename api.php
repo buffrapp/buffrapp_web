@@ -786,6 +786,7 @@
                     NULL   '/* Fecha_Hora*/ . '
                   )';
                 $lookup = $server->query($sql);
+                print $sql;
                 if ($lookup) {
                   print PASS;
                 }else{
