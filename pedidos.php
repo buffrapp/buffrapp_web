@@ -41,7 +41,7 @@ $scripts = [ 'pedidos' ];?>
       </div>
     </div>
     <div class="modal-footer">
-      <a href="#!" class="modal-close waves-effect waves-green btn-flat" onclick="order_delete(true)">Sí</a>
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat" onclick="cancelar_pedido()">Sí</a>
       <a href="#!" class="modal-close waves-effect waves-green btn-flat">No</a>
     </div>
   </div>
