@@ -770,6 +770,7 @@
                       ID_Pedido = '.$_POST['content'][1].' AND
                       DNI_Cancelado is not null and FH_Entregado is not null';
               $lookup = $server->query($sql);
+              print $sql;
               if ($lookup && $lookup->rowCount() == 1) {
                 $sql = 'INSERT INTO '.$tables['reports'].'
                   (
@@ -786,7 +787,6 @@
                     NULL   '/* Fecha_Hora*/ . '
                   )';
                 $lookup = $server->query($sql);
-                print $sql;
                 if ($lookup) {
                   print PASS;
                 }else{
