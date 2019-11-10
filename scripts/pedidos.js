@@ -130,9 +130,9 @@ function aceptar_pedido(id_pedido) {
 }
 
 function rechazar_pedido() {
-  $('#del' + $('#order_id').val()).fadeOut();
+  $('#del' + id_pedido).fadeOut();
     setTimeout(function () {
-        $('#del' + $('#order_id').val()).remove();
+        $('#del' + id_pedido).remove();
         //$('#area_picker_pedidos').effect('shake');
         verificar_existencia();
         $.ajax({
@@ -140,12 +140,12 @@ function rechazar_pedido() {
           type: 'POST',
           data: {
             request: 'cancelarOrden',
-            content: [$('#order_id').val()]
+            content: [id_pedido]
           }
         })
         .done(function (data) {
          console.log(data);
-         M.toast({ html: 'El pedido '+$('#order_id').val()+' fue rechazado.' });
+         M.toast({ html: 'El pedido '+id_pedido+' fue rechazado.' });
         });
     
     }, atime);
