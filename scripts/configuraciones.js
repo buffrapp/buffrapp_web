@@ -1,6 +1,7 @@
 var titulo;
 var explicacion;
 var add;
+var id;
 
 $('document').ready(function () {
 	horarios();
@@ -58,8 +59,8 @@ function reportes(){
 		M.textareaAutoResize($('#motivo'));
 	   	
 }
-function report_edit_modal(id){
-	$('#report_id_edit').val(id);
+function report_edit_modal(id2){
+	id = id2;
 	$('#motivo_new').val($('#motivo_'+id).html());
     $('#report_edit').modal('open');
 }
@@ -73,7 +74,7 @@ function report_edit(){
 	     type: 'POST',
 	     data: {
 	       request: 'editReasons',
-	       content: [ $('#report_id_edit').val(),$('#motivo_new').val(),$('#reportarA_new').val() ]
+	       content: [ id,$('#motivo_new').val(),$('#reportarA_new').val() ]
 	     }
 	   })
 	   .done(function (dataO) {
@@ -94,8 +95,8 @@ function report_edit(){
 	}
 }
 
-function report_delete_request(id){
-    $('#report_id').val(id);
+function report_delete_request(id2){
+    id = id2;
     $('#report_remove').modal('open');
 }
  function report_delete() {
@@ -104,7 +105,7 @@ function report_delete_request(id){
      type: 'POST',
      data: {
        request: 'deleteReasons',
-       content: [ $('#report_id').val() ]
+       content: [id]
      }
    })
    .done(function (data) {

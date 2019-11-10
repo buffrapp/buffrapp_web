@@ -99,7 +99,7 @@ function aceptar_pedido(id_pedido) {
 
 				                  <div class="card-action">
 				                    <a id="del_aceptar" class="green-text" href="#" onclick="listo_pedido(` + data[0]["ID_Pedido"] + `)">Listo</a>
-				                    <a id="del_rechazar" class="green-text" href="#" onclick="rechazar_pedido_request(` + data[0]["ID_Pedido"] + `)">Rechazar</a>
+				                    <a id="del_rechazar" class="green-text" href="#" onclick="rechazar_pedido_request(` + data[0]["ID_Pedido"] + `)">Cancelar</a>
 				                  </div>
 				              </div>
 				            </div>
@@ -172,6 +172,8 @@ function rechazar_pedido_request(id_pedido_new) {
  }
 
 function cancelar_pedido() {
+
+  if ($("input[name='edad']:radio").is(':checked')) {
     id = $("input:radio[name=motivo]:checked").val();
     console.log("id pedido: "+id_pedido+" id: "+id);
     $.ajax({
@@ -188,6 +190,7 @@ function cancelar_pedido() {
        switch (data) {
          case 0:
             let motivo = $("#Motivo_"+id).html()
+            $('#del' + id_pedido).fadeOut();
             M.toast({ html: 'El pedido '+id_pedido+' fue cancelado porque '+motivo+'.' });
             verificar_existencia();
           break;
@@ -196,6 +199,10 @@ function cancelar_pedido() {
          break;
        }
      });
+   }else {
+     M.toast({ html: 'Elegí un motivo' });
+   }
+    
 }
 
 function completar_pedido(id_pedido) {
@@ -265,7 +272,7 @@ function listo_pedido(id_pedido){
 
                           <div class="card-action">
                             <a id="del_aceptar" class="green-text" href="#" onclick="completar_pedido(` + data[0]["ID_Pedido"] + `)">Enregado</a>
-                            <a id="del_rechazar" class="green-text" href="#" onclick="rechazar_pedido_request(` + data[0]["ID_Pedido"] + `)">No vino</a>
+                            <a id="del_rechazar" class="green-text" href="#">No vino</a>
                           </div>
                       </div>
                     </div>
@@ -497,7 +504,7 @@ function todo(){
 
                           <div class="card-action">
                             <a id="del_aceptar" class="green-text" href="#" onclick="listo_pedido(` + data[i]["ID_Pedido"] + `)">Listo</a>
-                            <a id="del_rechazar" class="green-text" href="#" onclick="rechazar_pedido_request(` + data[i]["ID_Pedido"] + `)">Rechazar</a>
+                            <a id="del_rechazar" class="green-text" href="#" onclick="rechazar_pedido_request(` + data[i]["ID_Pedido"] + `)">Cancelar</a>
                           </div>
                       </div>
                     </div>
