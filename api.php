@@ -936,6 +936,27 @@
                 print ERROR;
               }
               break;
+        case 'getOneDay':
+        $dia = $server->quote($_POST['content'][0]);
+        if ($server->quote($_POST['content'][0]) == '') {
+          $dia = 'Lunes';
+        }
+          $sql = 'SELECT Turno,Dia,
+                            CONCAT(HOUR(HoraI),":",MINUTE(HoraI),"hs") as "HoraI",
+                            CONCAT(HOUR(HoraF),":",MINUTE(HoraF),"hs") as "HoraF" 
+                            FROM ' . $tables['horarios'].' WHERE Dia = '.;
+          $lookup = $server->query($sql);
+          if ($lookup) {
+            if ($lookup->rowCount() == 1) {
+              print json_encode($lookup->fetchall());
+            }else{
+              print ERROR;
+            }
+          }else{
+            print ERROR;
+          }
+          print json_encode($server->query($sql)->fetchAll());
+          break;
         case 'setCalendar':
           if (isset($_SESSION['dni'])) {
             $horaI = $_POST['content'][0];

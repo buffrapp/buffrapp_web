@@ -171,20 +171,34 @@ function horarios(){
 	add = `<a class="btn-floating btn-large waves-effect waves-light modal-trigger green" href="#horarios_add">
 		      <i class="waves-effect waves-light large material-icons">add</i>
 		    </a>`;
+	let select = `<div class="row">
+					<label>Dia</label>
+						    <select id="DiaSelect" multiple>
+							    <option value="Lunes">Lunes</option>
+							    <option value="Martes">Martes</option>
+							    <option value="Miercoles">Miercoles</option>
+							    <option value="Jueves">Jueves</option>
+							    <option value="Viernes">Viernes</option>
+						    </select>
+			          </div>
+				</div>`
 	$.ajax({
      url: 'api.php',
      type: 'POST',
      data: {
-       request: 'getHorarios'
+       request: 'getOneDay',
+       content: $('#DiaSelect').val()
      }
    })
    .done(function (data) {
      	console.log(data);
      	data = JSON.parse(data);
-     	let horarios='';
-     	for (let i = 0; i<data.length; i++) {
-     		horarios += '<div class="row">'+data[i]['Turno']+': '+data[i]['HoraI']+'-'+data[i]['HoraF']+'</div>';
-     	};
+     	if (data.length > 0) {
+     		let horarios='<div class="row">'+data[0]['Dia']+'</div>';
+	     	for (let i = 0; i<data.length; i++) {
+	     		horarios += '<div class="row">'+data[i]['Turno']+': '+data[i]['HoraI']+'-'+data[i]['HoraF']+'</div>';
+	     	};
+	     };
 		$('#datos').html(horarios);
 		configurarOpcion();
     });
