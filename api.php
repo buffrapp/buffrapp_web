@@ -175,7 +175,7 @@
                   }
                   print $mensaje;
                 } else {
-                  print ERROR;
+                  print NOT_ALLOWED;
                 }
               } else {
                 print ERROR;

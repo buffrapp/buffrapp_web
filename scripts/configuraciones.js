@@ -297,6 +297,9 @@ function Verificar(){
 		     		case 1:
 		     				M.toast({ 'html': 'Ocurrió un error al acutalizar los datos.' });
 		     			break;
+		     		case 2:
+		     			M.toast({ 'html': 'La verificación no fue correcta.' });
+		     			break;
 		     		default:
 		     				data = JSON.parse(dataO)
 		     				M.toast({ 'html': data[0][0] });
