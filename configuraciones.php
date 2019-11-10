@@ -102,8 +102,8 @@
 			         <div class="input-feld col s12">
 			        <div class="row">
 			          <div class="input-feld col s12">
-			            <input type="text" name='time' id='time' class="timepicker">
-          				<label for="tiempo">Horario</label>
+			            <input type="text" class="timepicker">
+          				<label for="time">Horario</label>
 			          </div>
 			        </div>
 			         <label>Dia</label>
