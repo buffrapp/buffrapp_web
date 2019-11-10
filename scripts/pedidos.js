@@ -2,7 +2,8 @@ var utime = 500;
 var offcount = 0;
 var isBusy = false;
 var first_id = -1;
-
+var id_pedido;
+var id;
 let atime = 100;
 
 const GENERAL_OFF_COUNT = 20;
@@ -188,8 +189,8 @@ function rechazar_pedido_request(id_pedido) {
  }
 
 function cancelar_pedido() {
-  let id_pedido = $('#order_id').val();
-    let id = $(".radio").val();
+  id_pedido = $('#order_id').val();
+    id = $(".radio").val();
     $.ajax({
        url: 'api.php',
        type: 'POST',

@@ -762,7 +762,7 @@
            */
           $sql = 'SELECT * FROM '.$tables['reasons'].'
                   WHERE ID_Motivo = '.$_POST['content'][0];
-
+          print $sql;
           $lookup = $server->query($sql);
           if ($lookup) {
             $matches = $lookup->rowCount();
@@ -781,7 +781,6 @@
                   '.$_SESSION['dni'].', ' /* DNI_A*/ . '
                   NULL   '/* Fecha_Hora*/ . '
                 )';
-                print $sql;
               $lookup = $server->query($sql);
               if ($lookup) {
                 print PASS;
