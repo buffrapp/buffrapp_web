@@ -152,8 +152,7 @@ function rechazar_pedido() {
 }
 
 function rechazar_pedido_request(id_pedido) {
-    $('#order_id').val(id_pedido);
-    console.log($('#order_id').val());
+    $('#order_id').html(id_pedido);
     $('#order_remove').modal('open');
     $.ajax({
        url: 'api.php',
@@ -195,8 +194,8 @@ function rechazar_pedido_request(id_pedido) {
  }
 
 function cancelar_pedido() {
-  id_pedido = $('#order_id').val();
-    id = $(".radio").val();
+  id_pedido = $('#order_id').html();
+    id = $("input:radio[name=edad]:checked").val();
     console.log("id pedido: "+id_pedido+" id: "+id);
     $.ajax({
        url: 'api.php',
