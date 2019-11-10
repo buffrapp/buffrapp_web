@@ -170,8 +170,8 @@ function rechazar_pedido_request(id_pedido) {
        let Alumnos = `<div class="col s5 lighten-3"><h3>Alumnos</h3>`;
        let Pedidos = `<div class="col s5 lighten-2"><h3>Pedidos</h3>`;
        
-       for (let i = 0 ; i < data.length; i++) {
-        html = `<p><label><input class="with-gap radio" type="radio" name="motivo" checked value='` + data[i]['ID_Motivo'] + `' /><span id="Motivo_` + data[i]['ID_Motivo'] + `">` + data[i]['Motivo'] + `</span></label></p>`;
+       for (let i = 0 ; i < data.length-1; i++) {
+        html = `<p><label><input class="with-gap radio" type="radio" name="motivo" value='` + data[i]['ID_Motivo'] + `' /><span id="Motivo_` + data[i]['ID_Motivo'] + `">` + data[i]['Motivo'] + `</span></label></p>`;
         if (data[i]['Tipo'] == '0') {
           Alumnos +=html;
         }else if(data[i]['Tipo'] == '1'){
@@ -179,6 +179,12 @@ function rechazar_pedido_request(id_pedido) {
         }
         
        };
+       html = `<p><label><input class="with-gap radio" type="radio" name="motivo" value='` + data[i+1]['ID_Motivo'] + `' /><span id="Motivo_` + data[i+1]['ID_Motivo'] + `">` + data[i]['Motivo'] + `</span></label></p>`;
+        if (data[i+1]['Tipo'] == '0') {
+          Alumnos +=html;
+        }else if(data[i+1]['Tipo'] == '1'){
+          Pedidos += html;
+        }
        html = `</div></div>`;
        Alumnos += html;
        Pedidos += html;
