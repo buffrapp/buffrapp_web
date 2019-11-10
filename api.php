@@ -787,7 +787,16 @@
                   )';
                 $lookup = $server->query($sql);
                 if ($lookup) {
-                  print PASS;
+                  $sql = "UPDATE " . $tables['orders'] . "
+                      SET    DNI_Cancelado = " . $dni . "
+                      WHERE  ID_Pedido     = " . $_POST['content'][0];
+
+                  $lookup = $server->query($sql);
+                  if ($lookup) {
+                    print PASS;
+                  } else {
+                    print ERROR;
+                  }
                 }else{
                   print ERROR;
                 }

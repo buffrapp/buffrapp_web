@@ -129,28 +129,6 @@ function aceptar_pedido(id_pedido) {
 
 }
 
-function rechazar_pedido() {
-  $('#del' + id_pedido).fadeOut();
-    setTimeout(function () {
-        $('#del' + id_pedido).remove();
-        //$('#area_picker_pedidos').effect('shake');
-        verificar_existencia();
-        $.ajax({
-          url: 'api.php',
-          type: 'POST',
-          data: {
-            request: 'cancelarOrden',
-            content: [id_pedido]
-          }
-        })
-        .done(function (data) {
-         console.log(data);
-         M.toast({ html: 'El pedido '+id_pedido+' fue rechazado.' });
-        });
-    
-    }, atime);
-}
-
 function rechazar_pedido_request(id_pedido_new) {
     id_pedido = id_pedido_new;
     $('#order_remove').modal('open');
@@ -209,7 +187,6 @@ function cancelar_pedido() {
        data = parseInt(data);
        switch (data) {
          case 0:
-            rechazar_pedido(id_pedido);
             let motivo = $("#Motivo_"+id).html()
             M.toast({ html: 'El pedido '+id_pedido+' fue cancelado porque '+motivo+'.' });
             verificar_existencia();
