@@ -1278,10 +1278,9 @@
           break;
           case 'getHorarios':
           $sql = 'SELECT Turno,Dia,
-                            CONCAT(HOUR(HoraI),:,MINUTE(HoraI),hs) as "HoraI",
-                            CONCAT(HOUR(HoraF),:,MINUTE(HoraF),hs) as "HoraF" 
+                            CONCAT(HOUR(HoraI),":",MINUTE(HoraI),"hs") as "HoraI",
+                            CONCAT(HOUR(HoraF),":",MINUTE(HoraF),"hs") as "HoraF" 
                             FROM ' . $tables['horarios'];
-          print $sql;
           print json_encode($server->query($sql)->fetchAll());
           break;
         case 'getUserProducts':
