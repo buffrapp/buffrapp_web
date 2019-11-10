@@ -762,7 +762,7 @@
            */
           $sql = 'SELECT * FROM '.$tables['reasons'].'
                   WHERE ID_Motivo = '.$_POST['content'][0];
-          print $sql;
+          print $sql."<-query";
           $lookup = $server->query($sql);
           if ($lookup) {
             $matches = $lookup->rowCount();
