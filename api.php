@@ -138,7 +138,7 @@
               $lookup = $server->query($sql);
               if ($lookup) {
                 if ($lookup->fetch()[0] == 1) {
-                  if (strlen($server->quote($_POST['content'][1]) >=4) {
+                  if (strlen($server->quote($_POST['content'][1])) >=4) {
                     $sql = 'UPDATE ' . $tables['admin'] . ' SET 
                                 Password      = ' . $server->quote($_POST['content'][1]).'
                                WHERE DNI           = ' . $_SESSION['dni'];
