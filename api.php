@@ -768,7 +768,7 @@
             if ($matches==1) {
               $sql = 'SELECT * FROM '.$tables['orders'].' WHERE 
                       ID_Pedido = '.$_POST['content'][1].' AND
-                      DNI_Cancelado is not null and FH_Entregado is null';
+                      DNI_Cancelado is null and FH_Entregado is null';
               $lookup = $server->query($sql);
               if ($lookup && $lookup->rowCount() == 1) {
                 $sql = 'INSERT INTO '.$tables['reports'].'
