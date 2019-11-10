@@ -191,6 +191,7 @@ function rechazar_pedido_request(id_pedido) {
 function cancelar_pedido() {
   id_pedido = $('#order_id').val();
     id = $(".radio").val();
+    console.log("id pedido: "+id_pedido+" id: "+id);
     $.ajax({
        url: 'api.php',
        type: 'POST',
