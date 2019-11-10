@@ -116,7 +116,7 @@ function report_delete_request(id2){
      switch (data) {
        case 0:
          M.toast({ 'html': 'El reporte se eliminó con éxito.' });
-         $('#reporte' + id).remove();
+         $('#motivo' + id).remove();
          $('#report_remove').modal('close');
          break;
        case 1:
