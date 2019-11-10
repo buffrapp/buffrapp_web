@@ -181,75 +181,11 @@ function horarios(){
    .done(function (data) {
      	console.log(data);
      	data = JSON.parse(data);
-     	for (var i = Things.length - 1; i >= 0; i--) {
-     		Things[i]
+     	let horarios='';
+     	for (let i = 0; i<data.length; i++) {
+     		horarios += '<div class="row">'+data[i]['Turno']+': '+data[i]['HoraI']+'-'+data[i]['HoraF']+'</div>';
      	};
-     	let datos =  `<table>
-				        <thead>
-				          <tr>
-					            <th>
-									Horarios/Dias
-								</th>	
-								<th>Lunes</th>
-								<th>Martes</th>
-								<th>Miercoles</th>
-								<th>Jueves</th>
-								<th>Viernes</th>
-				          </tr>
-				        </thead>
-
-				        <tbody>
-				         	<tr>
-								<td>7:30AM</td>
-							</tr>
-							<tr>
-								<td>8AM</td>
-							</tr>
-							<tr>
-								<td>9AM</td>
-							</tr>
-							<tr>
-								<td>10AM</td>
-							</tr>
-							<tr>
-								<td>11AM</td>
-							</tr>
-							<tr>
-								<td>12AM</td>
-							</tr>
-							<tr>
-								<td>13PM</td>
-							</tr>
-							<tr>
-								<td>14PM</td>
-							</tr>
-							<tr>
-								<td>15PM</td>
-							</tr>
-							<tr>
-								<td>16PM</td>
-							</tr>
-							<tr>
-								<td>17PM</td>
-							</tr>
-							<tr>
-								<td>18PM</td>
-							</tr>
-							<tr>
-								<td>19PM</td>
-							</tr>
-							<tr>
-								<td>20PM</td>
-							</tr>
-							<tr>
-								<td>21PM</td>
-							</tr>
-							<tr>
-								<td>21:40PM</td>
-							</tr>
-				        </tbody>
-				      </table>`;
-		$('#datos').html(datos);
+		$('#datos').html(horarios);
 		configurarOpcion();
     });
 	
@@ -353,4 +289,71 @@ function configurarOpcion(){
 	$('#buttonAdd').html(add);
 	$('#TituloC').html(titulo);
 	$('#explicacion').html(explicacion);
+}
+function tablaHorarios(){
+		let datos =  `<table>
+				        <thead>
+				          <tr>
+					            <th>
+									Horarios/Dias
+								</th>	
+								<th>Lunes</th>
+								<th>Martes</th>
+								<th>Miercoles</th>
+								<th>Jueves</th>
+								<th>Viernes</th>
+				          </tr>
+				        </thead>
+
+				        <tbody>
+				         	<tr>
+								<td>7:30AM</td>
+							</tr>
+							<tr>
+								<td>8AM</td>
+							</tr>
+							<tr>
+								<td>9AM</td>
+							</tr>
+							<tr>
+								<td>10AM</td>
+							</tr>
+							<tr>
+								<td>11AM</td>
+							</tr>
+							<tr>
+								<td>12AM</td>
+							</tr>
+							<tr>
+								<td>13PM</td>
+							</tr>
+							<tr>
+								<td>14PM</td>
+							</tr>
+							<tr>
+								<td>15PM</td>
+							</tr>
+							<tr>
+								<td>16PM</td>
+							</tr>
+							<tr>
+								<td>17PM</td>
+							</tr>
+							<tr>
+								<td>18PM</td>
+							</tr>
+							<tr>
+								<td>19PM</td>
+							</tr>
+							<tr>
+								<td>20PM</td>
+							</tr>
+							<tr>
+								<td>21PM</td>
+							</tr>
+							<tr>
+								<td>21:40PM</td>
+							</tr>
+				        </tbody>
+				      </table>`;
 }
