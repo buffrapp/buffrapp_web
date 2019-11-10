@@ -947,7 +947,7 @@
                             FROM ' . $tables['horarios'].' WHERE Dia = '.$dia;
           $lookup = $server->query($sql);
           if ($lookup) {
-            if ($lookup->rowCount() == 1) {
+            if ($lookup->rowCount() > 1) {
               print json_encode($lookup->fetchall());
             }else{
               print ERROR;
