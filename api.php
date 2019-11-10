@@ -944,7 +944,7 @@
           $sql = 'SELECT Turno,Dia,
                             CONCAT(HOUR(HoraI),":",MINUTE(HoraI),"hs") as "HoraI",
                             CONCAT(HOUR(HoraF),":",MINUTE(HoraF),"hs") as "HoraF" 
-                            FROM ' . $tables['horarios'].' WHERE Dia = '.;
+                            FROM ' . $tables['horarios'].' WHERE Dia = '.$dia;
           $lookup = $server->query($sql);
           if ($lookup) {
             if ($lookup->rowCount() == 1) {
