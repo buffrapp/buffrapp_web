@@ -173,7 +173,7 @@ function horarios(){
 		    </a>`;
 	let select = `<div class="row">
 					<label>Dia</label>
-						    <select id="DiaSelect" onchange="horarios()">
+						    <select id="DiaSelect" onchange="buscarDia()">
 							    <option value="Lunes">Lunes</option>
 							    <option value="Martes">Martes</option>
 							    <option value="Miercoles">Miercoles</option>
@@ -184,7 +184,11 @@ function horarios(){
 				</div>`
 				$('#datos').html(select);
 				 $('select').formSelect();
-				 console.log($('#DiaSelect').val());
+	configurarOpcion();
+	buscarDia();
+}
+
+function buscarDia(){
 	$.ajax({
      url: 'api.php',
      type: 'POST',
@@ -203,10 +207,7 @@ function horarios(){
 	     	};
 	     	$('#datos').append(horarios);
 	     };
-		configurarOpcion();
     });
-	
-
 }
 
 function misdatos(){
