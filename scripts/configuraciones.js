@@ -89,6 +89,7 @@ function report_edit(){
 	       	data = JSON.parse(dataO);
 	       	M.toast({ 'html': 'El reporte se editó con éxito.' });
 	         $('#report_edit').modal('close');
+	         reportes();
 	       break;
 	     }
 	   });
@@ -115,7 +116,7 @@ function report_delete_request(id2){
      switch (data) {
        case 0:
          M.toast({ 'html': 'El reporte se eliminó con éxito.' });
-         $('#reporte' + $('#reporte_id').val()).remove();
+         $('#reporte' + id).remove();
          $('#report_remove').modal('close');
          break;
        case 1:
