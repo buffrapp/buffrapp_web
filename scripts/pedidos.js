@@ -209,7 +209,7 @@ function cancelar_pedido() {
        data = parseInt(data);
        switch (data) {
          case 0:
-            completar_pedido(id_pedido);
+            rechazar_pedido(id_pedido);
             let motivo = $("#Motivo_"+id).html()
             M.toast({ html: 'El pedido '+id_pedido+' fue cancelado porque '+motivo+'.' });
             verificar_existencia();
