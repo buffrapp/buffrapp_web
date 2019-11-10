@@ -130,6 +130,34 @@
                 print ERROR;
             }
             break;
+          case 'updateMyOwnData':
+              $password = $server->quote($_POST['content'][2]);
+              $sql = 'SELECT DNI FROM ' . $tables['admin'] . '
+                               WHERE DNI           = ' . $_SESSION['dni'] . '
+                                  AND  Password      = ' . $password;
+              $lookup = $server->query($sql);
+              if ($lookup) {
+                if ($lookup->fetch()[0] == 1) {
+                  if (strlen($server->quote($_POST['content'][1]) >=4) {
+                    $sql = 'UPDATE ' . $tables['admin'] . ' SET 
+                                Password      = ' . $server->quote($_POST['content'][1]).'
+                               WHERE DNI           = ' . $_SESSION['dni'];
+                    $lookup = $server->query($sql);
+                    if ($lookup) {
+                      print PASS;
+                    }else{
+                      print ERROR;
+                    }
+                  }else{
+                     print ERROR;
+                  }
+                } else {
+                  print ERROR;
+                }
+              } else {
+                print ERROR;
+              }
+            break;
           case 'usernameLookup':
             /*
             // About this operation:

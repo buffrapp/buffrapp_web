@@ -253,8 +253,8 @@ function misdatos(){
 
 		        <div class="row">
 		          <div class="input-feld col s12">
-		            <input class="validate" type="text" name="email_new" id="email_new" value="` + data[0]['E-mail'] + `"/>
-		            <label for="email_new">Nuevo E-mail</label>
+		            <input class="validate" type="text" name="email_new" id="email_new" value="` + data[0]['E-mail'] + `" disabled/>
+		            <label for="email_new">E-mail</label>
 		          </div>
 		        </div>
 
@@ -267,14 +267,45 @@ function misdatos(){
 
 		        <div class="row">
 		          <div class="input-feld col s12">
-		            <button id="button" type="submit" class="waves-effect waves-light btn green right">Modificar</button>
+		            <button id="button" type="submit" class="waves-effect waves-light btn green right modal-trigger" href="#Confirmar">Modificar</button>
 		          </div>
 		        </div>`;
 		$('#datos').html(datos);
    });
 	configurarOpcion();
+}
 
-
+function Verificar(){
+	if ($('#old_password').val().length < 1) {
+		M.toast({ 'html': 'Ingresá tu contraseña para actualizar los datos.' });
+	}else{
+		if ($('#email_new').val().length < 1) {
+			M.toast({ 'html': 'No podes dejar el E-mail vacio.' });
+		}else{
+			$.ajax({
+     		url: 'api.php',
+		     type: 'POST',
+		     data: {
+		       request: 'updateMyOwnData',
+		       content: [$('#email_new').val(),$('#password_new').val(),$('#old_password').val()]
+		     }
+		   })
+		   .done(function (data) {
+		     	data = parseInt(data);
+		     	switch (data) {
+		     		case 0:
+		     				M.toast({ 'html': 'Datos actualizados con éxito.' });
+				        	misdatos();
+		     			break;
+		     		case 1:
+		     				M.toast({ 'html': 'Ocurrió un error al acutalizar los datos.' });
+		     			break;
+		     	}
+		   });
+		}
+		
+	}
+	
 }
 
 function configurarOpcion(){

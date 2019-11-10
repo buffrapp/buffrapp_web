@@ -124,4 +124,19 @@
 			      <button class="modal-close waves-effect waves-green btn-flat">Cancelar</button>
 			    </div>
 			</div>
+<div id="Confirmar" class="modal modal-fixed-footer">
+			    <div class="modal-content">
+			      <h4>Ingresá tu contraseña actual para verificar</h4>
+			        <div class="row">
+			         <div class="input-feld col s12">
+			         	<input type="password" name="old_password" id="old_password">
+			          </div>
+			        </div>
+
+			    </div>
+			    <div class="modal-footer">
+			      <button class="waves-effect waves-green btn-flat" onclick="Verificar()">Verificar</button>
+			      <button class="modal-close waves-effect waves-green btn-flat">Cancelar</button>
+			    </div>
+			</div>
 <?php require_once('includes/footer.php'); ?>
