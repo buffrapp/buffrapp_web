@@ -139,12 +139,10 @@
               if ($lookup) {
                 if ($lookup->rowCount()==1) {
                   $email = $lookup->fetch()[0];
-                  $email_new = $server->quote($_POST['content'][0]);
-                  print $email;
-                  print $email_new;
-                  if ($email != $email_new) {
+                  $email_new = $_POST['content'][0];
+                  if ($email != $email_new && filter_var($email_new,FILTER_VALIDATE_EMAIL)) {
                     $sql = 'UPDATE ' . $tables['admin'] . ' SET 
-                                `E-mail`      = ' . $email_new.'
+                                `E-mail`      = ' . $server->quote($_POST['content'][0]).'
                                WHERE DNI           = ' . $_SESSION['dni'];
                     $lookup = $server->query($sql);
                     if ($lookup) {
