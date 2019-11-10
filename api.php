@@ -139,7 +139,6 @@
               if ($lookup) {
                 if ($lookup->rowCount()==1) {
                   $email = $lookup->fetch()[0];
-                  $mensaje = 'No hiciste cambios';
                   if ($email == $server->quote($_POST['content'][0])) {
                     $sql = 'UPDATE ' . $tables['admin'] . ' SET 
                                 `E-mail`      = ' . $server->quote($_POST['content'][0]).'
@@ -159,15 +158,7 @@
                                WHERE DNI           = ' . $_SESSION['dni'];
                     $lookup = $server->query($sql);
                     if ($lookup) {
-                      $mensaje .='Contraseña acutalizada.';
-                      $token = array(
-                        "iat"        => $_SERVER['REQUEST_TIME'],
-                        "data"       => [
-                        "username" => $_SESSION['dni'],
-                        "password" => $server->quote($_POST['content'][1])
-                      ]
-                      );
-                      $_SESSION['token'] = JWT::encode($token, $security['secret']);
+                      isset($mensaje)?$mensaje .='Contraseña acutalizada.':$mensaje ='Contraseña acutalizada.';
                     }else{
                       print ERROR;
                       break;

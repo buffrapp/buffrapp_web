@@ -253,7 +253,7 @@ function misdatos(){
 
 		        <div class="row">
 		          <div class="input-feld col s12">
-		            <input class="validate" type="text" name="email_new" id="email_new" value="` + data[0]['E-mail'] + `" disabled/>
+		            <input class="validate" type="text" name="email_new" id="email_new" value="` + data[0]['E-mail'] + `">
 		            <label for="email_new">E-mail</label>
 		          </div>
 		        </div>
@@ -291,7 +291,6 @@ function Verificar(){
 		     }
 		   })
 		   .done(function (dataO) {
-		  		console.log(dataO);
 		     	data = parseInt(dataO);
 		     	switch (data) {
 		     		case 1:
@@ -301,8 +300,7 @@ function Verificar(){
 		     			M.toast({ 'html': 'La verificación no fue correcta.' });
 		     			break;
 		     		default:
-		     				data = JSON.parse(dataO)
-		     				M.toast({ 'html': data[0][0] });
+		     				M.toast({ 'html': dataO });
 				        	misdatos();
 		     			break;
 		     	}
