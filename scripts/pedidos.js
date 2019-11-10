@@ -195,7 +195,7 @@ function rechazar_pedido_request(id_pedido) {
 
 function cancelar_pedido() {
   id_pedido = $('#order_id').html();
-    id = $("input:radio[name=edad]:checked").val();
+    id = $("input:radio[name=motivo]:checked").val();
     console.log("id pedido: "+id_pedido+" id: "+id);
     $.ajax({
        url: 'api.php',
