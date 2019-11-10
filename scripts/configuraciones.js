@@ -173,7 +173,7 @@ function horarios(){
 		    </a>`;
 	let select = `<div class="row">
 					<label>Dia</label>
-						    <select id="DiaSelect" multiple>
+						    <select id="DiaSelect">
 							    <option value="Lunes">Lunes</option>
 							    <option value="Martes">Martes</option>
 							    <option value="Miercoles">Miercoles</option>
@@ -183,6 +183,7 @@ function horarios(){
 			          </div>
 				</div>`
 				$('#datos').html(select);
+				 $('select').formSelect();
 	$.ajax({
      url: 'api.php',
      type: 'POST',
@@ -194,7 +195,6 @@ function horarios(){
    .done(function (data) {
      	console.log(data);
      	data = JSON.parse(data);
-
      	if (data.length > 0) {
      		let horarios='<div class="row">'+data[0]['Dia']+'</div>';
 	     	for (let i = 0; i<data.length; i++) {
