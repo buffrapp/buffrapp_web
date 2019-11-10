@@ -151,8 +151,8 @@ function rechazar_pedido() {
     }, atime);
 }
 
-function rechazar_pedido_request(id_pedido) {
-    $('#order_id').val(id_pedido);
+function rechazar_pedido_request(id_pedido_new) {
+    id_pedido = id_pedido_new;
     $('#order_remove').modal('open');
     $.ajax({
        url: 'api.php',
@@ -194,7 +194,6 @@ function rechazar_pedido_request(id_pedido) {
  }
 
 function cancelar_pedido() {
-  id_pedido = $('#order_id').val();
     id = $("input:radio[name=motivo]:checked").val();
     console.log("id pedido: "+id_pedido+" id: "+id);
     $.ajax({
