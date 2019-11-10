@@ -1223,6 +1223,11 @@
             }
             
           break;
+        case 'getMyOwnData':
+          print json_encode($server->query('SELECT * FROM ' . $tables['admin'] . '
+                                            WHERE  DNI = '.$_SESSION["dni"])->fetchAll());
+          break;
+          break;
         case 'getProducts':
           print json_encode($server->query('SELECT * FROM ' . $tables['products'] . '
                                             WHERE  estado >    -1')->fetchAll());

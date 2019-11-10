@@ -231,8 +231,7 @@ function misdatos(){
      url: 'api.php',
      type: 'POST',
      data: {
-       request: 'deleteReasons',
-       content: [ $('#report_id').val() ]
+       request: 'getMyOwnData'
      }
    })
    .done(function (data) {
@@ -240,21 +239,35 @@ function misdatos(){
      	data = JSON.parse(data);
      	let datos = `<div class="row">
 		          <div class="input-feld col s12">
-		            <input class="validate" type="text" name="email_new" id="email_new" />
-		            <label for="email_new">Ingresá tu correo electrónico o DNI</label>
+		            <input type="text" name="name" value="` + data[0]['Nombre'] + `" disabled/>
+		            <label for="name">Nombre completo</label>
 		          </div>
 		        </div>
 
 		        <div class="row">
 		          <div class="input-feld col s12">
-		            <input class="validate" type="password" name="password_new" id="password_new" />
-		            <label for="password_new">Ingresá tu contraseña</label>
+		            <input name="dni" type="text" value="` + data[0]['DNI'] + `" disabled/>
+		            <label for="dni">DNI</label>
 		          </div>
 		        </div>
 
 		        <div class="row">
 		          <div class="input-feld col s12">
-		            <button id="button" type="submit" class="waves-effect waves-light btn green right">Iniciar sesión</button>
+		            <input class="validate" type="text" name="email_new" id="email_new" value="` + data[0]['E-mail'] + `"/>
+		            <label for="email_new">Nuevo E-mail</label>
+		          </div>
+		        </div>
+
+		        <div class="row">
+		          <div class="input-feld col s12">
+		            <input class="validate" type="password" name="password_new" id="password_new"/>
+		            <label for="password_new">Ingresá nueva contraseña</label>
+		          </div>
+		        </div>
+
+		        <div class="row">
+		          <div class="input-feld col s12">
+		            <button id="button" type="submit" class="waves-effect waves-light btn green right">Modificar</button>
 		          </div>
 		        </div>`;
 		$('#datos').html(datos);
