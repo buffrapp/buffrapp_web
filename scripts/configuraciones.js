@@ -290,15 +290,17 @@ function Verificar(){
 		       content: [$('#email_new').val(),$('#password_new').val(),$('#old_password').val()]
 		     }
 		   })
-		   .done(function (data) {
-		     	data = parseInt(data);
+		   .done(function (dataO) {
+		  		console.log(dataO);
+		     	data = parseInt(dataO);
 		     	switch (data) {
-		     		case 0:
-		     				M.toast({ 'html': 'Datos actualizados con éxito.' });
-				        	misdatos();
-		     			break;
 		     		case 1:
 		     				M.toast({ 'html': 'Ocurrió un error al acutalizar los datos.' });
+		     			break;
+		     		default:
+		     				data = toString(dataO)
+		     				M.toast({ 'html': data });
+				        	misdatos();
 		     			break;
 		     	}
 		   });

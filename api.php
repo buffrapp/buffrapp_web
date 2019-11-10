@@ -148,7 +148,7 @@
                     if ($lookup) {
                       $mensaje = 'E-mail actualizado. ';
                     }else{
-                      print ERROR;
+                      print ERROR.'1';
                       break;
                     }
                   }
@@ -161,17 +161,16 @@
                     if ($lookup) {
                       $mensaje .='Contraseña acutalizada.';
                     }else{
-                      print ERROR;
+                      print ERROR.'2';
                       break;
                     }
                   }
-                  
                   print $mensaje;
                 } else {
-                  print ERROR;
+                  print ERROR.'3';
                 }
               } else {
-                print ERROR;
+                print ERROR.'4';
               }
             break;
           case 'usernameLookup':
