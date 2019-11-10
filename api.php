@@ -762,28 +762,35 @@
            */
           $sql = 'SELECT * FROM '.$tables['reasons'].'
                   WHERE ID_Motivo = '.$_POST['content'][0];
-          print $sql."<-query";
           $lookup = $server->query($sql);
           if ($lookup) {
             $matches = $lookup->rowCount();
-            if ($matches==0) {
-              $sql = 'INSERT INTO '.$tables['reports'].'
-                (
-                  `ID_Motivo`,
-                  `ID_Pedido`,
-                  `DNI_Administrador`,
-                  `Fecha_Hora`
-                )
-                VALUES
-                (
-                  "'.$_POST['content'][0].'", ' /* IDMotivo*/ . '
-                  '.$_POST['content'][1].', ' /* ID_PEDIDO*/ . '
-                  '.$_SESSION['dni'].', ' /* DNI_A*/ . '
-                  NULL   '/* Fecha_Hora*/ . '
-                )';
+            if ($matches==1) {
+              $sql = 'SELECT * FROM '.$tables['orders'].' WHERE 
+                      ID_Pedido = '.$_POST['content'][1].' AND
+                      DNI_Cancelado is not null and FH_Entregado is not null';
               $lookup = $server->query($sql);
-              if ($lookup) {
-                print PASS;
+              if ($lookup && $lookup->rowCount() == 1) {
+                $sql = 'INSERT INTO '.$tables['reports'].'
+                  (
+                    `ID_Motivo`,
+                    `ID_Pedido`,
+                    `DNI_Administrador`,
+                    `Fecha_Hora`
+                  )
+                  VALUES
+                  (
+                    "'.$_POST['content'][0].'", ' /* IDMotivo*/ . '
+                    '.$_POST['content'][1].', ' /* ID_PEDIDO*/ . '
+                    '.$_SESSION['dni'].', ' /* DNI_A*/ . '
+                    NULL   '/* Fecha_Hora*/ . '
+                  )';
+                $lookup = $server->query($sql);
+                if ($lookup) {
+                  print PASS;
+                }else{
+                  print ERROR;
+                }
               }else{
                 print ERROR;
               }
