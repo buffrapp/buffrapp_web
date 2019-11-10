@@ -788,7 +788,7 @@
                 $lookup = $server->query($sql);
                 if ($lookup) {
                   $sql = "UPDATE " . $tables['orders'] . "
-                      SET    DNI_Cancelado = " . $dni . "
+                      SET    DNI_Cancelado = " . $_SESSION['dni'] . "
                       WHERE  ID_Pedido     = " . $_POST['content'][0];
 
                   $lookup = $server->query($sql);
