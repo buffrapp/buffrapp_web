@@ -132,25 +132,41 @@
             break;
           case 'updateMyOwnData':
               $password = $server->quote($_POST['content'][2]);
-              $sql = 'SELECT DNI FROM ' . $tables['admin'] . '
+              $sql = 'SELECT `E-mail` FROM ' . $tables['admin'] . '
                                WHERE DNI           = ' . $_SESSION['dni'] . '
                                   AND  Password      = ' . $password;
               $lookup = $server->query($sql);
               if ($lookup) {
-                if ($lookup->fetch()[0] == 1) {
+                if ($lookup->rowCount()==1) {
+                  $email = $lookup->fetch()[0];
+                  $mensaje = 'No hiciste cambios';
+                  if ($email == $server->quote($_POST['content'][0])) {
+                    $sql = 'UPDATE ' . $tables['admin'] . ' SET 
+                                `E-mail`      = ' . $server->quote($_POST['content'][0]).'
+                               WHERE DNI           = ' . $_SESSION['dni'];
+                    $lookup = $server->query($sql);
+                    if ($lookup) {
+                      $mensaje = 'E-mail actualizado. ';
+                    }else{
+                      print ERROR;
+                      break;
+                    }
+                  }
+
                   if (strlen($server->quote($_POST['content'][1])) >=4) {
                     $sql = 'UPDATE ' . $tables['admin'] . ' SET 
                                 Password      = ' . $server->quote($_POST['content'][1]).'
                                WHERE DNI           = ' . $_SESSION['dni'];
                     $lookup = $server->query($sql);
                     if ($lookup) {
-                      print PASS;
+                      $mensaje .='Contraseña acutalizada.';
                     }else{
                       print ERROR;
+                      break;
                     }
-                  }else{
-                     print ERROR;
                   }
+                  
+                  print $mensaje;
                 } else {
                   print ERROR;
                 }
