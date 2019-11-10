@@ -139,6 +139,7 @@
               if ($lookup) {
                 if ($lookup->rowCount()==1) {
                   $email = $lookup->fetch()[0];
+                  print $_POST['content'][0];
                   if ($email == $server->quote($_POST['content'][0])) {
                     $sql = 'UPDATE ' . $tables['admin'] . ' SET 
                                 `E-mail`      = ' . $server->quote($_POST['content'][0]).'
