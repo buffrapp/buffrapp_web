@@ -182,6 +182,7 @@ function horarios(){
 						    </select>
 			          </div>
 				</div>`
+				$('#datos').html(select);
 	$.ajax({
      url: 'api.php',
      type: 'POST',
@@ -193,13 +194,14 @@ function horarios(){
    .done(function (data) {
      	console.log(data);
      	data = JSON.parse(data);
+
      	if (data.length > 0) {
      		let horarios='<div class="row">'+data[0]['Dia']+'</div>';
 	     	for (let i = 0; i<data.length; i++) {
 	     		horarios += '<div class="row">'+data[i]['Turno']+': '+data[i]['HoraI']+'-'+data[i]['HoraF']+'</div>';
 	     	};
+	     	$('#datos').append(horarios);
 	     };
-		$('#datos').html(horarios);
 		configurarOpcion();
     });
 	
