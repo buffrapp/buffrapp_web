@@ -181,7 +181,8 @@ function horarios(){
 							    <option value="Viernes">Viernes</option>
 						    </select>
 			          </div>
-				</div>`
+				</div>
+				<div id="Horarios"></div>`
 				$('#datos').html(select);
 				 $('select').formSelect();
 	configurarOpcion();
@@ -201,11 +202,11 @@ function buscarDia(){
      	console.log(data);
      	data = JSON.parse(data);
      	if (data.length > 0) {
-     		let horarios='<div class="row">'+data[0]['Dia']+'</div>';
+     		let horarios='';
 	     	for (let i = 0; i<data.length; i++) {
 	     		horarios += '<div class="row">'+data[i]['Turno']+': '+data[i]['HoraI']+'-'+data[i]['HoraF']+'</div>';
 	     	};
-	     	$('#datos').append(horarios);
+	     	$('#Horarios').html(horarios);
 	     };
     });
 }
