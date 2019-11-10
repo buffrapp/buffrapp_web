@@ -1277,10 +1277,12 @@
                                             WHERE  estado >    -1')->fetchAll());
           break;
           case 'getHorarios':
-          print json_encode($server->query('SELECT Turno,Dia,
+          $sql = 'SELECT Turno,Dia,
                             CONCAT(HOUR(HoraI),:,MINUTE(HoraI),hs) as "HoraI",
                             CONCAT(HOUR(HoraF),:,MINUTE(HoraF),hs) as "HoraF" 
-                            FROM ' . $tables['horarios'])->fetchAll());
+                            FROM ' . $tables['horarios'];
+          print $sql;
+          print json_encode($server->query($sql)->fetchAll());
           break;
         case 'getUserProducts':
           print json_encode($server->query('SELECT   * FROM ' . $tables['products'] . '
