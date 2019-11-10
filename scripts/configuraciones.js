@@ -155,7 +155,7 @@ function report_add(){
 		          break;
 		        default:
 		        	M.toast({ 'html': 'Motivo agregado con éxito.' });
-		        	$('#motivo').val('');
+		        	reportes();
 		        break;
 	    	}
 		});

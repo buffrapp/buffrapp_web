@@ -468,7 +468,7 @@
                 $sql = 'DELETE FROM '.$tables["reasons"].' WHERE ID_Motivo = '.$id;
                 $lookup =     $server->query($sql);
                 if ($lookup) {
-                  print json_encode($lookup->fetchall());
+                  print PASS;
                 } else {
                   print ERROR;
                 }
