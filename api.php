@@ -160,7 +160,13 @@
                     $lookup = $server->query($sql);
                     if ($lookup) {
                       $mensaje .='Contraseña acutalizada.';
-                      $token["password"] = $server->quote($_POST['content'][1]);
+                      $token = array(
+                        "iat"        => $_SERVER['REQUEST_TIME'],
+                        "data"       => [
+                        "username" => $_SESSION['dni'],
+                        "password" => $server->quote($_POST['content'][1])
+                      ]
+                      );
                       $_SESSION['token'] = JWT::encode($token, $security['secret']);
                     }else{
                       print ERROR;

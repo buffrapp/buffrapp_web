@@ -298,8 +298,8 @@ function Verificar(){
 		     				M.toast({ 'html': 'Ocurrió un error al acutalizar los datos.' });
 		     			break;
 		     		default:
-		     				data = toString(dataO)
-		     				M.toast({ 'html': data });
+		     				data = JSON.parse(dataO)
+		     				M.toast({ 'html': data[0][0] });
 				        	misdatos();
 		     			break;
 		     	}
