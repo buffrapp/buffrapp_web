@@ -169,8 +169,8 @@ function rechazar_pedido_request(id_pedido) {
 
        let Alumnos = `<div class="col s5 lighten-3"><h3>Alumnos</h3>`;
        let Pedidos = `<div class="col s5 lighten-2"><h3>Pedidos</h3>`;
-       
-       for (let i = 0 ; i < data.length-1; i++) {
+       let i;
+       for (i = 0 ; i < data.length-1; i++) {
         html = `<p><label><input class="with-gap radio" type="radio" name="motivo" value='` + data[i]['ID_Motivo'] + `' /><span id="Motivo_` + data[i]['ID_Motivo'] + `">` + data[i]['Motivo'] + `</span></label></p>`;
         if (data[i]['Tipo'] == '0') {
           Alumnos +=html;
