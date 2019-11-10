@@ -429,7 +429,8 @@
               }
           break;
         case 'viewOrder':
-         $sql = 'SELECT
+        $sql = 'SET LANGUAGE Español;';
+         $sql .= 'SELECT
             o.DNI_Usuario, o.ID_Pedido,
             o.ID_Producto, o.DNI_Administrador,
               CONCAT(DATE_FORMAT(o.FH_Recibido,"%d-%m-%Y")," (",DAYNAME(o.FH_Recibido),")") AS "DIA",
@@ -463,7 +464,7 @@
             LEFT JOIN ' .$tables['users']. ' can2
             ON can2.DNI = o.DNI_Cancelado
             WHERE
-            ID_Pedido = ' . $server->quote($_POST['content'][0]);
+            ID_Pedido = ' . $server->quote($_POST['content'][0]).';';
             $lookup   =     $server->query($sql);
             //print $sql;
           if ($lookup) {
@@ -936,6 +937,15 @@
                 print ERROR;
               }
               break;
+        case 'getDiasMas':
+          $sql = 'SELECT d.Dias as "Dias",count(o.ID_Pedido),SUM(p.Precio)
+                  FROM ' . $tables['horarios'].' d
+                  INNER JOIN ' . $tables['orders'].' o
+                  ON d.Dia = ';
+        break;
+        case 'getAlimentosMas':
+          # code...
+        break;
         case 'getOneDay':
         $dia = $server->quote($_POST['content'][0]);
         if ($server->quote($_POST['content'][0]) == '') {
