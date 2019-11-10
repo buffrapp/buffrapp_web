@@ -187,7 +187,7 @@ function horarios(){
      type: 'POST',
      data: {
        request: 'getOneDay',
-       content: $('#DiaSelect').val()
+       content: [$('#DiaSelect').val()]
      }
    })
    .done(function (data) {
