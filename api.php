@@ -164,6 +164,7 @@
                       break;
                     }
                   }
+                  !isset($mensaje)?$mensaje = 'No se realizó ningún cambio':'';
                   print $mensaje;
                 } else {
                   print NOT_ALLOWED;
