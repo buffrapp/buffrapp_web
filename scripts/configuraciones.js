@@ -173,7 +173,7 @@ function horarios(){
 		    </a>`;
 	let select = `<div class="row">
 					<label>Dia</label>
-						    <select id="DiaSelect">
+						    <select id="DiaSelect" onchange="horarios()">
 							    <option value="Lunes">Lunes</option>
 							    <option value="Martes">Martes</option>
 							    <option value="Miercoles">Miercoles</option>
