@@ -171,52 +171,88 @@ function horarios(){
 	add = `<a class="btn-floating btn-large waves-effect waves-light modal-trigger green" href="#horarios_add">
 		      <i class="waves-effect waves-light large material-icons">add</i>
 		    </a>`;
-	let datos =  `<table>
-			        <thead>
-			          <tr>
-				            <th>
-								Horarios/Dias
-							</th>	
-							<th>Lunes</th>
-							<th>Martes</th>
-							<th>Miercoles</th>
-							<th>Jueves</th>
-							<th>Viernes</th>
-			          </tr>
-			        </thead>
+	$.ajax({
+     url: 'api.php',
+     type: 'POST',
+     data: {
+       request: 'getHorarios'
+     }
+   })
+   .done(function (data) {
+     	console.log(data);
+     	data = JSON.parse(data);
+     	for (var i = Things.length - 1; i >= 0; i--) {
+     		Things[i]
+     	};
+     	let datos =  `<table>
+				        <thead>
+				          <tr>
+					            <th>
+									Horarios/Dias
+								</th>	
+								<th>Lunes</th>
+								<th>Martes</th>
+								<th>Miercoles</th>
+								<th>Jueves</th>
+								<th>Viernes</th>
+				          </tr>
+				        </thead>
 
-			        <tbody>
-			         	<tr>
-							<td>7:30AM</td>
-						</tr>
-						<tr>
-							<td>9AM</td>
-						</tr>
-						<tr>
-							<td>11AM</td>
-						</tr>
-						<tr>
-							<td>13PM</td>
-						</tr>
-						<tr>
-							<td>15PM</td>
-						</tr>
-						<tr>
-							<td>17PM</td>
-						</tr>
-						<tr>
-							<td>19PM</td>
-						</tr>
-						<tr>
-							<td>21PM</td>
-						</tr>
-						<tr>
-							<td>21:40PM</td>
-						</tr>
-			        </tbody>
-			      </table>`;
-	$('#datos').html(datos);
-	configurarOpcion();
+				        <tbody>
+				         	<tr>
+								<td>7:30AM</td>
+							</tr>
+							<tr>
+								<td>8AM</td>
+							</tr>
+							<tr>
+								<td>9AM</td>
+							</tr>
+							<tr>
+								<td>10AM</td>
+							</tr>
+							<tr>
+								<td>11AM</td>
+							</tr>
+							<tr>
+								<td>12AM</td>
+							</tr>
+							<tr>
+								<td>13PM</td>
+							</tr>
+							<tr>
+								<td>14PM</td>
+							</tr>
+							<tr>
+								<td>15PM</td>
+							</tr>
+							<tr>
+								<td>16PM</td>
+							</tr>
+							<tr>
+								<td>17PM</td>
+							</tr>
+							<tr>
+								<td>18PM</td>
+							</tr>
+							<tr>
+								<td>19PM</td>
+							</tr>
+							<tr>
+								<td>20PM</td>
+							</tr>
+							<tr>
+								<td>21PM</td>
+							</tr>
+							<tr>
+								<td>21:40PM</td>
+							</tr>
+				        </tbody>
+				      </table>`;
+		$('#datos').html(datos);
+		configurarOpcion();
+    });
+	
 
 }
 

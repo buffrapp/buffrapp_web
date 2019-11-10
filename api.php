@@ -1276,6 +1276,9 @@
           print json_encode($server->query('SELECT * FROM ' . $tables['products'] . '
                                             WHERE  estado >    -1')->fetchAll());
           break;
+          case 'getHorarios':
+          print json_encode($server->query('SELECT * FROM ' . $tables['horarios'])->fetchAll());
+          break;
         case 'getUserProducts':
           print json_encode($server->query('SELECT   * FROM ' . $tables['products'] . '
                                             WHERE    estado >    0
