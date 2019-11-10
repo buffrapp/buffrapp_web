@@ -487,6 +487,7 @@
                         Motivo = ' .$server->quote($_POST['content'][1]).',
                         Tipo = '. $server->quote($_POST['content'][2]).'
                         WHERE ID_Motivo = '.$id;
+                        print $sql;
                 $lookup =     $server->query($sql);
                 if ($lookup) {
                   print json_encode($lookup->fetchall());
