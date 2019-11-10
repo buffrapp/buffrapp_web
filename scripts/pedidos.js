@@ -199,6 +199,7 @@ function cancelar_pedido() {
        }
      })
      .done(function (data) {
+      console.log(data);
        data = parseInt(data);
        switch (data) {
          case 0:
