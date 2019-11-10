@@ -139,8 +139,7 @@
               if ($lookup) {
                 if ($lookup->rowCount()==1) {
                   $email = $lookup->fetch()[0];
-                  print $_POST['content'][0];
-                  if ($email == $server->quote($_POST['content'][0])) {
+                  if ($email != $server->quote($_POST['content'][0]) && filter_var($server->quote($_POST['content'][0], FILTER_VALIDATE_EMAIL))) {
                     $sql = 'UPDATE ' . $tables['admin'] . ' SET 
                                 `E-mail`      = ' . $server->quote($_POST['content'][0]).'
                                WHERE DNI           = ' . $_SESSION['dni'];
