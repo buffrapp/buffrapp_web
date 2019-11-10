@@ -781,6 +781,7 @@
                   '.$_SESSION['dni'].', ' /* DNI_A*/ . '
                   NULL   '/* Fecha_Hora*/ . '
                 )';
+                print $sql;
               $lookup = $server->query($sql);
               if ($lookup) {
                 print PASS;
