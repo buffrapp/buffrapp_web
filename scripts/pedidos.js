@@ -172,8 +172,6 @@ function rechazar_pedido_request(id_pedido_new) {
  }
 
 function cancelar_pedido() {
-
-  if ($("input[name='edad']:radio").is(':checked')) {
     id = $("input:radio[name=motivo]:checked").val();
     console.log("id pedido: "+id_pedido+" id: "+id);
     $.ajax({
@@ -199,12 +197,7 @@ function cancelar_pedido() {
          break;
        }
      });
-   }else {
-     M.toast({ html: 'Elegí un motivo' });
-   }
-    
 }
-
 function completar_pedido(id_pedido) {
 
     $('#del' + id_pedido).fadeOut();
