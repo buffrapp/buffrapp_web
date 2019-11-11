@@ -429,11 +429,19 @@
               }
           break;
         case 'viewOrder':
-        $sql = 'SET LANGUAGE Español;';
-         $sql .= 'SELECT
+         $sql = 'SELECT
             o.DNI_Usuario, o.ID_Pedido,
             o.ID_Producto, o.DNI_Administrador,
-              CONCAT(DATE_FORMAT(o.FH_Recibido,"%d-%m-%Y")," (",DAYNAME(o.FH_Recibido),")") AS "DIA",
+              CONCAT(DATE_FORMAT(o.FH_Recibido,"%d-%m-%Y")," (",
+                  Case DAYNAME(o.FH_Recibido)
+                      when "Monday" then "LUNES"
+                      when "Tuesday" then "MARTES"
+                      when "Wednesday" then "MIERCOLES"
+                      when "Thursday" then "JUEVES"
+                      when "Friday" then "VIERNES"
+                      when "Saturday" then "SABADO"
+                      when "Sunday" then "DOMINGO"
+                  END,")") AS "DIA",
               CONCAT(HOUR(o.FH_Recibido),":",MINUTE(o.FH_Recibido)) AS "Recibido",
               CONCAT(HOUR(o.FH_Tomado),":",MINUTE(o.FH_Tomado)) AS "Tomado",
               CONCAT(HOUR(o.FH_Listo),":",MINUTE(o.FH_Listo)) AS "Listo",
