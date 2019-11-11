@@ -42,7 +42,7 @@ $('document').ready(function () {
             for (let i = 0; i < data.length; i++) {
               html += `<div class="row">`+data[0]['DIA']+`: `+data[0]['Pedidos']+`</div>`;
             };
-            $('#DiasMas').html(horarios);
+            $('#DiasMas').html(html);
           });
   $.ajax({
             url: 'api.php',
@@ -58,6 +58,6 @@ $('document').ready(function () {
             for (let i = 0; i < data.length; i++) {
               html += `<div class="row">`+data[0]['Producto']+`: `+data[0]['Vendidos']+`</div>`;
             };
-            $('#AlimentosMás').html(horarios);
+            $('#AlimentosMás').html(html);
           });
 });
