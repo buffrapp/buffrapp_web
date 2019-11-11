@@ -1513,15 +1513,12 @@
                         when DAYNAME(o.FH_Recibido) = "Saturday" then "SABADO"
                         when DAYNAME(o.FH_Recibido) = "Sunday" then "DOMINGO"
                     END AS "DIA" ,
-                    count(o.ID_Pedido) as "Pedidos",
-                    SUM(p.Precio) as "Total"
+                    CONCAT(count(o.ID_Pedido)," pedidos este día") as "Pedidos"
                     FROM ' . $tables['orders'].' o
-                    INNER JOIN ' . $tables['products'].' p
-                    ON o.ID_Producto = p.ID_Producto 
                     WHERE FH_Entregado IS NOT NULL
                     GROUP BY DIA
-                    ORDER BY count(o.ID_Pedido)';
-              print $sql;
+                    ORDER BY count(o.ID_Pedido) DESC';
+              //print $sql;
              $lookup = $server->query($sql);
              if ($lookup) {
               if ($lookup->rowCount() > 1) {
@@ -1534,7 +1531,25 @@
             }
           break;
           case 'getAlimentosMas':
-            # code...
+            $sql = 'SELECT p.Nombre as "Nombre",
+                    CONCAT(count(o.ID_Pedido)," veces se ordenó este alimento") as "Pedidos"
+                    FROM ' . $tables['products'].' p
+                    INNER JOIN ' . $tables['orders'].' o
+                    ON o.ID_Producto = p.ID_Producto
+                    WHERE FH_Entregado IS NOT NULL AND Estado >= 0
+                    GROUP BY p.Nombre,p.ID_Producto
+                    ORDER BY count(o.ID_Pedido) DESC';
+              //print $sql;
+             $lookup = $server->query($sql);
+             if ($lookup) {
+              if ($lookup->rowCount() > 1) {
+                print json_encode($lookup->fetchall());
+              }else{
+                print ERROR;
+              }
+            }else{
+              print ERROR;
+            }
         break;
         default:
           print ERROR;
