@@ -1504,14 +1504,14 @@
 
           break;
           case 'getDiasMas':
-            $sql = 'SELECT Case DAYNAME(o.FH_Recibido)
-                        when "Monday" then "LUNES"
-                        when "Tuesday" then "MARTES"
-                        when "Wednesday" then "MIERCOLES"
-                        when "Thursday" then "JUEVES"
-                        when "Friday" then "VIERNES"
-                        when "Saturday" then "SABADO"
-                        when "Sunday" then "DOMINGO"
+            $sql = 'SELECT Case 
+                        when DAYNAME(o.FH_Recibido) = "Monday" then "LUNES"
+                        when DAYNAME(o.FH_Recibido) = "Tuesday" then "MARTES"
+                        when DAYNAME(o.FH_Recibido) = "Wednesday" then "MIERCOLES"
+                        when DAYNAME(o.FH_Recibido) = "Thursday" then "JUEVES"
+                        when DAYNAME(o.FH_Recibido) = "Friday" then "VIERNES"
+                        when DAYNAME(o.FH_Recibido) = "Saturday" then "SABADO"
+                        when DAYNAME(o.FH_Recibido) = "Sunday" then "DOMINGO"
                     END AS "DIA" ,
                     count(o.ID_Pedido) as "Pedidos",
                     SUM(p.Precio) as "Total"
@@ -1519,7 +1519,7 @@
                     INNER JOIN ' . $tables['products'].' p
                     ON o.ID_Producto = p.ID_Producto 
                     WHERE FH_Entregado IS NOT NULL
-                    GROUP BY DAYNAME(o.FH_Recibido)
+                    GROUP BY DIA
                     ORDER BY count(o.ID_Pedido)';
               print $sql;
              $lookup = $server->query($sql);
