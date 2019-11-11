@@ -1521,6 +1521,7 @@
                     WHERE FH_Entregado IS NOT NULL
                     GROUP BY DAYNAME(o.FH_Recibido)
                     ORDER BY count(o.ID_Pedido)';
+              print $sql;
              $lookup = $server->query($sql);
              if ($lookup) {
               if ($lookup->rowCount() > 1) {
