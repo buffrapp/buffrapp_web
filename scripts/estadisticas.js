@@ -40,7 +40,7 @@ $('document').ready(function () {
             data = JSON.parse(data);
             let html = '';
             for (let i = 0; i < data.length; i++) {
-              html += `<div class="row">`+data[0]['DIA']+`: `+data[0]['Pedidos']+`</div>`;
+              html += `<div class="row">`+data[i]['DIA']+`: `+data[i]['Pedidos']+`</div>`;
             };
             $('#DiasMas').html(html);
           });
@@ -56,7 +56,7 @@ $('document').ready(function () {
             data = JSON.parse(data);
             let html = '';
             for (let i = 0; i < data.length; i++) {
-              html += `<div class="row">`+data[0]['Producto']+`: `+data[0]['Vendidos']+`</div>`;
+              html += `<div class="row">`+data[i]['Nombre']+`: `+data[i]['Pedidos']+`</div>`;
             };
             $('#AlimentosMás').html(html);
           });
