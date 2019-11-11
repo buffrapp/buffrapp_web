@@ -945,15 +945,7 @@
                 print ERROR;
               }
               break;
-        case 'getDiasMas':
-          $sql = 'SELECT d.Dias as "Dias",count(o.ID_Pedido),SUM(p.Precio)
-                  FROM ' . $tables['horarios'].' d
-                  INNER JOIN ' . $tables['orders'].' o
-                  ON d.Dia = ';
-        break;
-        case 'getAlimentosMas':
-          # code...
-        break;
+        
         case 'getOneDay':
         $dia = $server->quote($_POST['content'][0]);
         if ($server->quote($_POST['content'][0]) == '') {
@@ -1511,6 +1503,38 @@
           }
 
           break;
+          case 'getDiasMas':
+            $sql = 'SELECT Case DAYNAME(o.FH_Recibido)
+                        when "Monday" then "LUNES"
+                        when "Tuesday" then "MARTES"
+                        when "Wednesday" then "MIERCOLES"
+                        when "Thursday" then "JUEVES"
+                        when "Friday" then "VIERNES"
+                        when "Saturday" then "SABADO"
+                        when "Sunday" then "DOMINGO"
+                    END AS "DIA" ,
+                    count(o.ID_Pedido) as "Pedidos",
+                    SUM(p.Precio) as "Total"
+                    FROM ' . $tables['orders'].' o
+                    INNER JOIN ' . $tables['products'].' p
+                    ON o.ID_Producto = p.ID_Producto 
+                    WHERE FH_Entregado IS NOT NULL
+                    GROUP BY DAYNAME(o.FH_Recibido)
+                    ORDER BY count(o.ID_Pedido)';
+             $lookup = $server->query($sql);
+             if ($lookup) {
+              if ($lookup->rowCount() > 1) {
+                print json_encode($lookup->fetchall());
+              }else{
+                print ERROR;
+              }
+            }else{
+              print ERROR;
+            }
+          break;
+          case 'getAlimentosMas':
+            # code...
+        break;
         default:
           print ERROR;
       }

@@ -27,4 +27,16 @@ $('document').ready(function () {
         }
     }
   });
+
+  $.ajax({
+            url: 'api.php',
+            type: 'POST',
+            data: {
+              request: 'getDiasMas'
+            }
+          })
+          .done(function (data) {
+            console.log(data);
+            data = JSON.parse(data);
+          });
 });
