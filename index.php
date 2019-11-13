@@ -4,13 +4,13 @@
       <div class="col s12 center-align grey-text">
         <h5>
           <i class="large material-icons">cloud_download</i> <br>
-            buffrapp_beta-0.1.apk
+            buffrapp_beta-0.2.apk
           </h5>
           <h6>
             Android 4.1 o superior
           </h6>
           <br>
-          <a href="../buffrapp_beta-0.1.apk" class="waves-effect waves-light btn btn-flat waves-green green white-text">Descargar ahora</a>
+          <a href="../buffrapp_beta-0.2.apk" class="waves-effect waves-light btn btn-flat waves-green green white-text">Descargar ahora</a>
           <br>
           <p>¿Sos un administrador? Hacé <a href="login.php">clic acá</a>.
       </div>
