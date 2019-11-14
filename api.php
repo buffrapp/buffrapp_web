@@ -1168,6 +1168,27 @@
             }
 
             break;
+        case 'checkForUpdates':
+            /*
+            // Inputs:
+            //
+            // 0  -> Application versionCode reported by the user's device.
+            */
+            
+            define('UPDATE_FOUND', 2);
+
+            $currentID = intval(shell_exec('aapt dump badging ' . getcwd() . '/../latest.apk | grep versionCode | cut -d "=" -f 3 | cut -d " " -f 1 | sed "s/\'//g"'));
+            if ($currentID == 0) {
+              print ERROR;
+            } else {
+              if ($currentID > $_POST['content'][0]) {
+                print UPDATE_FOUND;
+              } else {
+                print PASS;
+              }
+            }
+            
+            break;
         default:
             print ERROR;
       }  
