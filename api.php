@@ -39,6 +39,10 @@
     session_cache_expire($info['session_lifetime'] * 60 * 24 * 30);
     session_start();
 
+    if (!isset($_SESSION['is_admin'])) {
+      $_SESSION['is_admin'] = false;
+    }
+
     if (isset($_POST['content']) && is_array($_POST['content']))
     {
       // print $_POST['request'];
